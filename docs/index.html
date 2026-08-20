@@ -205,21 +205,9 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 .tippt.da i:nth-child(3){ animation-delay:.36s; }
 @keyframes tippAn{ 0%,60%,100%{ opacity:.3; transform:none }
                    30%{ opacity:1; transform:translateY(-3px) } }
-.sprach .blase{ display:flex; align-items:center; gap:11px; min-width:210px; }
-.sprach-stop{ width:31px; height:31px; border-radius:50%; background:var(--accent);
-  flex-shrink:0; display:flex; align-items:center; justify-content:center; }
-.sprach-stop::after{ content:""; width:10px; height:10px; border-radius:2px; background:var(--auf); }
-.sprach-welle{ flex:1; display:flex; align-items:center; gap:2.5px; height:22px; }
-.sprach-welle i{ flex:1; background:var(--soft); border-radius:2px; opacity:.5;
-  height:30%; display:block; }
-.sprach.da .sprach-welle i{ animation:welle 1s ease-in-out infinite; }
-.sprach-welle i:nth-child(3n){ animation-delay:.15s } .sprach-welle i:nth-child(3n+1){ animation-delay:.3s }
 @keyframes welle{ 50%{ height:100%; opacity:.9 } }
-.sprach-zeit{ font-variant-numeric:tabular-nums; font-size:14.5px; font-weight:800;
-  color:var(--soft); min-width:42px; text-align:right; }
 @media (prefers-reduced-motion:reduce){
-  .tippt.da i, .sprach.da .sprach-welle i{ animation:none }
-}
+  .tippt.da i, }
 
 /* Gruppenchat: Menschen wechseln die Seite, damit man sieht, dass mehrere
    reden. Nur wenn dieselbe Person zweimal hintereinander schreibt, bleibt sie
@@ -235,6 +223,10 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
   display:flex; align-items:center; justify-content:center;
   font-size:14px; font-weight:800; color:var(--auf); margin-bottom:2px; }
 .kuerzel.a{ background:#3F7DB8; } .kuerzel.b{ background:#B8683F; }
+/* Bloop bekommt kein Kuerzel, sondern sich selbst. */
+.kuerzel.bloop{ background:none; color:var(--figur); width:38px; height:41px;
+  border-radius:0; }
+.kuerzel.bloop svg{ width:100%; height:100%; }
 .zug.folge .kuerzel{ visibility:hidden; }
 .blase-spalte{ display:flex; flex-direction:column; min-width:0; }
 .mitte{ text-align:center; }
@@ -268,13 +260,14 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 <main id="oben">
   <div class="bahn verlauf">
 <p class="dazwischen">So klingt es in jeder Elterngruppe. Die Namen sind erfunden, die Sätze nicht.</p>
-<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">„Ich habe ehrlich keine Ahnung, was diese Apps mit den Daten meiner Tochter machen.“</div></div></div>
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">„Und meiner lernt drei Tage, dann reißt die Serie — und dann ist er beleidigt und macht gar nichts mehr.“</div></div></div>
-<div class="zug sprach" data-sprach><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase"><span class="sprach-stop" aria-hidden="true"></span><span class="sprach-welle" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="sprach-zeit" data-zeit>0:00</span></div></div></div>
-<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><div class="blase" style="font-size:14px;color:var(--soft);font-weight:700">Aufnahme abgebrochen</div></div></div>
-<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><div class="blase">„Sorry, das wurde zu lang. Kurz: <strong>Ich will auch nicht dauernd kontrollieren müssen.</strong>“</div></div></div>
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">„Ganz ehrlich — mir geht es genauso.“</div></div></div>
-<p class="dazwischen">Bloop kommt dazu</p>
+<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Meine schaut nur noch Shorts. Insta, TikTok, Snap. Drei Stunden. Jeden Tag. 😩</div></div></div>
+<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Bei uns dasselbe 🙈 Und wenn ich was sage, bin ich der Böse.</div></div></div>
+<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Ich hab ihr eine Lern-App draufgemacht. Dachte, das wäre wenigstens sinnvoll.</div></div></div>
+<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Aber die macht genau dasselbe 😤 Punkte, Diamanten, diese Serie, die man nicht abreißen lassen darf.</div></div></div>
+<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Ja! Drei Tage stolz — dann einmal vergessen, Serie weg, Drama am Frühstückstisch 🎭</div></div></div>
+<div class="zug du folge"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Und keiner sagt einem, was die eigentlich mit den Daten machen.</div></div></div>
+<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Genau. Ich will doch nur, dass sie was lernt. <strong>Ohne dass ich Polizei spielen muss.</strong></div></div></div>
+<div class="zug tippt" data-tippt><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase" aria-label="schreibt"><i></i><i></i><i></i></div></div></div>
 <div class="zug "><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><span style="font-size:20px;font-weight:800;letter-spacing:-.02em">Hi. Ich bin Bloop.</span><br><span style="color:var(--soft)">Darf ich der Reihe nach?</span></div></div>
 <div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><strong>Zu den Daten:</strong> Es gibt keine. Kein Konto, keine Anmeldung, kein Server. Alles bleibt auf dem Gerät.</div></div>
 <div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Probieren Sie es aus — Flugmodus an, ich laufe weiter. Was offline funktioniert, kann nichts verschicken.</div></div>
@@ -530,32 +523,6 @@ Regeln:
       k.setAttribute("aria-expanded", auf ? "true" : "false");
     });
   });
-</script>
-<script>
-  // Die Sprachnachricht laeuft bis 0:45 und bricht ab - der Moment, den jeder
-  // aus jeder Elterngruppe kennt. Startet erst, wenn die Zeile sichtbar wird,
-  // und laeuft genau einmal.
-  (function () {
-    var zeile = document.querySelector("[data-sprach]");
-    if (!zeile) return;
-    var anzeige = zeile.querySelector("[data-zeit]");
-    var reduziert = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduziert) { anzeige.textContent = "0:45"; return; }
-    var gestartet = false;
-    var starte = function () {
-      if (gestartet) return; gestartet = true;
-      var s = 0;
-      var uhr = setInterval(function () {
-        s += 1;
-        anzeige.textContent = "0:" + (s < 10 ? "0" : "") + s;
-        if (s >= 45) { clearInterval(uhr); zeile.classList.add("aus"); }
-      }, 55);
-    };
-    if (!("IntersectionObserver" in window)) { starte(); return; }
-    new IntersectionObserver(function (e, o) {
-      if (e[0].isIntersecting) { starte(); o.disconnect(); }
-    }, { threshold: 0.6 }).observe(zeile);
-  })();
 </script>
 <script>
   document.documentElement.classList.add("js");
