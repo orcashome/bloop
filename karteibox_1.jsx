@@ -43,11 +43,20 @@ const setzeSprache = (c) => { SPR = SPRACHEN.some((s) => s.c === c) ? c : "de"; 
 const sprachVon = (m) => (m && m.sprache) || null;
 /* Vorschlag aus den Browsereinstellungen - nur als Startwert, nie als Zwang.
    Wer sie einmal gewaehlt hat, behaelt seine Wahl. */
+/* Deutsch fuer Deutschland, Oesterreich, die Schweiz und Liechtenstein, sonst
+   Englisch. Geprueft wird die GANZE Kennung, nicht nur der Sprachteil: "de-AT"
+   und "de-CH" sind Deutsch, "en-AT" dagegen nicht - wer sein Geraet auf Englisch
+   gestellt hat, will Englisch, auch in Wien.
+   Gelesen wird nur, nichts gespeichert oder verschickt. */
 const geraeteSprache = () => {
   if (typeof navigator === "undefined") return "de";
-  const roh = (navigator.languages && navigator.languages[0]) || navigator.language || "de";
-  const kurz = String(roh).toLowerCase().split("-")[0];
-  return SPRACHEN.some((s) => s.c === kurz) ? kurz : "en";
+  const liste = (navigator.languages && navigator.languages.length)
+    ? navigator.languages : [navigator.language || "en"];
+  for (const roh of liste) {
+    const kurz = String(roh).toLowerCase().split("-")[0];
+    if (SPRACHEN.some((s) => s.c === kurz)) return kurz;
+  }
+  return "en";
 };
 
 const TEXTE = {
@@ -787,9 +796,12 @@ const STYLES = `
 .feier-was{ font-size:15px; color:var(--ink-soft); margin-top:6px; }
 .feier-lob{ font-family:var(--disp); font-size:24px; font-weight:500; margin-top:20px; }
 @media (prefers-reduced-motion: reduce){ .schnipsel{ display:none } .feier{ animation:none } }
+/* Volle Deckung, Inhalt trotzdem 480px schmal - dieselbe Falle wie bei .tour:
+   ein position:fixed mit max-width deckt nur einen Streifen, daneben laeuft
+   die Seite darunter sichtbar weiter. */
 .namenswahl{ position:fixed; inset:0; z-index:40; background:var(--paper); overflow-y:auto;
-  padding:max(30px,env(safe-area-inset-top)) 20px 30px; display:flex; flex-direction:column;
-  justify-content:center; max-width:480px; margin:0 auto;
+  padding-left:max(22px,calc((100vw - 480px) / 2)); padding-right:max(22px,calc((100vw - 480px) / 2)); padding-top:max(26px,env(safe-area-inset-top)); padding-bottom:max(26px,env(safe-area-inset-bottom)); display:flex; flex-direction:column;
+  justify-content:center;  
   animation:ubAuf .4s cubic-bezier(.2,.7,.2,1) both; }
 .nw-liste{ display:flex; flex-wrap:wrap; gap:8px; }
 .nw-liste .chip{ font-size:15px; padding:11px 16px; }
@@ -1291,6 +1303,34 @@ const STYLES = `
 /* Auf der Lernbuehne bekommt der Editor den GANZEN Platz, den die Karte hatte.
    Zentriert schwebend sah er aus wie ein Dialog, der zufaellig dort liegt - und
    die Felder blieben klein, obwohl der halbe Bildschirm leer war. */
+/* Das Aenderungsblatt legt sich ueber die Kartei, statt sie zu verschieben -
+   sonst springt die Liste unter dem Finger weg. */
+/* Blinzeln: die Augengruppe faellt kurz auf null Hoehe zusammen. Kein zweiter
+   Pfad, keine Lider - eine Skalierung um die Augenachse genuegt und laeuft auf
+   jedem Geraet fluessig, weil sie nur die Grafikkarte beschaeftigt.
+   transform-origin liegt auf Augenhoehe (y=34 im viewBox), sonst klappt das
+   Auge nach oben weg statt sich zu schliessen. */
+.octo-augen{ transform-origin:39.8px 34px; }
+.octo.blinzelt .octo-augen{ animation:octoBlinzeln .19s ease-in-out; }
+@keyframes octoBlinzeln{ 50%{ transform:scaleY(.06); } }
+/* Der Blick wandert weich, nicht sprunghaft. */
+.octo-pupille{ transition:transform .42s cubic-bezier(.34,1.2,.5,1); }
+@media (prefers-reduced-motion: reduce){
+  .octo.blinzelt .octo-augen{ animation:none }
+  .octo-pupille{ transition:none }
+}
+.aender-blatt{ position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end;
+  justify-content:center; background:color-mix(in srgb, var(--ink) 34%, transparent);
+  animation:aenderAuf .18s ease both; }
+.aender-innen{ width:100%; max-width:480px; max-height:92dvh; overflow-y:auto;
+  background:var(--paper); border-radius:24px 24px 0 0;
+  padding:20px 20px max(20px,env(safe-area-inset-bottom)); }
+@keyframes aenderAuf{ from{ opacity:0 } to{ opacity:1 } }
+@media (prefers-reduced-motion:reduce){ .aender-blatt{ animation:none } }
+@media (min-width:560px){
+  .aender-blatt{ align-items:center; }
+  .aender-innen{ border-radius:24px; max-height:88dvh; }
+}
 .blatt-buehne{ flex:1; width:100%; display:flex; flex-direction:column;
   overflow-y:auto; overscroll-behavior:contain; padding:2px 0 8px; }
 .blatt-buehne .blatt{ flex:1; }
@@ -4706,12 +4746,11 @@ export default function Robin() {
       <MarkeCtx.Provider value={buddyName(meta)}>
       {zeigeEintritt && <Eintritt onSkip={() => setEintrittVorbei(true)}
         marke={buddyName(meta)} />}
-      {/* Reihenfolge: erst Sprache, dann Tour. Eine Tour in der falschen Sprache
-          erklaert nichts. */}
-      {eintrittVorbei && metaGeladen.current && !meta.sprache && (
-        <SprachWahl onWaehlen={(c) => setMeta((m) => ({ ...m, sprache: c }))} />
-      )}
-      {eintrittVorbei && metaGeladen.current && meta.sprache && !meta.tourFertig && (
+      {/* KEINE Sprachwahl beim Start. Bloop spricht sofort die Sprache des
+          Geraets - Deutsch in DACH, sonst Englisch. Ein Dialog vor der Tour
+          haette den ersten Eindruck mit einer Entscheidung begonnen, die das
+          Geraet ohnehin schon beantwortet. Umschalten geht im Profil. */}
+      {eintrittVorbei && metaGeladen.current && !meta.tourFertig && (
         <Tour marke={buddyName(meta)} sound={sound}
           onFertig={() => setMeta((m) => ({ ...m, tourFertig: true }))} />
       )}
@@ -4781,7 +4820,7 @@ export default function Robin() {
             onOpen={(id) => setView({ name: "deck", deckId: id })} />
         )}
         {view.name === "profil" && (
-          <Profil meta={meta} onBack={zurueck}
+          <Profil meta={meta} onBack={zurueck} sound={sound}
             onSetzen={(teil) => setMeta((m) => ({ ...m, ...teil }))} />
         )}
         {view.name === "quizwahl" && (
@@ -4817,6 +4856,11 @@ export default function Robin() {
             onStudy={() => setView({ name: "study", deckId: deck.id })}
             onAddCard={(felder) => update((d) => {
               d.find((x) => x.id === deck.id).cards.push({ id: uid(), due: 0, ...felder });
+              return d;
+            })}
+            onEditCard={(cid, felder) => update((d) => {
+              const c = d.find((x) => x.id === deck.id).cards.find((x) => x.id === cid);
+              if (c) Object.assign(c, felder);
               return d;
             })}
             onDelCard={(cid) => update((d) => {
@@ -4908,6 +4952,7 @@ function SprachWahl({ onWaehlen }) {
  * Am Ende steht kein "Fertig", sondern der erste echte Schritt: etwas aussuchen.
  */
 function Tour({ marke, onFertig, sound }) {
+  const tourLeben = useOctoLeben();
   const [i, setI] = useState(0);
   // In der Tour wird nichts vorgefuehrt, was man nicht selbst anfassen kann:
   // die Beispielkarte dreht sich wirklich, der Ton schaltet wirklich.
@@ -4941,7 +4986,13 @@ function Tour({ marke, onFertig, sound }) {
     <div className="tour" role="dialog" aria-modal="true" aria-label={t("tour.aria")}>
       <button className="tour-skip" onClick={onFertig}>{t("tour.skip")}</button>
       <div className="tour-buehne">
-        {s.octo && <div className="tour-octo"><OctoIcon s={104} blick={s.octo} /></div>}
+        {/* In der Tour bestimmt der Schritt den Blick - dort ist er Teil der
+            Aussage ("schielen" beim Datenschutz-Schritt). Geblinzelt wird
+            trotzdem, das macht ihn lebendig, ohne die Aussage zu stoeren. */}
+        {s.octo && <div className="tour-octo">
+          <OctoIcon s={104} blick={s.octo} blinzelt={tourLeben.blinzelt}
+            kopfhoerer={!!(sound && sound.supported && sound.idx > 0)} />
+        </div>}
         {s.bild === "karte" && (
           <div className={"tour-karte tour-karte-echt" + (gedreht ? " um" : "") + (warumAuf ? " weit" : "")}
             onPointerDown={(e) => { zugY.current = e.clientY; }}
@@ -4958,7 +5009,16 @@ function Tour({ marke, onFertig, sound }) {
             <span className="tour-kicker">{gedreht ? "Antwort" : "Frage"}</span>
             <b>{gedreht ? "gracias" : "Was heißt „danke“ auf Spanisch?"}</b>
             {gedreht && !warumAuf && (
-              <button className="warum-knopf" onClick={(e) => { e.stopPropagation(); setWarumAuf(true); haptik(HAPTIK.umdrehen); }}>
+              /* Auch die Zeiger-Ereignisse abfangen, nicht nur den Klick:
+                 pointerup feuert VOR click und blubbert zur Karte hoch. Dort galt
+                 der Druck als kurzes Tippen, die Karte drehte sich zurueck und
+                 setzte warumAuf wieder auf false - danach schaltete der Knopf es
+                 auf true, aber die Karte war nicht mehr gedreht, also blieb die
+                 dritte Seite unsichtbar. Der Knopf tat scheinbar nichts. */
+              <button className="warum-knopf"
+                onPointerDown={(e) => e.stopPropagation()}
+                onPointerUp={(e) => e.stopPropagation()}
+                onClick={(e) => { e.stopPropagation(); setWarumAuf(true); haptik(HAPTIK.umdrehen); }}>
                 <span className="warum-pfeil" aria-hidden="true">↑</span> Warum?
               </button>
             )}
@@ -5086,9 +5146,10 @@ function NamensWahl({ titel, wert, topf, platzhalter, zuruecksetzen, onWaehlen }
  * Figuren, sondern eine Farbeinstellung mit zwei Namen davor. Jetzt gibt es
  * Bloop - benennbar und einfaerbbar.
  */
-function Profil({ meta, onSetzen, onBack }) {
+function Profil({ meta, onSetzen, onBack, sound }) {
   const f = farbeVon(meta);
   const name = buddyName(meta);
+  const leben = useOctoLeben();
   return (
     <>
       <ZurueckKnopf onClick={onBack} />
@@ -5097,7 +5158,10 @@ function Profil({ meta, onSetzen, onBack }) {
           ihm, also zeigt sie ihn - und jede Farbaenderung ist sofort an ihm zu
           sehen, statt nur an einem Punkt in einer Reihe. */}
       <div className="profil-held">
-        <div className="profil-held-figur"><OctoIcon s={96} blick="ruhig" /></div>
+        <div className="profil-held-figur">
+          <OctoIcon s={96} blick={leben.blick} blinzelt={leben.blinzelt}
+            kopfhoerer={!!(sound && sound.idx > 0)} />
+        </div>
         <div className="profil-held-name">{name}</div>
       </div>
 
@@ -5316,7 +5380,7 @@ function Home({ decks, sound, deckname, meta, onMeta, onAdd, onImport, onCatalog
             waere hier folgenlos. Auf allen anderen Seiten fuehrt es nach Hause. */}
         <button className="brand brand-heim" onClick={onProfil}
           aria-label={marke + " — Begleiter und Farbe"} title={t("menue.profil")}>
-          <span className="brand-mark"><OctoIcon /></span>
+          <span className="brand-mark"><OctoIcon kopfhoerer={!!(sound && sound.idx > 0)} /></span>
           <span className="brand-name">{marke}</span>
         </button>
       </div>
@@ -6502,11 +6566,16 @@ function Bibliothek({ onBack, onHeim, onAdd, onStudy, eigene, onOpen, onToggleRe
 }
 
 /* ---------------- Deck ---------------- */
-function DeckView({ deck, tts, onBack, onHeim, onStudy, onAddCard, onDelCard, onDelDeck, onRest, onBeide, onFoto, onUebung }) {
+function DeckView({ deck, tts, onBack, onHeim, onStudy, onAddCard, onEditCard, onDelCard, onDelDeck, onRest, onBeide, onFoto, onUebung }) {
   /* Eine Karte ist ein Entwurf mit drei Seiten, nicht zwei Einzelfelder plus
      ein "welche Seite sehe ich gerade". Das Umdrehen beim Anlegen ist entfallen. */
   const LEER = { front: "", back: "", warum: "", flang: "en-US", blang: "de-DE" };
   const [entwurf, setEntwurf] = useState(LEER);
+  /* Karten liessen sich bisher nur beim Lernen aendern - wer in der Liste einen
+     Tippfehler sah, musste die Karte erst drankommen lassen. Jetzt oeffnet der
+     Stift dasselbe Kartenblatt direkt hier. */
+  const [aendert, setAendert] = useState(null);
+  const [aenderung, setAenderung] = useState(LEER);
   const [mikroFuer, setMikroFuer] = useState(null);
   const [shareCode, setShareCode] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -6697,10 +6766,44 @@ function DeckView({ deck, tts, onBack, onHeim, onStudy, onAddCard, onDelCard, on
             <div className="crow-back">{c.back}</div>
           </div>
           <button className="crow-spk" onClick={() => tts.speak(c.front, c.flang)} disabled={!tts.supported} aria-label={t("lern.vorlesen")}><SpeakerIcon s={16} /></button>
+          {onEditCard && !waehlen && (
+            <button className="crow-spk" aria-label={t("lern.aendern")}
+              onClick={(e) => {
+                e.stopPropagation();
+                setAendert(c.id);
+                setAenderung({ front: c.front || "", back: c.back || "", warum: c.warum || "",
+                  flang: c.flang || "de-DE", blang: c.blang || "de-DE" });
+              }}><PencilIcon /></button>
+          )}
           <span className="crow-box">{stufe3Von(c).label}</span>
           <button className="crow-del" onClick={() => onDelCard(c.id)} aria-label={t("allg.loeschen")}>×</button>
         </div>
       ))}
+
+      {aendert && (
+        <div className="aender-blatt" role="dialog" aria-label={t("lern.aendern")}>
+          <div className="aender-innen">
+            <div className="panel-title">{t("lern.aendern")}
+              <button className="panel-close" onClick={() => setAendert(null)}
+                aria-label={t("allg.schliessen")}>×</button>
+            </div>
+            <KartenBlatt wert={aenderung} onChange={setAenderung} tts={tts}
+              spracheAn={!!(aenderung.flang && aenderung.blang && aenderung.flang !== aenderung.blang)} />
+            <div className="recall-actions" style={{ gap: 10, marginTop: 12 }}>
+              <button className="btn btn-ghost" style={{ flex: 1 }}
+                onClick={() => setAendert(null)}>{t("ed.abbrechen")}</button>
+              <button className="btn btn-primary" style={{ flex: 1 }}
+                onClick={() => {
+                  // Vorder- und Rueckseite sind Pflicht, die Erklaerung nicht.
+                  if (nurText(aenderung.front).trim() && nurText(aenderung.back).trim()) {
+                    onEditCard(aendert, aenderung);
+                  }
+                  setAendert(null);
+                }}>{t("ed.speichern")}</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {waehlen && anzahlMarkiert > 0 && (
         <div className="wahl-leiste">
@@ -7535,7 +7638,7 @@ function ZurueckKnopf({ onClick, onHeim, sound, rechts }) {
       <div className="topbar">
         {/* Die Marke ist zugleich der Weg nach Hause — erwartet man von einem Logo. */}
         <button className="brand brand-heim" onClick={onHeim || onClick} aria-label={t("allg.heim")}>
-          <span className="brand-mark"><OctoIcon /></span>
+          <span className="brand-mark"><OctoIcon kopfhoerer={!!(sound && sound.idx > 0)} /></span>
           <span className="brand-name">{marke}</span>
         </button>
         <div className="topbar-rechts">
@@ -7660,27 +7763,101 @@ function GridIcon() {
 // Die Pupillen liegen in einer eigenen Gruppe und werden per transform bewegt.
 // Das ist die ganze Animation - kein Neuzeichnen, laeuft auf der GPU.
 const OCTO_AUGE = [[29.09, 33.95], [50.60, 33.95]];
+/* Pupillenversatz je Blickrichtung, in Einheiten des viewBox.
+   Der Spielraum ist 4.3 (Augenradius 9.07 minus Pupillenradius 4.77) - darueber
+   stiesse die Pupille am Augenrand an. Deshalb bleibt alles unter 3.5.
+   `ruhig` sitzt bewusst NICHT mittig: mittige Pupillen wirken tot. */
 const OCTO_BLICKE = {
   ruhig:    [[1.92, 1.34], [1.85, 1.35]],
+  links:    [[-2.90, 1.10], [-2.95, 1.10]],
+  rechts:   [[3.40, 1.10], [3.35, 1.10]],
   schielen: [[3.30, 0.90], [-3.30, 0.90]],
   hoch:     [[1.30, -2.90], [1.25, -2.90]],
   runter:   [[1.60, 3.30], [1.55, 3.30]],
   weg:      [[-2.60, -2.30], [-2.60, -2.30]],
 };
-function OctoIcon({ s = 26, blick = "ruhig" }) {
+/* Bloop mit Kopfhoerer. Der Buegel liegt AUF dem Kopf statt darueber: der
+ * Scheitel beruehrt schon den oberen Rand des viewBox, ein Buegel darueber
+ * waere abgeschnitten. Die Muscheln sitzen dort, wo bei einem Oktopus Ohren
+ * waeren - er hat keine, aber genau das ist der Witz.
+ * Gezeichnet wird VOR den Augen, damit nichts das Gesicht verdeckt. */
+function Kopfhoerer() {
+  return (
+    <g className="octo-kopfhoerer" aria-hidden="true">
+      {/* Der Buegel folgt der KOPFKONTUR, nicht einer geschaetzten Rundung.
+          Nachgemessen am Koerperpfad ist der Kopf ein Kreis um (40, 38.8) mit
+          Radius 38.8. Der Buegel liegt mit Radius 34.5 knapp darauf: Scheitel
+          bei y=3, also drei Einheiten unter dem Kopfscheitel - er sitzt auf,
+          statt darueber zu schweben. Wer die Endpunkte verschiebt, muss den
+          Radius mitrechnen, sonst rutscht der Bogen vom Kopf.
+          Die Farbe kommt aus --ink und folgt dem Thema: dunkel auf hellem
+          Grund, hell auf dunklem. */}
+      <path d="M5.5,34 A34.5,34.5 0 0 1 74.2,34" fill="none" stroke="var(--ink)"
+        strokeWidth="5" strokeLinecap="round" />
+      <ellipse cx="5.5" cy="35.5" rx="5" ry="9" fill="var(--ink)" />
+      <ellipse cx="74.2" cy="35.5" rx="5" ry="9" fill="var(--ink)" />
+    </g>
+  );
+}
+
+/* Bloop lebt ein bisschen. Der Blick wandert alle paar Sekunden, dazwischen
+ * blinzelt er. Beides bewusst unregelmaessig: ein Takt waere ein Metronom, und
+ * genau das wirkt tot.
+ *
+ * Regel dabei: **Er reagiert nicht auf Leistung.** Kein trauriger Blick nach
+ * einer falschen Antwort, kein Jubeln nach einer richtigen - das waere die
+ * Belohnungsschleife durch die Hintertuer. Er schaut sich einfach um, so wie
+ * jemand, der neben einem sitzt.
+ *
+ * Kostet nichts, wenn niemand hinsieht: die Zeitgeber laufen nur, solange die
+ * Komponente montiert ist, und `prefers-reduced-motion` schaltet die Bewegung
+ * per CSS ab (die Zeitgeber duerfen weiterlaufen, sie aendern dann nur Werte,
+ * die niemand sieht).
+ */
+const OCTO_WANDER = ["ruhig", "links", "rechts", "hoch", "runter", "ruhig", "schielen"];
+
+function useOctoLeben(an = true) {
+  const [blick, setBlick] = useState("ruhig");
+  const [blinzelt, setBlinzelt] = useState(false);
+  useEffect(() => {
+    if (!an) return;
+    let a, b;
+    const schauen = () => {
+      setBlick(OCTO_WANDER[Math.floor(Math.random() * OCTO_WANDER.length)]);
+      a = setTimeout(schauen, 2600 + Math.random() * 4200);
+    };
+    const blinzeln = () => {
+      setBlinzelt(true);
+      setTimeout(() => setBlinzelt(false), 200);
+      b = setTimeout(blinzeln, 3400 + Math.random() * 5200);
+    };
+    a = setTimeout(schauen, 1800 + Math.random() * 2000);
+    b = setTimeout(blinzeln, 2400 + Math.random() * 2600);
+    return () => { clearTimeout(a); clearTimeout(b); };
+  }, [an]);
+  return { blick, blinzelt };
+}
+
+function OctoIcon({ s = 26, blick = "ruhig", kopfhoerer = false, blinzelt = false }) {
   const v = OCTO_BLICKE[blick] || OCTO_BLICKE.ruhig;
   return (
-    <svg width={s} height={Math.round(s * 1.0747)} viewBox="0 0 79.67 85.62" aria-hidden="true">
+    <svg width={s} height={Math.round(s * 1.0747)} viewBox="0 0 79.67 85.62" aria-hidden="true"
+      className={"octo" + (blinzelt ? " blinzelt" : "")}>
       <path fill="currentColor" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z" />
-      {OCTO_AUGE.map(([cx, cy], i) => (
-        <circle key={"a" + i} cx={cx} cy={cy} r="9.07" fill="#fff" />
-      ))}
+      {kopfhoerer && <Kopfhoerer />}
+      <g className="octo-augen">
+        {OCTO_AUGE.map(([cx, cy], i) => (
+          <circle key={"a" + i} cx={cx} cy={cy} r="9.07" fill="#fff" />
+        ))}
+      </g>
       <path fill="#293A38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z" />
-      {OCTO_AUGE.map(([cx, cy], i) => (
-        <g key={"p" + i} className="octo-pupille" transform={`translate(${v[i][0]} ${v[i][1]})`}>
-          <circle cx={cx} cy={cy} r="4.77" fill="#293A38" />
-        </g>
-      ))}
+      <g className="octo-augen">
+        {OCTO_AUGE.map(([cx, cy], i) => (
+          <g key={"p" + i} className="octo-pupille" transform={`translate(${v[i][0]} ${v[i][1]})`}>
+            <circle cx={cx} cy={cy} r="4.77" fill="#293A38" />
+          </g>
+        ))}
+      </g>
     </svg>
   );
 }
