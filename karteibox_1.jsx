@@ -4749,8 +4749,24 @@ export default function Robin() {
         {view.name === "home" && (
           <Home decks={decks} sound={sound} deckname={meta.deckname}
             meta={meta} onMeta={(teil) => setMeta((m) => ({ ...m, ...teil }))}
-            onAdd={(name) => update((d) => { d.push({ id: uid(), name, cards: [] }); return d; })}
-            onImport={(dk) => update((d) => { d.push(dk); return d; })}
+            /* Nach dem Anlegen direkt in die neue Kartei. Vorher blieb man auf der
+               Startseite stehen, wo eine leere Kartei nirgends auftaucht - es sah
+               aus, als haette der Knopf nichts getan. Wer eine Kartei anlegt, will
+               als Naechstes Karten hineintun; genau dort landet er jetzt, und das
+               Kartenblatt steht dort schon offen, weil die Kartei leer ist. */
+            onAdd={(name) => {
+              const id = uid();
+              update((d) => { d.push({ id, name, cards: [] }); return d; });
+              // Der Schluessel heisst deckId, nicht id - sonst findet die Ansicht
+              // die Kartei nicht und rendert gar nichts.
+              setView({ name: "deck", deckId: id });
+            }}
+            /* Auch beim Import: die uebernommene Kartei zeigen, statt sie still
+               in die Liste zu legen. Sonst wirkt der Code-Import wie ein Fehler. */
+            onImport={(dk) => {
+              update((d) => { d.push(dk); return d; });
+              setView({ name: "deck", deckId: dk.id });
+            }}
             onCatalog={() => setView({ name: "bib" })}
             onUeberblick={() => setView({ name: "ueberblick" })}
             onFoto={() => setView({ name: "foto" })}
