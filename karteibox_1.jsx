@@ -1305,20 +1305,10 @@ const STYLES = `
    die Felder blieben klein, obwohl der halbe Bildschirm leer war. */
 /* Das Aenderungsblatt legt sich ueber die Kartei, statt sie zu verschieben -
    sonst springt die Liste unter dem Finger weg. */
-/* Blinzeln: die Augengruppe faellt kurz auf null Hoehe zusammen. Kein zweiter
-   Pfad, keine Lider - eine Skalierung um die Augenachse genuegt und laeuft auf
-   jedem Geraet fluessig, weil sie nur die Grafikkarte beschaeftigt.
-   transform-origin liegt auf Augenhoehe (y=34 im viewBox), sonst klappt das
-   Auge nach oben weg statt sich zu schliessen. */
-.octo-augen{ transform-origin:39.8px 34px; }
-.octo.blinzelt .octo-augen{ animation:octoBlinzeln .19s ease-in-out; }
-@keyframes octoBlinzeln{ 50%{ transform:scaleY(.06); } }
-/* Der Blick wandert weich, nicht sprunghaft. */
-.octo-pupille{ transition:transform .42s cubic-bezier(.34,1.2,.5,1); }
-@media (prefers-reduced-motion: reduce){
-  .octo.blinzelt .octo-augen{ animation:none }
-  .octo-pupille{ transition:none }
-}
+/* Der Blick wandert weich, nicht sprunghaft. Etwas laenger als eine uebliche
+   Bewegung, damit es wie Umsehen wirkt und nicht wie Zucken. */
+.octo-pupille{ transition:transform .55s cubic-bezier(.32,.9,.35,1); }
+@media (prefers-reduced-motion: reduce){ .octo-pupille{ transition:none } }
 .aender-blatt{ position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end;
   justify-content:center; background:color-mix(in srgb, var(--ink) 34%, transparent);
   animation:aenderAuf .18s ease both; }
@@ -4952,7 +4942,6 @@ function SprachWahl({ onWaehlen }) {
  * Am Ende steht kein "Fertig", sondern der erste echte Schritt: etwas aussuchen.
  */
 function Tour({ marke, onFertig, sound }) {
-  const tourLeben = useOctoLeben();
   const [i, setI] = useState(0);
   // In der Tour wird nichts vorgefuehrt, was man nicht selbst anfassen kann:
   // die Beispielkarte dreht sich wirklich, der Ton schaltet wirklich.
@@ -4986,11 +4975,10 @@ function Tour({ marke, onFertig, sound }) {
     <div className="tour" role="dialog" aria-modal="true" aria-label={t("tour.aria")}>
       <button className="tour-skip" onClick={onFertig}>{t("tour.skip")}</button>
       <div className="tour-buehne">
-        {/* In der Tour bestimmt der Schritt den Blick - dort ist er Teil der
-            Aussage ("schielen" beim Datenschutz-Schritt). Geblinzelt wird
-            trotzdem, das macht ihn lebendig, ohne die Aussage zu stoeren. */}
+        {/* In der Tour bestimmt der SCHRITT den Blick, nicht der Zufall - dort
+            ist er Teil der Aussage ("schielen" beim Datenschutz-Schritt). */}
         {s.octo && <div className="tour-octo">
-          <OctoIcon s={104} blick={s.octo} blinzelt={tourLeben.blinzelt}
+          <OctoIcon s={104} blick={s.octo}
             kopfhoerer={!!(sound && sound.supported && sound.idx > 0)} />
         </div>}
         {s.bild === "karte" && (
@@ -5159,7 +5147,7 @@ function Profil({ meta, onSetzen, onBack, sound }) {
           sehen, statt nur an einem Punkt in einer Reihe. */}
       <div className="profil-held">
         <div className="profil-held-figur">
-          <OctoIcon s={96} blick={leben.blick} blinzelt={leben.blinzelt}
+          <OctoIcon s={96} blick={leben.blick}
             kopfhoerer={!!(sound && sound.idx > 0)} />
         </div>
         <div className="profil-held-name">{name}</div>
@@ -7814,35 +7802,37 @@ function Kopfhoerer() {
  * per CSS ab (die Zeitgeber duerfen weiterlaufen, sie aendern dann nur Werte,
  * die niemand sieht).
  */
-const OCTO_WANDER = ["ruhig", "links", "rechts", "hoch", "runter", "ruhig", "schielen"];
+const OCTO_WANDER = ["links", "rechts", "hoch", "runter", "schielen"];
 
+/* **Ruhe ist der Normalzustand.** Bloop schaut alle zehn bis zwanzig Sekunden
+   einmal kurz woanders hin und kommt dann zurueck - er wandert nicht dauernd.
+   Eine erste Fassung wechselte alle drei Sekunden den Blick und blinzelte dazu;
+   das war keine Lebendigkeit mehr, sondern Unruhe, und man konnte nicht mehr
+   danebensitzen, ohne hinzusehen.
+   Geblinzelt wird gar nicht: die Augen sind gross und rund, ein Zuklappen
+   liest sich in dieser Groesse als Zucken statt als Blinzeln. */
 function useOctoLeben(an = true) {
   const [blick, setBlick] = useState("ruhig");
-  const [blinzelt, setBlinzelt] = useState(false);
   useEffect(() => {
     if (!an) return;
-    let a, b;
+    let naechster, zurueck;
     const schauen = () => {
       setBlick(OCTO_WANDER[Math.floor(Math.random() * OCTO_WANDER.length)]);
-      a = setTimeout(schauen, 2600 + Math.random() * 4200);
+      // Kurz hinsehen, dann wieder geradeaus.
+      zurueck = setTimeout(() => setBlick("ruhig"), 1100 + Math.random() * 900);
+      naechster = setTimeout(schauen, 10000 + Math.random() * 10000);
     };
-    const blinzeln = () => {
-      setBlinzelt(true);
-      setTimeout(() => setBlinzelt(false), 200);
-      b = setTimeout(blinzeln, 3400 + Math.random() * 5200);
-    };
-    a = setTimeout(schauen, 1800 + Math.random() * 2000);
-    b = setTimeout(blinzeln, 2400 + Math.random() * 2600);
-    return () => { clearTimeout(a); clearTimeout(b); };
+    naechster = setTimeout(schauen, 4000 + Math.random() * 5000);
+    return () => { clearTimeout(naechster); clearTimeout(zurueck); };
   }, [an]);
-  return { blick, blinzelt };
+  return { blick };
 }
 
-function OctoIcon({ s = 26, blick = "ruhig", kopfhoerer = false, blinzelt = false }) {
+function OctoIcon({ s = 26, blick = "ruhig", kopfhoerer = false }) {
   const v = OCTO_BLICKE[blick] || OCTO_BLICKE.ruhig;
   return (
     <svg width={s} height={Math.round(s * 1.0747)} viewBox="0 0 79.67 85.62" aria-hidden="true"
-      className={"octo" + (blinzelt ? " blinzelt" : "")}>
+      className="octo">
       <path fill="currentColor" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z" />
       {kopfhoerer && <Kopfhoerer />}
       <g className="octo-augen">
