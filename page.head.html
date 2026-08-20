@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bloop — Lernkarten ohne Konto, ohne Werbung</title>
+<meta name="description" content="Lernkarten mit drei Seiten: Frage, Antwort — und die Erklärung dahinter, wenn du sie brauchst. Die Karten bloopen immer wieder auf, bis du sie kannst. Ohne Konto, ohne Werbung, ohne Daten. Für Kinder ab 10 bedenkenlos.">
+<!-- Zwei Werte: das Handy nimmt den passenden zum Systemmodus. -->
+<meta name="theme-color" content="#F6F2FC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#150C24" media="(prefers-color-scheme: dark)">
+<!-- Keine Schriftdateien mehr: die runde Schrift kommt vom System (ui-rounded).
+     Spart rund 400 KB und stellt sicher, dass nichts nachgeladen wird. -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<!-- iOS nimmt fuer den Homescreen ausschliesslich diese PNG - kein SVG, kein Manifest-Icon.
+     Deckendes Quadrat ohne eigene Rundung: iOS maskiert die Ecken selbst. -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bloop">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta property="og:title" content="Bloop — Lernkarten ohne Konto, ohne Werbung">
+<meta property="og:description" content="Drei Seiten statt zwei: Frage, Antwort, Erklärung. Die Karten bloopen auf, bis du sie kannst.">
+<meta property="og:type" content="website">
+<style>
+  html,body{margin:0;padding:0;background:#F6F2FC}
+  @media (prefers-color-scheme:dark){ html,body{background:#150C24} }
+  /* Bis React da ist: ruhiger Platzhalter statt weißem Blitz */
+  #boot{font-family:system-ui,-apple-system,sans-serif;color:#6D6187;font-size:14px;
+        display:flex;align-items:center;justify-content:center;min-height:100dvh}
+</style>
+</head>
+<body>
+<div id="root"><div id="boot">wird geöffnet…</div></div>
+<script>
+  // Offline-Fähigkeit: nach dem ersten Laden läuft Robin auch ohne Netz.
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () {});
+    });
+  }
+</script>
