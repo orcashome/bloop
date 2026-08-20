@@ -13,7 +13,7 @@ rm -rf /tmp/icons_ql && mkdir -p /tmp/icons_ql
 
 rendere() {   # $1 = Vorlagenname, $2 = Zielgroesse, $3 = Zieldatei
   qlmanage -t -s 1024 -o /tmp/icons_ql "bau_$1.svg" > /dev/null 2>&1
-  sips -z "$2" "$2" "/tmp/icons_ql/bau_$1.svg.png" --out "../docs/$3" > /dev/null 2>&1
+  sips -z "$2" "$2" "/tmp/icons_ql/bau_$1.svg.png" --out "../docs/app/$3" > /dev/null 2>&1
 }
 
 rendere icon-1024        1024 icon-1024.png
@@ -21,6 +21,6 @@ rendere icon-512          512 icon-512.png
 rendere icon-192          192 icon-192.png
 rendere apple-touch-icon  180 apple-touch-icon.png
 rendere icon-maskable     512 icon-maskable.png
-cp bau_icon.svg ../docs/icon.svg
+cp bau_icon.svg ../docs/app/icon.svg
 rm -f bau_*.svg
 echo "Icons gerendert."

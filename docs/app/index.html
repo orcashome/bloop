@@ -596,9 +596,18 @@ Error generating stack: `+i.message+`
 
 /* Tour: eine Buehne oben, darunter Text, unten der eine Knopf. Immer gleich
    aufgebaut, damit man nach dem ersten Schritt weiss, wo man tippt. */
+/* Der Vorhang muss die GANZE Breite decken. Mit max-width:480px auf einem
+   position:fixed-Element deckte er nur die mittleren 480 Pixel - auf einem
+   breiten Bildschirm lief die Startseite links und rechts sichtbar weiter, samt
+   ihrem Knopf, und der Markenname wurde an der Kante abgeschnitten.
+   Die Breitenbegrenzung sitzt jetzt im Innenabstand: der Inhalt bleibt 480px
+   schmal, die Flaeche deckt alles. */
 .tour{ position:fixed; inset:0; z-index:45; background:var(--paper); overflow-y:auto;
-  padding:max(26px,env(safe-area-inset-top)) 22px max(26px,env(safe-area-inset-bottom));
-  display:flex; flex-direction:column; max-width:480px; margin:0 auto;
+  padding-top:max(26px,env(safe-area-inset-top));
+  padding-bottom:max(26px,env(safe-area-inset-bottom));
+  padding-left:max(22px,calc((100vw - 480px) / 2));
+  padding-right:max(22px,calc((100vw - 480px) / 2));
+  display:flex; flex-direction:column;
   animation:tourAuf .32s cubic-bezier(.2,.7,.2,1) both; }
 @keyframes tourAuf{ from{ opacity:0 } to{ opacity:1 } }
 .tour-skip{ align-self:flex-end; background:none; border:none; color:var(--ink-soft);

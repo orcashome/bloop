@@ -2,7 +2,7 @@
  * Zweck: Die App laeuft nach dem ersten Besuch auch ohne Netz (Auto, Bahn, Keller).
  * WICHTIG beim Neu-Deployen: CACHE-Namen hochzaehlen, sonst sehen Rueckkehrer die alte Version.
  */
-const CACHE = "bloop-v16";
+const CACHE = "bloop-v17";
 // Wichtig: jede Datei hier MUSS existieren. addAll bricht sonst komplett ab,
 // der Service Worker installiert nicht, und die App laeuft nicht offline.
 // fonts.css ist entfallen - die runde Schrift kommt jetzt vom System.

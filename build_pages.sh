@@ -1,5 +1,9 @@
 #!/bin/bash
-# Baut die eigenstaendige docs/index.html fuer GitHub Pages.
+# Baut die eigenstaendige App nach docs/app/index.html.
+#
+# docs/index.html ist die Startseite und wird NICHT von hier erzeugt -
+# die App liegt bewusst in einem Unterordner, damit ihre Adresse stabil
+# bleibt, wenn die Website die Wurzel bekommt.
 #
 # Einmalig vorher im Projektordner:
 #   npm install react react-dom esbuild
@@ -9,7 +13,7 @@
 #
 set -e
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-OUT="$HERE/docs"
+OUT="$HERE/docs/app"
 NM="$HERE/node_modules"
 
 if [ ! -d "$NM/react" ]; then
@@ -32,8 +36,8 @@ js, n = re.subn(r"@import url\(\\?'https://fonts\.googleapis\.com[^)]*\\?'\);", 
 js = js.replace('</script>', '<\\/script>')
 open(sys.argv[3], 'w', encoding='utf-8').write(head + '\n<script>' + js + '</script>\n</body>\n</html>\n')
 print('Google-Fonts-Import entfernt:', n)
-print('docs/index.html geschrieben:', len(head) + len(js), 'Zeichen')
+print('docs/app/index.html geschrieben:', len(head) + len(js), 'Zeichen')
 PY
 
 rm -f "$HERE/app.min.js"
-echo "Fertig. Nicht vergessen: bei inhaltlichen Aenderungen CACHE in docs/sw.js hochzaehlen."
+echo "Fertig. Nicht vergessen: bei inhaltlichen Aenderungen CACHE in docs/app/sw.js hochzaehlen."

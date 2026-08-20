@@ -45,7 +45,7 @@ if __name__ == "__main__":
     FIGUR, DETAIL = v["d_fig"], v["h_ink"]      # #9B6CD0 auf #2B1F38
     GRUND = "#221936"                            # dunkles Violett, wie frueher das Dunkelgruen
 
-    aus = os.path.join(hier, "..", "docs")
+    aus = os.path.join(hier, "..", "docs", "app")
     # Wie gross die Figur sitzen muss: Gemessen an den fertigen PNGs deckte der
     # Oktopus bei 76% Kantenanteil nur 36% der Kachel - zwischen den Armen ist
     # Luft, die Bounding Box luegt. Auf dem Homescreen wirkte er dadurch verloren.
