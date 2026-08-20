@@ -20,14 +20,19 @@ MUND = ("M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4
 # Bildmasse der Originalzeichnung
 B, H = 79.67, 85.62
 
-def svg(groesse, figur, grund, detail, anteil):
+def svg(groesse, figur, grund, detail, anteil, mit_grund=True):
     """anteil: wie viel der Kante die Figur einnimmt. Maskable braucht weniger,
     weil Android das Icon zu einem Kreis beschneiden darf."""
     s = groesse * anteil / max(B, H)
     tx = (groesse - B * s) / 2.0
     ty = (groesse - H * s) / 2.0
+    # Das Favicon laeuft OHNE Grundflaeche: im Browsertab saesse die Figur sonst
+    # in einem dunklen Kaestchen, das neben dem Tab fremd wirkt. Die
+    # Homescreen-Icons brauchen die Flaeche dagegen zwingend - iOS setzt bei
+    # Transparenz schwarze Ecken, Android beschneidet ins Leere.
+    flaeche = ('<rect width="%d" height="%d" fill="%s"/>' % (groesse, groesse, grund)) if mit_grund else ""
     return ('<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d">'
-      '<rect width="%d" height="%d" fill="%s"/>'
+      '%s'
       '<g transform="translate(%.3f %.3f) scale(%.5f)">'
       '<path fill="%s" d="%s"/>'
       '<circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/>'
@@ -35,7 +40,7 @@ def svg(groesse, figur, grund, detail, anteil):
       '<path fill="%s" d="%s"/>'
       '<circle cx="31.01" cy="35.29" r="4.77" fill="%s"/>'
       '<circle cx="52.45" cy="35.30" r="4.77" fill="%s"/>'
-      '</g></svg>') % (groesse, groesse, groesse, groesse, groesse, groesse, grund,
+      '</g></svg>') % (groesse, groesse, groesse, groesse, flaeche,
                        tx, ty, s, figur, KOERPER, detail, MUND, detail, detail)
 
 if __name__ == "__main__":
@@ -69,7 +74,12 @@ if __name__ == "__main__":
     # Ausnahme: icon.svg geht als Vektor direkt in die App und behaelt 64.
     for name, px, anteil in plaene:
         vorlage = 64 if name == "icon" else 1024
+        # Ohne Grundflaeche nimmt die Figur die ganze Kachel ein - im Tab zaehlt
+        # jedes Pixel, und es gibt keine Ecken mehr, die abgeschnitten wuerden.
         with open(os.path.join(hier, "bau_%s.svg" % name), "w") as f:
-            f.write(svg(vorlage, FIGUR, GRUND, DETAIL, anteil))
+            if name == "icon":
+                f.write(svg(vorlage, FIGUR, GRUND, DETAIL, 1.0, mit_grund=False))
+            else:
+                f.write(svg(vorlage, FIGUR, GRUND, DETAIL, anteil))
     print("Figur %s / Grund %s / Detail %s" % (FIGUR, GRUND, DETAIL))
     print("%d SVG-Vorlagen geschrieben" % len(plaene))
