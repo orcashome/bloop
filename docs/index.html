@@ -141,6 +141,102 @@ details code{ display:block; background:var(--paper); border-radius:10px; paddin
 
 footer{ padding:36px 0 46px; text-align:center; border-top:1px solid var(--line); margin-top:26px; }
 footer p{ font-size:13px; font-weight:600; color:var(--soft); }
+
+/* Der Verlauf baut sich beim Scrollen auf, nicht nach der Uhr. Ein Chat mit
+   Kunstpause ist beim ersten Besuch charmant und ab dem zweiten laestig - man
+   kann nicht ueberfliegen, nicht nachlesen, nicht zurueck. So bleibt das Tempo
+   beim Leser, und es wirkt trotzdem lebendig.
+   Ohne JavaScript oder mit reduzierter Bewegung steht einfach alles da. */
+.zug{ opacity:1; }
+.js .zug{ opacity:0; transform:translateY(14px); }
+.js .zug.da{ opacity:1; transform:none;
+  transition:opacity .42s ease, transform .42s cubic-bezier(.2,.7,.3,1); }
+@media (prefers-reduced-motion:reduce){
+  .js .zug{ opacity:1; transform:none; }
+  .js .zug.da{ transition:none; }
+}
+/* Die Sorgen am Anfang: dieselbe Seite wie die Fragen des Lesers, aber
+   ernster gesetzt - sie sind keine Zwischenfrage, sondern der Grund. */
+.zug.sorge .blase{ font-size:17.5px; font-weight:700; color:var(--ink);
+  background:var(--blase-du); }
+.dazwischen{ text-align:center; font-size:12.5px; font-weight:700; color:var(--soft);
+  letter-spacing:.03em; padding:14px 0 4px; }
+
+/* Die Probekarte auf dieser Seite ist ANFASSBAR. Frage und Antwort gleichzeitig
+   zu zeigen nimmt genau den Moment weg, um den es geht: kurz nachdenken, dann
+   nachsehen. Wer einmal selbst getippt hat, hat die App verstanden. */
+.probe.tipp{ cursor:pointer; user-select:none; width:100%; text-align:left;
+  border:none; font:inherit; color:inherit; transition:box-shadow .16s ease; }
+.probe.tipp:hover{ box-shadow:0 3px 0 var(--accent); }
+.probe.tipp:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+.probe-hinweis{ font-size:12.5px; font-weight:800; color:var(--accent);
+  letter-spacing:.04em; margin-top:14px; }
+.probe-loesung{ display:none; }
+.probe.auf .probe-loesung{ display:block; animation:probeAuf .26s ease both; }
+.probe.auf .probe-hinweis{ display:none; }
+@keyframes probeAuf{ from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:none } }
+@media (prefers-reduced-motion:reduce){ .probe.auf .probe-loesung{ animation:none } }
+
+/* Ablauf in Schritten. Nummern sind hier keine Deko: die Reihenfolge ist
+   der Inhalt - wer Schritt zwei vor Schritt eins macht, kommt nicht ans Ziel. */
+.ablauf{ counter-reset:schritt; display:flex; flex-direction:column; gap:2px; }
+.schritt{ display:flex; gap:15px; padding:15px 0; }
+.schritt::before{ counter-increment:schritt; content:counter(schritt);
+  flex-shrink:0; width:29px; height:29px; border-radius:50%; background:var(--accent);
+  color:var(--auf); font-size:14px; font-weight:800;
+  display:flex; align-items:center; justify-content:center; margin-top:1px; }
+.schritt h4{ margin:0 0 4px; font-size:16px; font-weight:800; letter-spacing:-.02em; }
+.schritt p{ font-size:15px; font-weight:600; color:var(--soft); }
+.schritt + .schritt{ border-top:1px solid var(--line); }
+.weg{ background:var(--card); border-radius:18px; padding:20px 22px;
+  box-shadow:0 3px 0 var(--line); margin-bottom:13px; }
+.weg > .kopf-zeile{ font-size:17px; font-weight:800; margin-bottom:4px; }
+.weg > .wer{ font-size:13px; font-weight:700; color:var(--accent);
+  letter-spacing:.03em; margin-bottom:12px; }
+
+/* Chat-Beiwerk: Tippanzeige und eine abgebrochene Sprachnachricht.
+   Beides laeuft NUR, wenn die Zeile im Bild ist - eine Animation, die im
+   Hintergrund vor sich hin tickt, kostet Akku und sieht niemand. */
+.tippt .blase{ display:inline-flex; gap:5px; padding:17px 20px; }
+.tippt i{ width:8px; height:8px; border-radius:50%; background:var(--soft);
+  display:block; opacity:.35; }
+.tippt.da i{ animation:tippAn 1.25s infinite; }
+.tippt.da i:nth-child(2){ animation-delay:.18s; }
+.tippt.da i:nth-child(3){ animation-delay:.36s; }
+@keyframes tippAn{ 0%,60%,100%{ opacity:.3; transform:none }
+                   30%{ opacity:1; transform:translateY(-3px) } }
+.sprach .blase{ display:flex; align-items:center; gap:11px; min-width:210px; }
+.sprach-stop{ width:31px; height:31px; border-radius:50%; background:var(--accent);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+.sprach-stop::after{ content:""; width:10px; height:10px; border-radius:2px; background:var(--auf); }
+.sprach-welle{ flex:1; display:flex; align-items:center; gap:2.5px; height:22px; }
+.sprach-welle i{ flex:1; background:var(--soft); border-radius:2px; opacity:.5;
+  height:30%; display:block; }
+.sprach.da .sprach-welle i{ animation:welle 1s ease-in-out infinite; }
+.sprach-welle i:nth-child(3n){ animation-delay:.15s } .sprach-welle i:nth-child(3n+1){ animation-delay:.3s }
+@keyframes welle{ 50%{ height:100%; opacity:.9 } }
+.sprach-zeit{ font-variant-numeric:tabular-nums; font-size:14.5px; font-weight:800;
+  color:var(--soft); min-width:42px; text-align:right; }
+@media (prefers-reduced-motion:reduce){
+  .tippt.da i, .sprach.da .sprach-welle i{ animation:none }
+}
+
+/* Gruppenchat: Menschen wechseln die Seite, damit man sieht, dass mehrere
+   reden. Nur wenn dieselbe Person zweimal hintereinander schreibt, bleibt sie
+   auf ihrer Seite - und bekommt dann weder Namen noch Bild noch einmal.
+   Die Namen sind erfunden; darauf weist die Zeile ueber dem Verlauf hin.
+   Erfundene Zitate mit echten Namen waeren auf einer Seite, die mit
+   Ehrlichkeit wirbt, genau der falsche Anfang. */
+.wer-name{ font-size:12px; font-weight:800; color:var(--soft); letter-spacing:.02em;
+  margin:0 0 4px 2px; }
+.zug.du .wer-name{ text-align:right; margin:0 2px 4px 0; }
+.zug.folge .wer-name{ display:none; }
+.kuerzel{ width:38px; height:38px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:800; color:var(--auf); margin-bottom:2px; }
+.kuerzel.a{ background:#3F7DB8; } .kuerzel.b{ background:#B8683F; }
+.zug.folge .kuerzel{ visibility:hidden; }
+.blase-spalte{ display:flex; flex-direction:column; min-width:0; }
 .mitte{ text-align:center; }
 </style>
 </head>
@@ -171,23 +267,66 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 
 <main id="oben">
   <div class="bahn verlauf">
-<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase gross">Hi, ich bin Bloop.<br>Ich glaube, dass <em>jedes Kind alles lernen kann.</em></div></div>
-<div class="zug du"><span class="kopfbild"></span><div class="blase">Schön. Und was machst du?</div></div>
-<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Ich merke mir, was du dir merken willst — und lege es dir genau dann wieder vor, wenn du es sonst vergessen würdest.</div></div>
+<p class="dazwischen">So klingt es in jeder Elterngruppe. Die Namen sind erfunden, die Sätze nicht.</p>
+<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">„Ich habe ehrlich keine Ahnung, was diese Apps mit den Daten meiner Tochter machen.“</div></div></div>
+<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">„Und meiner lernt drei Tage, dann reißt die Serie — und dann ist er beleidigt und macht gar nichts mehr.“</div></div></div>
+<div class="zug sprach" data-sprach><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase"><span class="sprach-stop" aria-hidden="true"></span><span class="sprach-welle" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="sprach-zeit" data-zeit>0:00</span></div></div></div>
+<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><div class="blase" style="font-size:14px;color:var(--soft);font-weight:700">Aufnahme abgebrochen</div></div></div>
+<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><div class="blase">„Sorry, das wurde zu lang. Kurz: <strong>Ich will auch nicht dauernd kontrollieren müssen.</strong>“</div></div></div>
+<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">„Ganz ehrlich — mir geht es genauso.“</div></div></div>
+<p class="dazwischen">Bloop kommt dazu</p>
+<div class="zug "><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><span style="font-size:20px;font-weight:800;letter-spacing:-.02em">Hi. Ich bin Bloop.</span><br><span style="color:var(--soft)">Darf ich der Reihe nach?</span></div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><strong>Zu den Daten:</strong> Es gibt keine. Kein Konto, keine Anmeldung, kein Server. Alles bleibt auf dem Gerät.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Probieren Sie es aus — Flugmodus an, ich laufe weiter. Was offline funktioniert, kann nichts verschicken.</div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Und die Serie?</div></div>
+<div class="zug "><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><strong>Gibt es nicht.</strong> Keine Punkte, keine Kette, nichts, was abreißen kann.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Wer drei Tage nichts macht, verliert nichts. Ich warte einfach. Eine Runde darf enden, ohne dass jemand ein schlechtes Gewissen bekommt.</div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Und das Kontrollieren?</div></div>
+<div class="zug "><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Es gibt eine Übersicht — aber <strong>keinen Elternzugang</strong>.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Ihr Kind kann sie Ihnen zeigen, wenn es möchte. Der Unterschied zwischen Stolz und Kontrolle ist, wer die Seite aufschlägt.</div></div>
+<p class="dazwischen">Und was ich mache</p>
+<div class="zug "><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Ich merke mir, was Ihr Kind sich merken will — und lege es genau dann wieder vor, wenn es sonst vergessen würde.</div></div>
 <div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Nicht zwanzigmal hintereinander. <strong>Einmal richtig.</strong></div></div>
-<div class="zug du"><span class="kopfbild"></span><div class="blase">Wie sehen die Karten aus?</div></div>
 <div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase" style="padding:12px"><div class="probe"><div class="probe-kicker">Mathematik · Frage</div><div class="probe-frage">Warum ist minus mal minus plus?</div><div class="probe-antwort" style="border-top:none;padding-top:0;margin-top:0;font-weight:800;color:var(--ink);font-size:16px">Weil das Gegenteil vom Gegenteil das Original ist.</div><div style="margin-top:12px"><span class="probe-warum">↑ Warum?</span></div><div class="probe-antwort">Minus dreht die Richtung um — zweimal umdrehen führt zurück. Wenn dir jemand dreimal Schulden von 4 Euro erlässt, hast du 12 Euro mehr.</div><div class="probe-knoepfe"><span class="n">Nochmal</span><span class="g">Gewusst</span></div></div></div></div>
-<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Zwei Seiten wie immer — und eine dritte dahinter, für das Warum. <strong>Die gibt es nur bei mir.</strong></div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Zwei Seiten wie immer — und eine dritte dahinter, für das Warum. <strong>Die gibt es nur bei mir.</strong></div></div>
+
+<p class="dazwischen">Der einfachste Einstieg</p>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">
+  Und wie kriege ich ein Kind dazu, freiwillig anzufangen?</div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">
+  Gar nicht mit Lernstoff. <strong>Mit Quizfragen.</strong></div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase" style="padding:12px">
+  <button class="probe tipp" data-probe aria-expanded="false">
+    <div class="probe-kicker">Zum Staunen · Frage</div>
+    <div class="probe-frage">Wie viele Zähne hat eine Schnecke?</div>
+    <div class="probe-hinweis">Tippen zum Umdrehen →</div>
+    <div class="probe-loesung">
+      <div class="probe-antwort" style="border-top:none;padding-top:0;margin-top:0;
+        font-weight:800;color:var(--ink);font-size:16.5px">Über 10 000.</div>
+      <div class="probe-antwort">Winzige Zähnchen auf einer Raspelzunge — damit
+        schabt sie Blätter ab. Nachwachsen tun sie auch, ein Leben lang.</div>
+    </div>
+  </button></div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">
+  Das ist die Frage, die es bei uns zu Hause geschafft hat. Seitdem wird sie jedem
+  erzählt, der nicht schnell genug weggeht.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">
+  Und wer erst einmal rät, merkt nicht, dass er dabei schon lernt —
+  wie eine Karte funktioniert, wie das Umdrehen geht, wie sich das anfühlt.
+  <strong>Der Lernstoff kommt danach von selbst.</strong></div></div>
+
 <div class="zug du"><span class="kopfbild"></span><div class="blase">Was kostet das?</div></div>
-<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Im Browser gar nichts. Für immer.</div></div>
+<div class="zug "><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Im Browser gar nichts. Für immer.</div></div>
 <div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Die Apps für Handy und Tablet kosten einmalig. Kein Abo.</div></div>
-<div class="zug du"><span class="kopfbild"></span><div class="blase">Und die Daten meines Kindes?</div></div>
-<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><strong>Welche Daten?</strong></div></div>
-<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Es gibt kein Konto, keine Anmeldung, keine Werbung und keinen Server, der irgendetwas einsammeln könnte. Alles bleibt auf dem Gerät.</div></div>
-<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Probieren Sie es aus: Flugmodus an — ich laufe weiter.</div></div>
-<div class="zug du"><span class="kopfbild"></span><div class="blase">Punkte? Serien? Belohnungen?</div></div>
-<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Nichts davon.</div></div>
-<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Wer drei Tage nichts macht, verliert nichts. Ich hole niemanden zurück, und eine Runde darf einfach enden.</div></div>
+<p class="dazwischen">Zum Schluss</p>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">
+  Der, der mich gebaut hat, saß genau da, wo Sie gerade sitzen. Zwei Kinder,
+  neun und zwölf, und die Frage: <strong>Warum ist eigentlich keine dieser Apps
+  auf der Seite der Kinder?</strong></div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">
+  Also hat er eine gebaut. Am Küchentisch, nach Feierabend.
+  <a href="#eltern">Die ganze Geschichte steht weiter unten.</a></div></div>
+
   </div>
 
   <div class="bahn mitte" style="padding:34px 20px 6px">
@@ -198,11 +337,16 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 
   <section id="eltern">
     <div class="bahn">
-      <div class="balken">Für Eltern</div>
-      <h2>Wir sind selbst welche.</h2>
-      <p class="vor">Wir haben zugesehen, wie unsere Kinder mit Programmen aufwachsen,
-        die gebaut wurden, um sie möglichst lange festzuhalten. Irgendwann haben wir
-        aufgehört, uns zu ärgern, und angefangen, das Gegenteil zu bauen.</p>
+      <div class="balken">Wer das baut</div>
+      <h2>Ein Vater, ein Küchentisch, zu viele Abende.</h2>
+      <p class="vor">Ich baue Bloop im Wesentlichen allein. Aber ich baue es nicht
+        allein <em>aus</em>: Ich rede jeden Tag mit meiner Frau darüber, mit meinen
+        Kindern — neun und zwölf — und mit anderen Eltern.
+        <strong>Die drei Sätze ganz oben sind nicht erfunden.</strong> Sie fallen bei
+        uns am Tisch, und sie fallen überall sonst auch.</p>
+      <p class="vor">Meine Kinder sind gnadenlose Tester. Was sie langweilig finden,
+        fliegt raus. Was sie nicht auf Anhieb verstehen, war schlecht erklärt —
+        nicht sie haben es nicht kapiert.</p>
       <details>
         <summary>Welche Daten sammelt die App über mein Kind?</summary>
         <p>Keine. Kein Konto, keine Anmeldung, keine Analyse-Werkzeuge.
@@ -255,37 +399,82 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 
   <section id="creator">
     <div class="bahn">
-      <div class="balken">Karten bauen</div>
-      <h2>Eigene Karten in zwei Minuten.</h2>
-      <p class="vor">Am Rechner tippen, per Code aufs Handy — oder sich die Karten
-        von einer KI schreiben lassen, die Sie ohnehin schon haben.
-        <strong>Wir bauen dafür keine ein:</strong> Jede App, die Inhalte erzeugt,
-        schickt Ihre Eingaben an einen fremden Server.</p>
+      <div class="balken">Bloop Creator</div>
+      <h2>Dein erstes Deck. In zwei Minuten.</h2>
+      <p class="vor">Karten selbst bauen, weitergeben, gemeinsam lernen — ohne Konto,
+        ohne Upload. Zwei Wege, die bei uns täglich laufen.</p>
+
+      <div class="weg">
+        <div class="kopf-zeile">Die Vokabelseite aus dem Schulbuch</div>
+        <div class="wer">Kind, 12 · dauert etwa zwei Minuten</div>
+        <div class="ablauf">
+          <div class="schritt"><div>
+            <h4>Seite abfotografieren</h4>
+            <p>Mit der Kamera des Handys. Danach im Foto auf den Text tippen und
+              „Alles auswählen“ — das macht das Handy selbst, iPhone wie Android.</p></div></div>
+          <div class="schritt"><div>
+            <h4>In Bloop einfügen</h4>
+            <p>Neue Kartei → Text einfügen. Aus jeder Zeile wird eine Karte.
+              Was nicht passt, fliegt mit einem Tipp raus.</p></div></div>
+          <div class="schritt"><div>
+            <h4>Weitergeben</h4>
+            <p>Kartei teilen erzeugt einen Code. Der geht per Nachricht an die
+              Freundin, die ihn einfügt — fertig. <strong>Kein Konto, kein Server,
+              keine Anmeldung.</strong></p></div></div>
+        </div>
+      </div>
+
+      <div class="weg">
+        <div class="kopf-zeile">Das Referat über Schnecken</div>
+        <div class="wer">Elternteil mit KI · dauert etwa fünf Minuten</div>
+        <div class="ablauf">
+          <div class="schritt"><div>
+            <h4>Stoff sammeln</h4>
+            <p>Aus dem Schulbuch, einem Sachbuch oder aus dem, was die KI ohnehin weiß.</p></div></div>
+          <div class="schritt"><div>
+            <h4>Karten schreiben lassen</h4>
+            <p>Den Auftrag unten in ein beliebiges KI-Werkzeug geben.
+              <strong>Wir bauen bewusst keine ein</strong> — jede App, die Inhalte
+              erzeugt, schickt Ihre Eingabe an einen fremden Server.</p></div></div>
+          <div class="schritt"><div>
+            <h4>Gegenlesen</h4>
+            <p>Das ist der Schritt, den niemand überspringen sollte. KIs erfinden
+              gelegentlich Zahlen. Bei zwanzig Karten dauert das eine Minute.</p></div></div>
+          <div class="schritt"><div>
+            <h4>Einfügen und loslegen</h4>
+            <p>Kopieren, in Bloop unter „Neue Kartei“ einfügen. Fertig.</p></div></div>
+        </div>
+      </div>
+
       <details>
-        <summary>Von der KI in die App — so geht es</summary>
-        <ol>
-          <li>KI-Werkzeug Ihrer Wahl öffnen (auch die kostenlosen genügen).</li>
-          <li>Auftrag unten eingeben, Thema ersetzen.</li>
-          <li>Antwort kopieren, in Bloop unter <strong>Neue Kartei</strong> einfügen.</li>
-        </ol>
+        <summary>Der Auftrag zum Kopieren — getestet</summary>
+        <p>Wir haben ihn mit den Antwortstilen der gängigen Werkzeuge geprüft:
+          nummerierte Listen, Fettdruck, Markdown-Tabellen. <strong>Alle vier
+          Varianten werden korrekt eingelesen.</strong> Wenn Ihr Werkzeug etwas
+          anderes ausgibt, funktioniert es trotzdem — die App räumt Formatierung
+          selbst weg.</p>
         <code>Erstelle 20 Lernkarten zum Thema [THEMA] für ein Kind
-in der [KLASSE]. Eine Karte pro Zeile, Vorderseite und
-Rückseite getrennt durch einen Gedankenstrich.
+in der [KLASSE].
+
+Format: eine Karte pro Zeile, Vorderseite und Rückseite
+getrennt durch einen Gedankenstrich.
 
 Regeln:
 - Die Antwort ist kurz. Ein Wort oder ein Satz.
 - Steht in der Antwort eine Zahl, muss die Einheit in
-  der Frage stehen ("Wie viele Kammern pro Herz?").
+  der Frage stehen ("Wie viele Kammern hat ein Herz?").
 - Frage nach dem Warum, nicht nach Auswendiggelerntem.
-- Keine Sternchen, kein Markdown.
-- Prüfe zum Schluss: Passt jede Antwort zur Frage?</code>
-        <p>Die letzten beiden Regeln sind die wichtigsten — ohne sie kommt
-          formatierter Text heraus, den die App wörtlich anzeigt.</p>
+- Keine Einleitung, keine Nummerierung, kein Markdown.
+- Prüfe zum Schluss jede Karte: Passt die Antwort
+  wirklich zur Frage?</code>
+        <p>Die letzte Regel ist die wichtigste. Ohne sie kommen gelegentlich
+          Karten heraus, deren Antwort eine andere Frage beantwortet.</p>
       </details>
       <details>
-        <summary>Karten von einem Gerät aufs andere</summary>
-        <p>Jede Kartei lässt sich als Code ausgeben und woanders wieder einfügen.
-          Das ist zugleich die Sicherung: ein Text, der Ihnen gehört.</p>
+        <summary>Karten weitergeben und sichern</summary>
+        <p>Jede Kartei lässt sich als Code ausgeben und woanders einfügen —
+          per Nachricht, Mail oder Zettel. Das ist zugleich Ihre Sicherung:
+          ein Text, der Ihnen gehört und den niemand sonst sieht.</p>
       </details>
     </div>
   </section>
@@ -331,6 +520,72 @@ Regeln:
   </div>
 </footer>
 
+<script>
+  // Die Probekarten drehen sich wirklich um. Kein Zeitgeber, kein Automatismus -
+  // der Besucher entscheidet, wann er nachsieht. Genau das ist die Geste, die
+  // er in der App wiederfindet.
+  document.querySelectorAll("[data-probe]").forEach(function (k) {
+    k.addEventListener("click", function () {
+      var auf = k.classList.toggle("auf");
+      k.setAttribute("aria-expanded", auf ? "true" : "false");
+    });
+  });
+</script>
+<script>
+  // Die Sprachnachricht laeuft bis 0:45 und bricht ab - der Moment, den jeder
+  // aus jeder Elterngruppe kennt. Startet erst, wenn die Zeile sichtbar wird,
+  // und laeuft genau einmal.
+  (function () {
+    var zeile = document.querySelector("[data-sprach]");
+    if (!zeile) return;
+    var anzeige = zeile.querySelector("[data-zeit]");
+    var reduziert = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduziert) { anzeige.textContent = "0:45"; return; }
+    var gestartet = false;
+    var starte = function () {
+      if (gestartet) return; gestartet = true;
+      var s = 0;
+      var uhr = setInterval(function () {
+        s += 1;
+        anzeige.textContent = "0:" + (s < 10 ? "0" : "") + s;
+        if (s >= 45) { clearInterval(uhr); zeile.classList.add("aus"); }
+      }, 55);
+    };
+    if (!("IntersectionObserver" in window)) { starte(); return; }
+    new IntersectionObserver(function (e, o) {
+      if (e[0].isIntersecting) { starte(); o.disconnect(); }
+    }, { threshold: 0.6 }).observe(zeile);
+  })();
+</script>
+<script>
+  document.documentElement.classList.add("js");
+  // Die Blasen erscheinen beim Erreichen, nicht nach der Uhr - so bleibt das
+  // Tempo beim Leser. Wer die Seite ein zweites Mal liest, wird nicht gebremst.
+  var zuege = document.querySelectorAll(".zug");
+  if (!("IntersectionObserver" in window)) {
+    // Alter Browser: alles sofort zeigen statt gar nichts.
+    zuege.forEach(function (z) { z.classList.add("da"); });
+  } else {
+    var beobachter = new IntersectionObserver(function (eintraege) {
+      eintraege.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        // Kleiner Versatz, damit aufeinanderfolgende Blasen nacheinander
+        // eintrudeln statt gleichzeitig aufzupoppen.
+        var i = +e.target.dataset.i || 0;
+        setTimeout(function () { e.target.classList.add("da"); }, Math.min(i, 3) * 90);
+        beobachter.unobserve(e.target);
+      });
+    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
+    var lauf = 0, letzterOben = -999;
+    zuege.forEach(function (z) {
+      var oben = z.offsetTop;
+      lauf = (oben - letzterOben < 140) ? lauf + 1 : 0;
+      letzterOben = oben;
+      z.dataset.i = lauf;
+      beobachter.observe(z);
+    });
+  }
+</script>
 <script>
   // Burger: nur auf schmalen Schirmen sichtbar, deshalb genuegt ein Umschalter.
   var b = document.getElementById("burger"), k = document.getElementById("klapp");

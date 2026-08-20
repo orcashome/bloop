@@ -63,6 +63,10 @@ const TEXTE = {
   /* Deutsch ist die Rueckfallsprache: was hier fehlt, faellt auf den Schluessel
      zurueck. Neue Texte gehoeren deshalb IMMER zuerst hierher. */
   de: {
+    "spiel.gegnerstein": "— %N%s Stein",
+    "spiel.denkt": "%N% überlegt…",
+    "deck.teilen.text": "Lern mit mir! Importiere diese Kartei in %N%:",
+    "foto.knopf": "Seite fotografieren",
     "allg.schliessen": "Schließen",
     "bib.hinzu": "Hinzufügen",
     "deck.alle": "Alle Karten",
@@ -267,6 +271,10 @@ const TEXTE = {
     "profil.farbe": "Farbe & Helligkeit",
   },
   en: {
+    "spiel.gegnerstein": "— %N%'s piece",
+    "spiel.denkt": "%N% is thinking…",
+    "deck.teilen.text": "Learn with me! Import this set into %N%:",
+    "foto.knopf": "Photograph a page",
     "name.andere": "Show others",
     "name.passt": "That's it",
     "modus.auto": "Automatic",
@@ -685,11 +693,18 @@ const STYLES = `
 .btn{ font-family:var(--ui); font-weight:800; font-size:16px; border-radius:18px; cursor:pointer;
   border:1px solid transparent; padding:13px 16px; transition:transform .08s ease, background .15s ease; }
 .btn:active{ transform:translateY(1px); }
+/* Volle Breite auf dem Handy - dort gehoert die Hauptsache unter den Daumen.
+   Auf breiten Schirmen aber gedeckelt: ein 720 Pixel breiter Knopf sieht nicht
+   wichtiger aus, sondern unfertig. */
 .btn-primary{ background:var(--accent); color:var(--auf); width:100%;
+  max-width:420px; margin-inline:auto;
   box-shadow:0 3px 0 var(--accent-press); }
 .btn-primary:hover{ background:var(--accent-press); }
 /* Vorher weiss auf var(--ink-soft) = Kontrast 1.8, der Text war schlicht weg. Jetzt 4.8. */
-.btn-primary:disabled{ background:var(--ink-soft); cursor:default; }
+/* Der ausgegraute Knopf hatte weiter die farbige Unterkante - das sah aus wie
+   ein Fehler, nicht wie "geht gerade nicht". Beides muss zusammen ausgrauen. */
+.btn-primary:disabled{ background:var(--ink-soft); cursor:default;
+  box-shadow:0 3px 0 var(--line); }
 .btn-ghost{ background:var(--card); border:none; box-shadow:0 3px 0 var(--line); color:var(--ink); }
 .btn-ghost:hover{ box-shadow:0 3px 0 var(--ink-soft); }
 :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
@@ -816,7 +831,8 @@ const STYLES = `
 .gruss.klein .gruss-text{ font-size:24px; line-height:1.22; letter-spacing:-.015em; }
 .today-say{ font-family:var(--ui); font-size:13px; font-weight:600; line-height:1.4;
   color:var(--ink-soft); margin-bottom:14px; text-wrap:balance; }
-.btn-go{ width:100%; font-size:16px; padding:16px; letter-spacing:-.01em; }
+.btn-go{ width:100%; max-width:420px; margin-inline:auto; font-size:16px;
+  padding:16px; letter-spacing:-.01em; }
 .start-row{ display:flex; gap:10px; margin-bottom:10px; }
 .start-row .btn{ flex:1; padding:14px; justify-content:center; }
 
@@ -5591,9 +5607,10 @@ function vgZug(b, stufe) {
 const VG_STUFEN = [{ label: "Leicht" }, { label: "Mittel" }, { label: "Knifflig" }];
 
 function VierGewinnt({ sound, onBack }) {
+  const marke = useMarke();
   const [stufe, setStufe] = useState(1);
   const [brett, setBrett] = useState(vgLeer);
-  const [dran, setDran] = useState(1);          // 1 = du, 2 = Robin
+  const [dran, setDran] = useState(1);          // 1 = du, 2 = der Begleiter
   const [denkt, setDenkt] = useState(false);
   const meinSieg = vgSieg(brett, 1), robinSieg = vgSieg(brett, 2);
   const voll = !vgMoeglich(brett).length;
@@ -5639,7 +5656,7 @@ function VierGewinnt({ sound, onBack }) {
           return (
             <button key={idx} className="vg-feld" onClick={() => wirf(sp)}
               disabled={vorbei || dran !== 1 || vgFrei(brett, sp) < 0}
-              aria-label={`Spalte ${sp + 1} ${v === 1 ? t("spiel.dranstein") : v === 2 ? "— Robins Stein" : "— frei"}`}>
+              aria-label={`Spalte ${sp + 1} ${v === 1 ? t("spiel.dranstein") : v === 2 ? t("spiel.gegnerstein").replace("%N%", marke) : "— frei"}`}>
               <span className={"vg-stein" + (v === 1 ? " du" : v === 2 ? " robin" : "")
                 + (leuchtet.includes(idx) ? " leuchtet" : "")} />
             </button>
@@ -5651,7 +5668,7 @@ function VierGewinnt({ sound, onBack }) {
         {meinSieg ? <><span className="done">Vier in einer Reihe.</span>{t("spiel.gewonnen")}</>
           : robinSieg ? <><span className="done">Robin hat vier.</span>Nochmal?</>
             : voll ? <><span className="done">Voll.</span>{t("spiel.remis")}</>
-              : denkt ? "Robin überlegt…" : t("spiel.dran")}
+              : denkt ? t("spiel.denkt").replace("%N%", marke) : t("spiel.dran")}
       </div>
 
       <div className="lo-actions">
@@ -6571,6 +6588,7 @@ function Bibliothek({ onBack, onHeim, onAdd, onStudy, eigene, onOpen, onToggleRe
 
 /* ---------------- Deck ---------------- */
 function DeckView({ deck, tts, onBack, onHeim, onStudy, onAddCard, onEditCard, onDelCard, onDelDeck, onRest, onBeide, onFoto, onUebung }) {
+  const marke = useMarke();
   /* Eine Karte ist ein Entwurf mit drei Seiten, nicht zwei Einzelfelder plus
      ein "welche Seite sehe ich gerade". Das Umdrehen beim Anlegen ist entfallen. */
   const LEER = { front: "", back: "", warum: "", flang: "en-US", blang: "de-DE" };
@@ -6625,7 +6643,7 @@ function DeckView({ deck, tts, onBack, onHeim, onStudy, onAddCard, onEditCard, o
   const openShare = () => { setShareCode(encodeDeck(deck)); setCopied(false); };
   const copyCode = async () => { try { await navigator.clipboard.writeText(shareCode); setCopied(true); } catch {} };
   const nativeShare = async () => {
-    try { await navigator.share({ title: "Robin", text: `Lern mit mir! Importiere diese Kartei in Robin:\n\n${shareCode}` }); } catch {}
+    try { await navigator.share({ title: marke, text: t("deck.teilen.text").replace("%N%", marke) + "\n\n" + shareCode }); } catch {}
   };
 
   const due = faelligeVon(deck);
@@ -7336,11 +7354,36 @@ const SEPARATORS = [
 const clean = (s) => s.replace(/^\s*(\d+\s*[.)]|[-•*·])\s+/, "").trim();
 
 // Modus 1: Vokabelliste — pro Zeile ein Paar, getrennt durch Strich, Tab, Doppelpunkt …
+/* Was KI-Werkzeuge tatsaechlich liefern - nachgemessen, nicht vermutet:
+   ChatGPT nummeriert und setzt fett ("1. **Schnecke** — ..."), Gemini baut gern
+   eine Markdown-Tabelle, andere haengen Einleitungs- und Schlusssaetze an.
+   Ungehaertet erkannte der Parser aus einer Tabelle NULL Karten und aus einer
+   nummerierten Liste Vorderseiten wie "1. **Schnecke**".
+   Deshalb wird jede Zeile zuerst von Formatierung befreit. Wer hier etwas
+   aendert: die Faelle stehen als Test in der Projektablage. */
+const TABELLE_TRENN = /^\s*\|?\s*:?-{2,}:?\s*(\|\s*:?-{2,}:?\s*)*\|?\s*$/;
+function entformatiere(zeile) {
+  let s = zeile;
+  // Markdown-Tabellenzeile: die aeusseren Striche weg, die inneren werden
+  // vom normalen Trennzeichen | ohnehin erkannt.
+  if (/^\s*\|.*\|\s*$/.test(s)) s = s.replace(/^\s*\|/, "").replace(/\|\s*$/, "");
+  // Aufzaehlungszeichen und Nummerierung am Zeilenanfang
+  s = s.replace(/^\s*(?:[-*+\u2022]\s+|\d{1,3}[.)]\s+)/, "");
+  // Fett, kursiv, Code
+  s = s.replace(/\*\*(.+?)\*\*/g, "$1").replace(/__(.+?)__/g, "$1");
+  s = s.replace(/(^|\s)\*(\S[^*]*?)\*(?=\s|$)/g, "$1$2");
+  s = s.replace(/`([^`]+)`/g, "$1");
+  return s;
+}
+
 function splitPairs(text) {
   const rows = [], skipped = [];
   for (const raw of (text || "").split(/\r?\n/)) {
-    const line = clean(raw);
+    if (TABELLE_TRENN.test(raw)) continue;          // |---|---|
+    const line = clean(entformatiere(raw));
     if (!line) continue;
+    // Kopfzeile einer Tabelle ueberspringen
+    if (/^(vorderseite|frage|begriff|front|question|term)\s*[|:\t]/i.test(line)) continue;
     let pair = null;
     for (const re of SEPARATORS) {
       const parts = line.split(re);
@@ -7438,7 +7481,7 @@ function FotoImport({ sound, onBack, onImport, zielName }) {
         <input ref={fileRef} type="file" accept="image/*" capture="environment"
           onChange={pick} style={{ display: "none" }} />
         <button className="btn btn-ghost" style={{ width: "100%" }} onClick={() => fileRef.current && fileRef.current.click()}>
-          {photo ? t("foto.anderes") : "Seite fotografieren"}
+          {photo ? t("foto.anderes") : t("foto.knopf")}
         </button>
         {photo && <img className="imp-photo" src={photo} alt="Fotografierte Buchseite" />}
         <div className="mic-hint" style={{ marginTop: 10 }}>
