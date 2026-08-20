@@ -4,26 +4,26 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bloop — weil jedes Kind alles lernen kann</title>
-<meta name="description" content="Eine Lern-App ohne Konto, ohne Werbung, ohne Datensammeln. Von Eltern gebaut, für Kinder, Lehrkräfte und Schulen. Die Fassung im Browser ist kostenlos und bleibt es.">
+<meta name="description" content="Eine Lern-App ohne Konto, ohne Werbung, ohne Datensammeln. Von Eltern gebaut, für Kinder, Lehrkräfte und Schulen. Im Browser kostenlos.">
 <meta name="theme-color" content="#F6F7F8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E0F11" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="app/icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="app/apple-touch-icon.png">
 <meta property="og:title" content="Bloop — weil jedes Kind alles lernen kann">
-<meta property="og:description" content="Eine Lern-App, die zufrieden ist, wenn man sie zumacht. Ohne Konto, ohne Werbung, ohne Datensammeln.">
+<meta property="og:description" content="Eine Lern-App, die zufrieden ist, wenn man sie zumacht.">
 <meta property="og:type" content="website">
 <style>
 :root{
-  --paper:#F6F7F8; --card:#FFFFFF; --ink:#232830; --soft:#666E7A;
-  --line:#E2E5E9; --accent:#8045C4; --accent-satt:#6D36AC; --auf:#FFFFFF;
-  --figur:#8349C5;
+  --paper:#F6F7F8; --card:#FFFFFF; --ink:#232830; --soft:#5B6270;
+  --line:#E2E5E9; --accent:#7A3FBF; --accent-satt:#65309F; --auf:#FFFFFF;
+  --figur:#7A3FBF; --blase-du:#EDEFF2;
   --disp:ui-rounded,'SF Pro Rounded','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --paper:#0E0F11; --card:#1A1C1F; --ink:#F0F1F3; --soft:#838A96;
-    --line:#34383E; --accent:#9B6CD0; --accent-satt:#B28EDB; --auf:#0E0F11;
-    --figur:#9B6CD0;
+    --paper:#0E0F11; --card:#1A1C1F; --ink:#F0F1F3; --soft:#9AA2AE;
+    --line:#34383E; --accent:#A87BDB; --accent-satt:#BF9BE6; --auf:#0E0F11;
+    --figur:#A87BDB; --blase-du:#22252A;
   }
 }
 *{ box-sizing:border-box; }
@@ -31,402 +31,299 @@ html{ scroll-behavior:smooth; }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
 body{ margin:0; background:var(--paper); color:var(--ink);
   font-family:var(--disp); -webkit-font-smoothing:antialiased; line-height:1.5; }
-.bahn{ width:100%; max-width:820px; margin:0 auto; padding:0 22px; }
-.eng{ max-width:660px; }
+.bahn{ width:100%; max-width:680px; margin:0 auto; padding:0 20px; }
 h1,h2,h3{ letter-spacing:-.03em; text-wrap:balance; margin:0; }
 p{ margin:0; }
 a{ color:var(--accent); }
 
-header{ padding:clamp(48px,9vh,96px) 0 clamp(16px,3vh,32px); text-align:center; }
-.figur{ color:var(--figur); width:clamp(96px,13vw,168px); height:auto;
-  aspect-ratio:79.67 / 85.62; margin:0 auto clamp(18px,2.6vh,30px); display:block; }
-h1{ font-size:clamp(32px,6.4vw,50px); font-weight:800; margin-bottom:16px; }
-.glaube{ font-size:clamp(18px,2.9vw,24px); font-weight:700; color:var(--ink);
-  max-width:22ch; margin:0 auto 8px; text-wrap:balance; line-height:1.3; }
-.claim{ font-size:clamp(16px,2.3vw,19px); font-weight:600; color:var(--soft);
-  max-width:40ch; margin:0 auto 26px; text-wrap:balance; }
-.dreiklang{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px 26px;
-  margin:0 0 28px; }
-.dreiklang span{ font-size:clamp(18px,3.2vw,25px); font-weight:800; letter-spacing:-.03em; }
-.dreiklang span:nth-child(2){ color:var(--accent); }
-.knopf{ display:inline-block; background:var(--accent); color:var(--auf);
-  text-decoration:none; font-size:17px; font-weight:800; padding:17px 34px;
-  border-radius:18px; box-shadow:0 3px 0 var(--accent-satt); }
-.knopf:hover{ background:var(--accent-satt); box-shadow:0 3px 0 var(--accent); }
-.unterknopf{ font-size:13.5px; font-weight:600; color:var(--soft); margin-top:13px; }
+/* Kopfleiste mit Burger */
+.kopf{ position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter:saturate(1.4) blur(10px); border-bottom:1px solid var(--line); }
+.kopf-innen{ display:flex; align-items:center; justify-content:space-between;
+  gap:14px; height:60px; }
+.marke{ display:flex; align-items:center; gap:9px; text-decoration:none; color:var(--ink); }
+.marke svg{ width:26px; height:28px; color:var(--figur); }
+.marke b{ font-size:19px; font-weight:800; letter-spacing:-.03em; }
+.kopf-rechts{ display:flex; align-items:center; gap:10px; }
+.mini{ background:var(--accent); color:var(--auf); text-decoration:none; font-size:14px;
+  font-weight:800; padding:10px 17px; border-radius:13px; white-space:nowrap; }
+.mini:hover{ background:var(--accent-satt); }
+.burger{ background:none; border:none; cursor:pointer; padding:9px; color:var(--ink);
+  display:flex; flex-direction:column; gap:4.5px; border-radius:10px; }
+.burger span{ display:block; width:21px; height:2.4px; background:currentColor; border-radius:2px; }
+@media (min-width:700px){ .burger{ display:none; } }
+.nav{ display:none; }
+@media (min-width:700px){
+  .nav{ display:flex; gap:20px; align-items:center; }
+  .nav a{ text-decoration:none; color:var(--soft); font-size:14.5px; font-weight:700; }
+  .nav a:hover{ color:var(--ink); }
+}
+.klapp{ display:none; border-top:1px solid var(--line); }
+.klapp.auf{ display:block; }
+@media (min-width:700px){ .klapp{ display:none !important; } }
+.klapp a{ display:block; padding:15px 20px; text-decoration:none; color:var(--ink);
+  font-size:16px; font-weight:700; border-bottom:1px solid var(--line); }
 
-section{ padding:clamp(44px,7vh,76px) 0; }
+/* Der Verlauf: Bloop links, du rechts */
+.verlauf{ padding:clamp(30px,6vh,58px) 0 10px; display:flex; flex-direction:column; gap:15px; }
+.zug{ display:flex; gap:11px; align-items:flex-end; max-width:min(560px,100%); }
+.zug.du{ flex-direction:row-reverse; margin-left:auto; }
+.kopfbild{ width:38px; height:41px; flex-shrink:0; color:var(--figur); margin-bottom:2px; }
+.zug.du .kopfbild{ visibility:hidden; width:0; }
+.blase{ background:var(--card); border-radius:20px 20px 20px 6px; padding:15px 18px;
+  box-shadow:0 2px 0 var(--line); font-size:16.5px; font-weight:600; }
+.zug.du .blase{ background:var(--blase-du); border-radius:20px 20px 6px 20px;
+  font-weight:700; color:var(--soft); box-shadow:none; }
+.blase strong{ font-weight:800; color:var(--ink); }
+.blase.gross{ font-size:clamp(20px,3.4vw,27px); font-weight:800; letter-spacing:-.025em;
+  line-height:1.25; }
+.blase.gross em{ font-style:normal; color:var(--accent); }
+.blase p + p{ margin-top:9px; }
+/* Mehrere Blasen hintereinander vom selben Sprecher: nur die erste bekommt das Bild */
+.zug.folge .kopfbild{ visibility:hidden; }
+.zug.folge .blase{ border-radius:20px; }
+
+/* Die Karte, in HTML nachgebaut statt als Bildschirmfoto: sie bleibt scharf,
+   waegt nichts und folgt dem hellen wie dem dunklen Modus. */
+.probe{ background:var(--card); border-radius:20px; box-shadow:0 3px 0 var(--line);
+  padding:18px; margin:4px 0 0; }
+.probe-kicker{ font-size:10px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--soft); }
+.probe-frage{ font-size:19px; font-weight:800; margin:9px 0 14px; line-height:1.25; }
+.probe-warum{ display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:800;
+  color:var(--accent); border-bottom:2px solid var(--line); padding-bottom:5px; }
+.probe-antwort{ font-size:15px; font-weight:600; color:var(--soft); margin-top:12px;
+  padding-top:12px; border-top:2px solid var(--line); }
+.probe-knoepfe{ display:flex; gap:9px; margin-top:15px; }
+.probe-knoepfe span{ flex:1; text-align:center; font-size:14px; font-weight:800;
+  padding:11px; border-radius:13px; }
+.probe-knoepfe .n{ background:var(--blase-du); color:var(--ink); }
+.probe-knoepfe .g{ background:var(--accent); color:var(--auf); }
+
+section{ padding:clamp(38px,6vh,66px) 0; }
 .balken{ font-size:11px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--accent); margin-bottom:11px; }
-h2{ font-size:clamp(24px,3.8vw,33px); font-weight:800; margin-bottom:13px; }
-h3{ font-size:18.5px; font-weight:800; margin-bottom:8px; }
-.vor{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:56ch; margin-bottom:26px; }
+  color:var(--accent); margin-bottom:10px; }
+h2{ font-size:clamp(23px,3.6vw,31px); font-weight:800; margin-bottom:12px; }
+.vor{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:54ch; margin-bottom:22px; }
 
-.zitat{ padding:clamp(56px,11vh,112px) 0; text-align:center; }
-.zitat blockquote{ margin:0; font-size:clamp(27px,5.4vw,46px); font-weight:800;
-  letter-spacing:-.035em; line-height:1.16; text-wrap:balance; max-width:20ch;
-  margin-inline:auto; }
-.zitat.akzent blockquote{ color:var(--accent); }
-.zitat .gross{ display:block; font-size:clamp(15.5px,2.1vw,19px); color:var(--soft);
-  font-weight:600; margin-top:18px; line-height:1.45; max-width:34ch; margin-inline:auto; }
-
-.karten{ display:grid; gap:14px; grid-template-columns:1fr; }
-@media (min-width:700px){ .karten{ grid-template-columns:repeat(3,1fr); } }
-.zwei{ display:grid; gap:14px; grid-template-columns:1fr; }
-@media (min-width:640px){ .zwei{ grid-template-columns:1fr 1fr; } }
-.karte{ background:var(--card); border-radius:20px; padding:22px; box-shadow:0 3px 0 var(--line); }
+.karten{ display:grid; gap:13px; grid-template-columns:1fr; }
+@media (min-width:620px){ .karten{ grid-template-columns:1fr 1fr; } }
+.karte{ background:var(--card); border-radius:18px; padding:20px; box-shadow:0 3px 0 var(--line); }
+.karte h3{ font-size:17px; font-weight:800; margin-bottom:7px; }
 .karte p{ font-size:15px; font-weight:600; color:var(--soft); }
-.karte p + p{ margin-top:9px; }
 
-.seiten{ display:grid; gap:12px; grid-template-columns:1fr; }
-@media (min-width:620px){ .seiten{ grid-template-columns:repeat(3,1fr); } }
-.seite{ background:var(--card); border-radius:18px; padding:19px;
-  box-shadow:0 3px 0 var(--line); min-height:132px; display:flex; flex-direction:column; }
-.seite .nr{ font-size:10px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--soft); margin-bottom:9px; }
-.seite .txt{ font-size:17px; font-weight:800; line-height:1.3; }
-.seite.dritte{ box-shadow:0 3px 0 var(--accent); }
-.seite.dritte .nr{ color:var(--accent); }
-.seite.dritte .txt{ font-size:14.5px; font-weight:600; color:var(--soft); }
-
-details{ background:var(--card); border-radius:16px; box-shadow:0 2px 0 var(--line);
-  margin-bottom:11px; overflow:hidden; }
-summary{ cursor:pointer; padding:17px 19px; font-size:16px; font-weight:800;
-  list-style:none; display:flex; justify-content:space-between; gap:14px; align-items:center; }
+details{ background:var(--card); border-radius:15px; box-shadow:0 2px 0 var(--line);
+  margin-bottom:10px; overflow:hidden; }
+summary{ cursor:pointer; padding:16px 18px; font-size:15.5px; font-weight:800;
+  list-style:none; display:flex; justify-content:space-between; gap:13px; align-items:center; }
 summary::-webkit-details-marker{ display:none; }
-summary::after{ content:"+"; color:var(--accent); font-size:21px; font-weight:800; flex-shrink:0; }
+summary::after{ content:"+"; color:var(--accent); font-size:20px; font-weight:800; flex-shrink:0; }
 details[open] summary::after{ content:"\2013"; }
-details p{ padding:0 19px 18px; font-size:15px; font-weight:600; color:var(--soft); }
+details p{ padding:0 18px 17px; font-size:15px; font-weight:600; color:var(--soft); }
 details p + p{ padding-top:0; margin-top:-6px; }
-details ol{ padding:0 19px 18px 38px; font-size:15px; font-weight:600; color:var(--soft); margin:0; }
-details li{ margin-bottom:8px; }
+details ol{ padding:0 18px 17px 36px; font-size:15px; font-weight:600; color:var(--soft); margin:0; }
+details li{ margin-bottom:7px; }
 details code{ display:block; background:var(--paper); border-radius:10px; padding:13px 15px;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; line-height:1.5;
-  color:var(--ink); white-space:pre-wrap; margin:10px 0 4px; }
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; line-height:1.55;
+  color:var(--ink); white-space:pre-wrap; margin:9px 0 3px; }
 
-.block{ background:var(--card); border-radius:24px; padding:clamp(26px,4vw,40px) clamp(22px,3.4vw,32px);
-  box-shadow:0 3px 0 var(--line); }
-.block p{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:56ch; }
-.block p + p{ margin-top:15px; }
-.block strong{ color:var(--ink); font-weight:800; }
-.block .schluss{ margin-top:24px; font-size:19px; font-weight:800; color:var(--ink);
-  max-width:30ch; text-wrap:balance; }
+.knopf{ display:inline-block; background:var(--accent); color:var(--auf); text-decoration:none;
+  font-size:16px; font-weight:800; padding:15px 30px; border-radius:16px;
+  box-shadow:0 3px 0 var(--accent-satt); }
+.knopf:hover{ background:var(--accent-satt); box-shadow:0 3px 0 var(--accent); }
+.laeden{ display:flex; flex-wrap:wrap; gap:11px; margin-top:18px; }
+.laden{ display:flex; flex-direction:column; gap:1px; background:var(--paper);
+  border:2px dashed var(--line); border-radius:14px; padding:12px 18px; min-width:158px; }
+.laden .oben{ font-size:10.5px; font-weight:700; color:var(--soft); }
+.laden .unten{ font-size:15px; font-weight:800; color:var(--ink); }
+.laden .bald{ font-size:10.5px; font-weight:800; color:var(--accent);
+  letter-spacing:.07em; text-transform:uppercase; margin-top:2px; }
 
-/* Ladenknoepfe: bewusst als "noch nicht" erkennbar. Ein Knopf, der aussieht
-   wie ein Knopf und nichts tut, ist eine Enttaeuschung; einer, der sagt, dass
-   er noch nicht kann, ist eine Ankuendigung. */
-.laeden{ display:flex; flex-wrap:wrap; gap:12px; margin-top:20px; }
-.laden{ display:flex; flex-direction:column; gap:2px; background:var(--paper);
-  border:2px dashed var(--line); border-radius:16px; padding:14px 20px; min-width:172px; }
-.laden .oben{ font-size:11px; font-weight:700; color:var(--soft); letter-spacing:.04em; }
-.laden .unten{ font-size:16px; font-weight:800; color:var(--ink); }
-.laden .bald{ font-size:11.5px; font-weight:800; color:var(--accent);
-  letter-spacing:.07em; text-transform:uppercase; margin-top:3px; }
-
-.preis{ display:flex; align-items:baseline; gap:9px; margin-bottom:5px; }
-.preis b{ font-size:23px; font-weight:800; }
-.preis span{ font-size:14px; font-weight:700; color:var(--soft); }
-
-footer{ padding:44px 0 54px; text-align:center; border-top:1px solid var(--line); margin-top:34px; }
-footer p{ font-size:13.5px; font-weight:600; color:var(--soft); }
+footer{ padding:36px 0 46px; text-align:center; border-top:1px solid var(--line); margin-top:26px; }
+footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 .mitte{ text-align:center; }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="bahn">
-    <div class="figur"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></div>
-    <h1>Hi, ich bin Bloop.</h1>
-    <p class="glaube">Ich glaube, dass jedes Kind alles lernen kann.</p>
-    <p class="claim">Es braucht nur den richtigen Moment — und niemanden,
-      der ihm dabei die Zeit stiehlt.</p>
-    <div class="dreiklang" aria-label="Learn it. Loop it. Own it.">
-      <span>Learn it.</span><span>Loop it.</span><span>Own it.</span>
+<header class="kopf">
+  <div class="bahn kopf-innen">
+    <a class="marke" href="#oben"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><b>Bloop</b></a>
+    <div class="kopf-rechts">
+      <nav class="nav">
+        <a href="#eltern">Für Eltern</a>
+        <a href="#schule">Für Schulen</a>
+        <a href="#creator">Karten bauen</a>
+      </nav>
+      <a class="mini" href="app/">Ausprobieren</a>
+      <button class="burger" id="burger" aria-label="Menü" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <a class="knopf" href="app/">Bloop ausprobieren</a>
-    <p class="unterknopf">Kostenlos, ohne Anmeldung, direkt im Browser.</p>
+  </div>
+  <div class="klapp" id="klapp">
+    <a href="#eltern">Für Eltern</a>
+    <a href="#schule">Für Schulen und Lehrkräfte</a>
+    <a href="#creator">Eigene Karten bauen</a>
+    <a href="#app">Die App</a>
   </div>
 </header>
 
-<section>
-  <div class="bahn">
-    <div class="block">
-      <div class="balken">Wer das baut</div>
-      <h2>Wir sind Eltern. Deshalb gibt es Bloop.</h2>
-      <p>Wir haben zugesehen, wie unsere Kinder mit Programmen aufwachsen, die von
-        Menschen gebaut wurden, deren Aufgabe es ist, sie möglichst lange festzuhalten.
-        Endloses Scrollen. Serien, die abreißen. Videos, die von selbst weiterlaufen.
-        <strong>Dahinter steckt jedes Mal eine Absicht — und sie ist nie die des Kindes.</strong></p>
-      <p>Irgendwann haben wir aufgehört, uns zu ärgern, und angefangen, das Gegenteil
-        zu bauen: etwas, das <strong>Zeit zurückgibt, statt sie abzuschöpfen</strong>.
-        Ohne Konto. Ohne Werbung. Ohne einen Server, der mitschreibt, was ein Kind
-        noch nicht kann.</p>
-      <p><strong>Own it</strong> meint beides: Das Wissen gehört dir, wenn du es dir
-        wirklich erarbeitet hast. Und deine Daten gehören dir sowieso — sie liegen auf
-        deinem Gerät und nirgendwo sonst.</p>
-      <p class="schluss">Wir bauen die App, die wir uns für unsere eigenen Kinder
-        gewünscht hätten.</p>
+<main id="oben">
+  <div class="bahn verlauf">
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase gross">Hi, ich bin Bloop.<br>Ich glaube, dass <em>jedes Kind alles lernen kann.</em></div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Schön. Und was machst du?</div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Ich merke mir, was du dir merken willst — und lege es dir genau dann wieder vor, wenn du es sonst vergessen würdest.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Nicht zwanzigmal hintereinander. <strong>Einmal richtig.</strong></div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Wie sehen die Karten aus?</div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase" style="padding:12px"><div class="probe"><div class="probe-kicker">Mathematik · Frage</div><div class="probe-frage">Warum ist minus mal minus plus?</div><div class="probe-antwort" style="border-top:none;padding-top:0;margin-top:0;font-weight:800;color:var(--ink);font-size:16px">Weil das Gegenteil vom Gegenteil das Original ist.</div><div style="margin-top:12px"><span class="probe-warum">↑ Warum?</span></div><div class="probe-antwort">Minus dreht die Richtung um — zweimal umdrehen führt zurück. Wenn dir jemand dreimal Schulden von 4 Euro erlässt, hast du 12 Euro mehr.</div><div class="probe-knoepfe"><span class="n">Nochmal</span><span class="g">Gewusst</span></div></div></div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Zwei Seiten wie immer — und eine dritte dahinter, für das Warum. <strong>Die gibt es nur bei mir.</strong></div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Was kostet das?</div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Im Browser gar nichts. Für immer.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Die Apps für Handy und Tablet kosten einmalig. Kein Abo.</div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Und die Daten meines Kindes?</div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase"><strong>Welche Daten?</strong></div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Es gibt kein Konto, keine Anmeldung, keine Werbung und keinen Server, der irgendetwas einsammeln könnte. Alles bleibt auf dem Gerät.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Probieren Sie es aus: Flugmodus an — ich laufe weiter.</div></div>
+<div class="zug du"><span class="kopfbild"></span><div class="blase">Punkte? Serien? Belohnungen?</div></div>
+<div class="zug"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Nichts davon.</div></div>
+<div class="zug folge"><span class="kopfbild"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect fill="#221936"/><g transform="translate(5.797 3.840) scale(0.65779)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="#2B1F38" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="#2B1F38"/><circle cx="52.45" cy="35.30" r="4.77" fill="#2B1F38"/></g></svg></span><div class="blase">Wer drei Tage nichts macht, verliert nichts. Ich hole niemanden zurück, und eine Runde darf einfach enden.</div></div>
+  </div>
+
+  <div class="bahn mitte" style="padding:34px 20px 6px">
+    <a class="knopf" href="app/">Einfach ausprobieren</a>
+    <p style="font-size:13px;font-weight:600;color:var(--soft);margin-top:11px">
+      Ohne Anmeldung. Läuft sofort.</p>
+  </div>
+
+  <section id="eltern">
+    <div class="bahn">
+      <div class="balken">Für Eltern</div>
+      <h2>Wir sind selbst welche.</h2>
+      <p class="vor">Wir haben zugesehen, wie unsere Kinder mit Programmen aufwachsen,
+        die gebaut wurden, um sie möglichst lange festzuhalten. Irgendwann haben wir
+        aufgehört, uns zu ärgern, und angefangen, das Gegenteil zu bauen.</p>
+      <details>
+        <summary>Welche Daten sammelt die App über mein Kind?</summary>
+        <p>Keine. Kein Konto, keine Anmeldung, keine Analyse-Werkzeuge.
+          Karten und Lernstand liegen im Speicher des Geräts.</p>
+        <p><strong>So prüfen Sie es:</strong> Flugmodus einschalten, App öffnen.
+          Sie läuft weiter. Was offline funktioniert, verschickt nichts.</p>
+      </details>
+      <details>
+        <summary>Wie finanziert sich das dann?</summary>
+        <p>Der Browser bleibt kostenlos. Geld verdienen wir über die Apps in den
+          Stores — einmalig, kein Abo — und über freiwillige Unterstützung.</p>
+        <p>Was wir <strong>nicht</strong> tun: Aufmerksamkeit verkaufen.</p>
+      </details>
+      <details>
+        <summary>Kann ich sehen, was mein Kind gelernt hat?</summary>
+        <p>Wenn Ihr Kind es Ihnen zeigt. Es gibt eine Übersicht und einen Knopf,
+          der daraus ein Bild macht.</p>
+        <p>Einen <strong>Elternzugang gibt es nicht</strong>. Der Unterschied zwischen
+          Stolz und Kontrolle ist, wer die Seite aufschlägt.</p>
+      </details>
+      <details>
+        <summary>Wo sind die Schwächen? Bitte ehrlich.</summary>
+        <p>Weil nichts das Gerät verlässt, gibt es <strong>keine Cloud-Sicherung</strong>.
+          Wer die Browserdaten löscht, verliert den Stand.</p>
+        <p>Und es gibt <strong>keine Erinnerungen</strong>. Wer nicht von selbst öffnet,
+          wird nicht geholt — der Preis dafür, keine Dark Patterns zu bauen.</p>
+      </details>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="zitat akzent">
-  <div class="bahn">
-    <blockquote>Eine App, die zufrieden ist, wenn man sie zumacht.</blockquote>
-    <span class="gross">Kein Zähler, der abreißt. Keine Nachricht, die zurückholt.
-      Wenn du fertig bist, bist du fertig.</span>
-  </div>
-</div>
-
-<section>
-  <div class="bahn">
-    <div class="balken">Was Bloop anders macht</div>
-    <h2>Karteikarten haben zwei Seiten. Bloop Cards haben drei.</h2>
-    <p class="vor">Eine gute Antwort muss kurz sein, sonst prüft niemand mehr ehrlich,
-      ob er sie wusste — man liest nur noch. Kurz reicht aber nicht immer zum Verstehen.
-      Die dritte Seite löst den Widerspruch: knappe Antwort für den Abruf, Erklärung
-      dahinter, nur auf Wunsch.</p>
-    <div class="seiten">
-      <div class="seite"><div class="nr">Frage</div>
-        <div class="txt">Warum ist minus mal minus plus?</div></div>
-      <div class="seite"><div class="nr">Antwort</div>
-        <div class="txt">Weil das Gegenteil vom Gegenteil das Original ist.</div></div>
-      <div class="seite dritte"><div class="nr">Warum ↑</div>
-        <div class="txt">Minus dreht die Richtung um — zweimal umdrehen führt zurück.
-          Wenn dir jemand dreimal Schulden von 4 Euro erlässt, hast du 12 Euro mehr.</div></div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="bahn">
-    <div class="karten">
-      <div class="karte">
-        <h3>Zur richtigen Zeit</h3>
-        <p>Ein Gedächtnismodell rechnet für jede Karte aus, wann sie zurückkommen soll:
-          kurz bevor sie vergessen würde. Das ist der Unterschied zwischen zwanzigmal
-          lesen und einmal richtig lernen.</p>
-      </div>
-      <div class="karte">
-        <h3>Keine Punkte, keine Serie</h3>
-        <p>Wer drei Tage nichts macht, verliert nichts. Kein Zähler reißt ab,
-          keine Nachricht holt zurück. Eine Lernrunde darf einfach enden.</p>
-      </div>
-      <div class="karte">
-        <h3>Nichts verlässt das Gerät</h3>
-        <p>Kein Konto, keine Anmeldung, keine Werbung, keine Tracker.
-          Es gibt keinen Server, der etwas einsammeln könnte — und das kann man nachprüfen.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="bahn">
-    <div class="balken">Für Eltern, Lehrkräfte und alle, die genauer hinschauen</div>
-    <h2>Die Fragen, die Sie stellen sollten.</h2>
-    <p class="vor">An jede App, die Kinder benutzen. Hier sind unsere Antworten —
-      und wie Sie sie überprüfen.</p>
-    <details>
-      <summary>Welche Daten sammelt die App über mein Kind?</summary>
-      <p>Keine. Es gibt kein Konto, keine Anmeldung, keine Analyse-Werkzeuge.
-        Die Karten und der Lernstand liegen im Speicher des Browsers auf dem Gerät.</p>
-      <p><strong>So prüfen Sie es:</strong> Flugmodus einschalten und die App öffnen.
-        Sie läuft vollständig weiter. Was offline funktioniert, kann nichts verschicken.</p>
-    </details>
-    <details>
-      <summary>Wie finanziert sich das dann?</summary>
-      <p>Die Fassung im Browser ist kostenlos und bleibt es. Geld verdienen wir über
-        die Apps in den App Stores — einmalig, kein Abo — und über Menschen, die das
-        Projekt freiwillig unterstützen.</p>
-      <p>Was wir <strong>nicht</strong> tun: Aufmerksamkeit verkaufen. Es gibt keine an
-        Kinder gerichtete Werbung, und es wird sie nicht geben.</p>
-    </details>
-    <details>
-      <summary>Ohne Punkte und Belohnungen — ist das nicht naiv?</summary>
-      <p>Motivation ruht auf drei Dingen: selbst entscheiden dürfen, besser werden,
-        und dabei nicht allein sein. Punkte und Serien bedienen keines davon —
-        sie erzeugen Druck und ersetzen ihn irgendwann durch Gleichgültigkeit.</p>
-      <p>Sichtbarer Fortschritt macht Kompetenz erlebbar, ohne zu drängen. Deshalb
-        zeigt Bloop, was schon sitzt — und niemals, was fehlt.</p>
-    </details>
-    <details>
-      <summary>Kann ich sehen, was mein Kind gelernt hat?</summary>
-      <p>Wenn Ihr Kind es Ihnen zeigt. Es gibt eine Übersicht mit gelernten Karten,
-        Lernzeit und Verlauf — und einen Knopf, der daraus ein Bild macht,
-        das man verschicken kann.</p>
-      <p>Es gibt <strong>keinen Elternzugang</strong>. Das ist Absicht: Der Unterschied
-        zwischen Stolz und Kontrolle ist, wer die Seite aufschlägt.</p>
-    </details>
-    <details>
-      <summary>Was ist mit Kindern, die sich schwer konzentrieren?</summary>
-      <p>Eine Lernrunde ist auf zwanzig Karten gedeckelt — auch nach zwei Wochen Pause.
-        Wer einen Berg sieht, fängt nicht an.</p>
-      <p>Dazu gibt es ein gleichmäßiges Rauschen zum Zuschalten, das Umgebungslärm
-        überdeckt. Keine Musik, kein Takt — manche bleiben damit besser bei der Sache.</p>
-    </details>
-    <details>
-      <summary>Wo sind die Schwächen? Bitte ehrlich.</summary>
-      <p>Weil nichts das Gerät verlässt, gibt es <strong>keine Sicherung in der Cloud</strong>.
-        Wer die Browserdaten löscht, verliert den Lernstand. Karteien lassen sich als
-        Code weitergeben und sichern — das muss man aber selbst tun.</p>
-      <p>Es gibt <strong>keine Erinnerungen</strong>. Wer von selbst nicht öffnet, wird
-        nicht geholt. Das ist der Preis dafür, keine Dark Patterns zu bauen.</p>
-    </details>
-  </div>
-</section>
-
-<section>
-  <div class="bahn">
-    <div class="balken">Für Schulen und Einrichtungen</div>
-    <h2>Kein Vertrag, keine Verwaltung, keine Datenschutzfolgenabschätzung.</h2>
-    <p class="vor">Der Grund ist derselbe wie überall sonst: Es gibt nichts zu
-      verwalten, weil nichts erhoben wird.</p>
-    <div class="zwei">
-      <div class="karte">
-        <h3>Sofort einsetzbar</h3>
-        <p>Eine Adresse im Browser, fertig. Keine Lizenzen, keine Zugänge,
-          keine Schulungen. Auch auf alten Geräten und im Schul-WLAN,
-          das die halbe Welt blockiert.</p>
-        <p>Wer offline arbeiten will, legt die Seite einmal auf den
-          Startbildschirm — danach läuft sie ohne Netz.</p>
-      </div>
-      <div class="karte">
-        <h3>Eigene Inhalte weitergeben</h3>
-        <p>Eine Lehrkraft baut einen Satz Karten und gibt ihn als Code weiter.
-          Die Klasse fügt ihn ein, fertig — ohne dass jemand ein Konto braucht
-          oder wir erfahren, wer da lernt.</p>
-        <p>Für Vokabeln, Fachbegriffe, Jahreszahlen, Formeln.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="bahn">
-    <div class="balken">Eigene Inhalte</div>
-    <h2>Sie haben schon eine KI. Nutzen Sie sie.</h2>
-    <p class="vor">Bloop baut bewusst keine KI ein. Es gibt genug Apps, die das tun,
-      und jede davon schickt Ihre Eingaben an einen fremden Server — das ist genau
-      das, was wir vermeiden. Aber Sie können jede beliebige KI selbst verwenden und
-      das Ergebnis einfügen. <strong>Der richtige Auftrag macht den Unterschied.</strong></p>
-    <details>
-      <summary>So erzeugen Sie einen Kartensatz in zwei Minuten</summary>
-      <ol>
-        <li>Öffnen Sie ein KI-Werkzeug Ihrer Wahl — ChatGPT, Claude, Gemini,
-          egal welches, auch die kostenlosen Fassungen genügen.</li>
-        <li>Geben Sie den Auftrag unten ein und ersetzen Sie das Thema.</li>
-        <li>Kopieren Sie die Antwort und fügen Sie sie in Bloop unter
-          <strong>Neue Kartei</strong> ein.</li>
-      </ol>
-      <p><strong>Der Auftrag:</strong></p>
-      <code>Erstelle 20 Lernkarten zum Thema [THEMA] für ein Kind
-in der [KLASSE]. Format: eine Karte pro Zeile, Vorderseite
-und Rückseite getrennt durch einen Gedankenstrich.
-
-Regeln:
-- Die Antwort ist kurz. Ein Wort oder ein Satz, nie ein Absatz.
-- Steht in der Antwort eine Zahl, muss die Einheit in der
-  Frage stehen ("Wie viele Kammern pro Herz?").
-- Frage nach dem Warum, nicht nach Auswendiggelerntem.
-- Keine Sternchen, keine Formatierung, kein Markdown.
-- Prüfe am Ende jede Karte: Passt die Antwort zur Frage?</code>
-      <p>Die letzten beiden Regeln sind die wichtigsten. Ohne sie liefern die
-        meisten Werkzeuge formatierten Text, den die App wörtlich anzeigt —
-        und gelegentlich Antworten, die nicht zur Frage passen.</p>
-    </details>
-    <details>
-      <summary>Warum wir keine KI einbauen</summary>
-      <p>Sobald eine App Inhalte für Sie erzeugt, muss sie Ihre Eingabe an einen
-        Server schicken. Damit wäre das zentrale Versprechen dahin — und wir
-        müssten anfangen, Auskunft über Kinderdaten zu geben.</p>
-      <p>Der Umweg über Ihr eigenes Werkzeug ist einen Handgriff länger und
-        lässt die Entscheidung bei Ihnen: Sie wissen, wohin der Text geht,
-        weil Sie ihn selbst dorthin geben.</p>
-    </details>
-  </div>
-</section>
-
-<section>
-  <div class="bahn">
-    <div class="balken">Browser oder App</div>
-    <h2>Die App kostet einmalig. Der Browser bleibt gratis.</h2>
-    <p class="vor">Beides kann fast dasselbe. Die folgenden Dinge kann ein Browser
-      grundsätzlich nicht — dafür gibt es schließlich Apps.</p>
-    <div class="karten">
-      <div class="karte">
-        <h3>Spürbare Rückmeldung</h3>
-        <p>Ein kurzer Impuls, wenn eine Karte wirklich weg ist. Auf dem iPhone
-          gibt es das im Browser überhaupt nicht.</p>
-      </div>
-      <div class="karte">
-        <h3>Sicherung und Gerätewechsel</h3>
-        <p>Über iCloud oder Google sichern, ohne dass wir je einen Server sehen.
-          Im Browser hängt der Lernstand an genau diesem Browser.</p>
-      </div>
-      <div class="karte">
-        <h3>Alle Inhalte dabei</h3>
-        <p>Der ganze Bestand an fertigen Karten, offline verfügbar,
-          ohne dass etwas nachgeladen werden muss.</p>
-      </div>
-    </div>
-    <div class="laeden">
-      <div class="laden">
-        <span class="oben">Laden im</span>
-        <span class="unten">App Store</span>
-        <span class="bald">In Vorbereitung</span>
-      </div>
-      <div class="laden">
-        <span class="oben">Jetzt bei</span>
-        <span class="unten">Google Play</span>
-        <span class="bald">In Vorbereitung</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="bahn">
-    <div class="block">
-      <div class="balken">Unterstützen</div>
-      <h2>Damit es kostenlos bleiben kann.</h2>
-      <p>Bloop hat keine Investoren und verkauft keine Aufmerksamkeit. Das ist der
-        Grund, warum die App so aussieht, wie sie aussieht — und es ist auch der
-        Grund, warum wir langsamer sind als andere.</p>
-      <p>Wer möchte, kann das Projekt regelmäßig unterstützen. Davon entstehen neue
-        Inhalte: mehr Fächer, mehr Jahrgänge, mehr Sprachen. <strong>Alles, was so
-        entsteht, ist für alle da</strong> — auch für die, die nichts zahlen.</p>
-      <p>Was Unterstützer <em>nicht</em> bekommen: Vorrang, Sonderfunktionen oder
-        Einfluss auf Inhalte. Eine Lern-App mit zwei Klassen von Kindern wäre
-        das Gegenteil von dem, was wir wollen.</p>
-      <div class="laeden">
-        <div class="laden">
-          <span class="oben">Unterstützen über</span>
-          <span class="unten">Patreon</span>
-          <span class="bald">In Vorbereitung</span>
+  <section id="schule">
+    <div class="bahn">
+      <div class="balken">Für Schulen und Lehrkräfte</div>
+      <h2>Kein Vertrag. Keine Verwaltung. Keine Folgenabschätzung.</h2>
+      <p class="vor">Weil nichts erhoben wird, gibt es auch nichts zu verwalten.</p>
+      <div class="karten">
+        <div class="karte">
+          <h3>Sofort einsetzbar</h3>
+          <p>Eine Adresse im Browser. Keine Lizenzen, keine Zugänge, keine Schulung.
+            Auch auf alten Geräten und im Schul-WLAN.</p>
+        </div>
+        <div class="karte">
+          <h3>Karten weitergeben</h3>
+          <p>Sie bauen einen Satz und geben ihn als Code weiter. Die Klasse fügt ihn
+            ein — ohne Konto, ohne dass wir erfahren, wer da lernt.</p>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<div class="zitat">
-  <div class="bahn">
-    <blockquote>Jedes Kind kann alles lernen.</blockquote>
-    <span class="gross">Ordentlich lernen zu können darf nicht davon abhängen,
-      was zu Hause dafür übrig ist. Deshalb ist und bleibt die Fassung
-      im Browser kostenlos.</span>
-  </div>
-</div>
+  <section id="creator">
+    <div class="bahn">
+      <div class="balken">Karten bauen</div>
+      <h2>Eigene Karten in zwei Minuten.</h2>
+      <p class="vor">Am Rechner tippen, per Code aufs Handy — oder sich die Karten
+        von einer KI schreiben lassen, die Sie ohnehin schon haben.
+        <strong>Wir bauen dafür keine ein:</strong> Jede App, die Inhalte erzeugt,
+        schickt Ihre Eingaben an einen fremden Server.</p>
+      <details>
+        <summary>Von der KI in die App — so geht es</summary>
+        <ol>
+          <li>KI-Werkzeug Ihrer Wahl öffnen (auch die kostenlosen genügen).</li>
+          <li>Auftrag unten eingeben, Thema ersetzen.</li>
+          <li>Antwort kopieren, in Bloop unter <strong>Neue Kartei</strong> einfügen.</li>
+        </ol>
+        <code>Erstelle 20 Lernkarten zum Thema [THEMA] für ein Kind
+in der [KLASSE]. Eine Karte pro Zeile, Vorderseite und
+Rückseite getrennt durch einen Gedankenstrich.
 
-<section class="mitte">
-  <div class="bahn">
-    <h2>Probieren Sie es aus.</h2>
-    <p class="claim">Es dauert keine Minute, kostet nichts und verlangt keine Anmeldung.</p>
-    <a class="knopf" href="app/">Bloop öffnen</a>
-  </div>
-</section>
+Regeln:
+- Die Antwort ist kurz. Ein Wort oder ein Satz.
+- Steht in der Antwort eine Zahl, muss die Einheit in
+  der Frage stehen ("Wie viele Kammern pro Herz?").
+- Frage nach dem Warum, nicht nach Auswendiggelerntem.
+- Keine Sternchen, kein Markdown.
+- Prüfe zum Schluss: Passt jede Antwort zur Frage?</code>
+        <p>Die letzten beiden Regeln sind die wichtigsten — ohne sie kommt
+          formatierter Text heraus, den die App wörtlich anzeigt.</p>
+      </details>
+      <details>
+        <summary>Karten von einem Gerät aufs andere</summary>
+        <p>Jede Kartei lässt sich als Code ausgeben und woanders wieder einfügen.
+          Das ist zugleich die Sicherung: ein Text, der Ihnen gehört.</p>
+      </details>
+    </div>
+  </section>
+
+  <section id="app">
+    <div class="bahn">
+      <div class="balken">Browser oder App</div>
+      <h2>Der Browser reicht. Die App kann etwas mehr.</h2>
+      <div class="karten">
+        <div class="karte">
+          <h3>Spürbare Rückmeldung</h3>
+          <p>Ein kurzer Impuls, wenn eine Karte weg ist. Auf dem iPhone gibt es das
+            im Browser überhaupt nicht.</p>
+        </div>
+        <div class="karte">
+          <h3>Sicherung und Gerätewechsel</h3>
+          <p>Über iCloud oder Google sichern, ohne dass wir je einen Server sehen.</p>
+        </div>
+      </div>
+      <div class="laeden">
+        <div class="laden"><span class="oben">Laden im</span>
+          <span class="unten">App Store</span><span class="bald">In Vorbereitung</span></div>
+        <div class="laden"><span class="oben">Jetzt bei</span>
+          <span class="unten">Google Play</span><span class="bald">In Vorbereitung</span></div>
+        <div class="laden"><span class="oben">Unterstützen über</span>
+          <span class="unten">Patreon</span><span class="bald">In Vorbereitung</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mitte">
+    <div class="bahn">
+      <h2>Probieren Sie es aus.</h2>
+      <p class="vor" style="margin:0 auto 22px">Eine Minute, keine Anmeldung, kein Risiko.</p>
+      <a class="knopf" href="app/">Bloop öffnen</a>
+    </div>
+  </section>
+</main>
 
 <footer>
   <div class="bahn">
@@ -434,5 +331,17 @@ Regeln:
   </div>
 </footer>
 
+<script>
+  // Burger: nur auf schmalen Schirmen sichtbar, deshalb genuegt ein Umschalter.
+  var b = document.getElementById("burger"), k = document.getElementById("klapp");
+  b.addEventListener("click", function () {
+    var auf = k.classList.toggle("auf");
+    b.setAttribute("aria-expanded", auf ? "true" : "false");
+  });
+  // Nach der Wahl wieder zu - sonst verdeckt das Menue das Ziel.
+  k.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { k.classList.remove("auf"); b.setAttribute("aria-expanded", "false"); }
+  });
+</script>
 </body>
 </html>
