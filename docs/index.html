@@ -120,6 +120,23 @@ h2{ font-size:clamp(24px,4vw,34px); font-weight:800; margin-bottom:14px; line-he
 .zug.ist-bloop .name{ color:var(--accent); }
 .blase strong{ font-weight:800; }
 
+/* Der einzige Ort, an dem Bloop eine Augenklappe traegt: dort, wo der Gedanke
+   erklaert wird. Auf dem App-Icon bleibt sie weg - ein festes Zeichen findet
+   man wieder, ein wechselndes nicht, und die Klappe kostet ein Auge, an dem
+   die ganze Mimik haengt. */
+.kaper{ background:var(--card); border-radius:22px; box-shadow:0 3px 0 var(--line);
+  padding:26px 24px; }
+.kaper-kopf{ display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+.kaper-kopf svg{ width:56px; height:61px; color:var(--accent); flex-shrink:0; }
+.kaper-kopf h2{ margin:0; }
+/* Unter 480px bleibt neben der Figur zu wenig fuer die Zeile - sie brach
+   dreimal um. Dann steht die Figur lieber darueber. */
+@media (max-width:479px){ .kaper-kopf{ flex-direction:column; align-items:flex-start; gap:12px; } }
+.kaper p + p{ margin-top:14px; }
+.kaper p{ font-size:16px; font-weight:600; color:var(--soft); max-width:56ch; }
+.kaper b{ color:var(--ink); font-weight:800; }
+.kaper .punkt{ font-size:17px; font-weight:800; color:var(--ink); margin-top:20px; }
+
 /* Bloop bittet um Hilfe: der Besucher verbessert eine bewusst schwache Karte.
    Drei Felder, weil eine Bloop-Karte drei Seiten hat - man begreift das Format,
    indem man es benutzt. Nichts davon wird gespeichert oder verschickt. */
@@ -337,6 +354,30 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 
   <section>
     <div class="bahn">
+      <div class="balken">Worum es eigentlich geht</div>
+      <div class="kaper">
+        <div class="kaper-kopf">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/><path d="M11,20.5 C24,15.5 42,16.5 55,22.5" fill="none" stroke="#231B2E" stroke-width="2.8" stroke-linecap="round"/><path d="M32.2,19.8 L48.6,22.4 A8.6,8.6 0 0 1 32.2,19.8 Z" fill="#231B2E"/><ellipse cx="40.2" cy="24.6" rx="8.3" ry="7.6" fill="#231B2E"/></svg>
+          <h2>Die echten Piraten sitzen woanders.</h2>
+        </div>
+        <p>Die Endlosschleife, die Serie, der rote Punkt: Das sind keine Unfälle,
+          das sind Bauteile. Jemand hat sie eingebaut, damit dein Kind länger bleibt.
+          Bezahlt wird mit Lebenszeit — und die Rechnung kommt nie, deshalb merkt es
+          niemand.</p>
+        <p><b>Wir bauen die Schleife andersherum.</b> Bei uns kommt eine Karte zurück,
+          weil du sie sonst vergessen würdest. Nicht, weil wir dich noch fünf Minuten
+          halten wollen. Nach fünf Minuten ist Schluss, und du nimmst etwas mit.</p>
+        <p>Nichts davon macht uns zu Helden — es macht uns nur zu einer App, die keinen
+          Grund hat, an deiner Aufmerksamkeit zu verdienen. Wir kennen dich nicht, und
+          wir wollen dich auch nicht kennenlernen.</p>
+        <p class="punkt">Own it. Das ist wörtlich gemeint: dein Wissen, deine Daten,
+          deine Zeit.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="bahn">
       <div class="balken">Ein Gespräch</div>
       <h2>Zwei Eltern, ein Oktopus.</h2>
       <p class="vor">Sabine und Jochen kennen sich aus der Elterngruppe. Bloop kam später
@@ -393,30 +434,40 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
       <p class="vor">Karten gibt man weiter — an die Freundin, an die Klasse, an den Rest
         der Familie. Ein Code, fertig.</p>
       <div class="faelle">
-        <div class="fall"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Familie im Auto, ein Kind fragt von der Ruecksitzbank nach den Zaehnen einer Schnecke">
+        <div class="fall"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Familie im Auto, ein Kind fragt von der Ruecksitzbank: Wie viele Zaehne hat eine Schnecke">
   <path d="M0,178 H320" stroke="var(--sz2)" stroke-width="3" stroke-linecap="round"/>
   <g stroke="var(--sz1)" stroke-width="3.4" stroke-linecap="round">
     <path d="M16,190 H52"/><path d="M84,190 H120"/><path d="M152,190 H188"/><path d="M220,190 H256"/>
   </g>
-  <path d="M40,150 C40,126 52,118 74,116 L104,84 C110,77 118,74 128,74 H206
-           C218,74 228,79 234,88 L256,116 C274,120 286,130 286,150
-           C286,158 280,162 272,162 H54 C46,162 40,158 40,150 Z" fill="var(--sz3)"/>
-  <path d="M116,112 L134,86 C137,82 141,80 146,80 H158 V112 Z" fill="var(--paper)"/>
-  <path d="M170,80 H200 C207,80 212,82 216,87 L234,112 H170 Z" fill="var(--paper)"/>
-  <circle cx="140" cy="100" r="11" fill="var(--sz4)"/>
-  <circle cx="193" cy="99" r="10" fill="var(--sz4)"/>
-  <circle cx="215" cy="101" r="8" fill="var(--accent)"/>
-  <circle cx="92" cy="162" r="21" fill="var(--sz4)"/>
-  <circle cx="92" cy="162" r="8" fill="var(--paper)"/>
-  <circle cx="238" cy="162" r="21" fill="var(--sz4)"/>
-  <circle cx="238" cy="162" r="8" fill="var(--paper)"/>
-  <!-- Der Zipfel zeigt auf das Kind in Akzentfarbe - das ist der, der fragt. -->
+  <!-- Das Auto faehrt nach rechts. Vorher war die Silhouette in beide
+       Richtungen lesbar, und damit sass das fragende Kind scheinbar vorne.
+       Gespiegelt wird die ganze Karosserie, die Koepfe liegen ungespiegelt
+       darueber - sonst muesste man jede Position doppelt umrechnen. -->
+  <g transform="translate(320,0) scale(-1,1)">
+    <path d="M40,150 C40,126 52,118 74,116 L104,84 C110,77 118,74 128,74 H206
+             C218,74 228,79 234,88 L256,116 C274,120 286,130 286,150
+             C286,158 280,162 272,162 H54 C46,162 40,158 40,150 Z" fill="var(--sz3)"/>
+    <path d="M116,112 L134,86 C137,82 141,80 146,80 H158 V112 Z" fill="var(--paper)"/>
+    <path d="M170,80 H200 C207,80 212,82 216,87 L234,112 H170 Z" fill="var(--paper)"/>
+    <circle cx="92" cy="162" r="21" fill="var(--sz4)"/>
+    <circle cx="92" cy="162" r="8" fill="var(--paper)"/>
+    <circle cx="238" cy="162" r="21" fill="var(--sz4)"/>
+    <circle cx="238" cy="162" r="8" fill="var(--paper)"/>
+  </g>
+  <!-- Vorne rechts faehrt jemand, hinten links sitzen zwei Kinder.
+       Das fragende ist das hinterste und traegt die Akzentfarbe. -->
+  <circle cx="180" cy="100" r="11" fill="var(--sz4)"/>
+  <circle cx="132" cy="99" r="10" fill="var(--sz4)"/>
+  <circle cx="110" cy="100" r="8" fill="var(--accent)"/>
+  <!-- Blase links oben, Zipfel auf das Kind hinten. Innenabstand ausgemessen:
+       die laengste Zeile ist 139 Einheiten breit, der Kasten 176 - bleiben
+       gut 18 pro Seite. Vorher klebte die Zeile am Rand. -->
   <g>
-    <rect x="150" y="6" width="164" height="52" rx="16" fill="var(--accent)"/>
-    <path d="M192,56 L208,88 L218,58 Z" fill="var(--accent)"/>
-    <text x="232" y="28" text-anchor="middle" font-size="15.5" font-weight="800"
+    <rect x="6" y="6" width="176" height="52" rx="16" fill="var(--accent)"/>
+    <path d="M92,56 L108,88 L122,58 Z" fill="var(--accent)"/>
+    <text x="94" y="28" text-anchor="middle" font-size="14.5" font-weight="800"
           fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Wie viele Zähne</text>
-    <text x="232" y="47" text-anchor="middle" font-size="15.5" font-weight="800"
+    <text x="94" y="47" text-anchor="middle" font-size="14.5" font-weight="800"
           fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">hat eine Schnecke?</text>
   </g>
 </svg>
@@ -471,9 +522,9 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
   <path d="M132,186c0-20 12-34 28-34s28,14 28,34z" fill="var(--accent)"/>
   <!-- Sprechblase am Kopf statt drei abstrakter Boegen -->
   <g>
-    <rect x="192" y="52" width="122" height="42" rx="15" fill="var(--accent)"/>
-    <path d="M204,92 L180,126 L226,94 Z" fill="var(--accent)"/>
-    <text x="253" y="79" text-anchor="middle" font-size="17" font-weight="800"
+    <rect x="166" y="52" width="148" height="42" rx="15" fill="var(--accent)"/>
+    <path d="M186,92 L176,124 L208,94 Z" fill="var(--accent)"/>
+    <text x="240" y="79" text-anchor="middle" font-size="15" font-weight="800"
           fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Frag mich was.</text>
   </g>
 </svg>

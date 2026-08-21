@@ -13,9 +13,9 @@
   <path d="M132,186c0-20 12-34 28-34s28,14 28,34z" fill="var(--accent)"/>
   <!-- Sprechblase am Kopf statt drei abstrakter Boegen -->
   <g>
-    <rect x="192" y="52" width="122" height="42" rx="15" fill="var(--accent)"/>
-    <path d="M204,92 L180,126 L226,94 Z" fill="var(--accent)"/>
-    <text x="253" y="79" text-anchor="middle" font-size="17" font-weight="800"
+    <rect x="166" y="52" width="148" height="42" rx="15" fill="var(--accent)"/>
+    <path d="M186,92 L176,124 L208,94 Z" fill="var(--accent)"/>
+    <text x="240" y="79" text-anchor="middle" font-size="15" font-weight="800"
           fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Frag mich was.</text>
   </g>
 </svg>
