@@ -63,6 +63,10 @@ const TEXTE = {
   /* Deutsch ist die Rueckfallsprache: was hier fehlt, faellt auf den Schluessel
      zurueck. Neue Texte gehoeren deshalb IMMER zuerst hierher. */
   de: {
+    "foto.schritt2": "2 · Text einfügen",
+    "foto.alt": "Fotografierte Buchseite",
+    "name.hinweis": "Bitte nicht deinen echten Namen — such dir was Lustiges aus. Ich merk mir nichts über dich, und ein ausgedachter Name bleibt ausgedacht.",
+    "ende.holen": "Holen und loslegen",
     "spiel.gegnerstein": "— %N%s Stein",
     "spiel.denkt": "%N% überlegt…",
     "deck.teilen.text": "Lern mit mir! Importiere diese Kartei in %N%:",
@@ -271,6 +275,10 @@ const TEXTE = {
     "profil.farbe": "Farbe & Helligkeit",
   },
   en: {
+    "foto.schritt2": "2 · Paste the text",
+    "foto.alt": "Photographed book page",
+    "name.hinweis": "Please don't use your real name — pick something silly. I remember nothing about you, and a made-up name stays made up.",
+    "ende.holen": "Get it and start",
     "spiel.gegnerstein": "— %N%'s piece",
     "spiel.denkt": "%N% is thinking…",
     "deck.teilen.text": "Learn with me! Import this set into %N%:",
@@ -895,7 +903,7 @@ const STYLES = `
 @keyframes pulse{ 0%,100%{ box-shadow:0 0 0 0 rgba(154,59,52,.35);} 50%{ box-shadow:0 0 0 9px rgba(154,59,52,0);} }
 .mic-hint{ font-size:12px; color:var(--ink-soft); line-height:1.45; }
 .target-toggle{ display:flex; gap:6px; margin-bottom:11px; align-items:center; }
-.chip{ font-size:12px; font-weight:600; padding:7px 13px; border-radius:999px; cursor:pointer;
+.chip{ font-size:12px; font-weight:600; padding:7px 13px; min-height:40px; border-radius:999px; cursor:pointer;
   border:none; box-shadow:0 2px 0 var(--line); background:var(--card); color:var(--ink-soft); }
 .chip.on{ background:var(--accent); color:var(--auf); border-color:var(--accent); }
 .lang-sel{ font-family:var(--ui); font-size:12px; border:1px solid var(--line); border-radius:8px;
@@ -912,11 +920,24 @@ const STYLES = `
 .crow{ display:flex; align-items:center; gap:8px; padding:11px 4px; border-bottom:1px solid var(--line); }
 .crow-front{ font-family:var(--disp); font-size:16px; font-weight:500; }
 .crow-back{ font-size:13px; color:var(--ink-soft); }
-.crow-spk{ background:none; border:none; color:var(--ink-soft); cursor:pointer; padding:0 2px; }
+/* Mindestens 40px in jede Richtung. Vorher waren diese Knoepfe 19 bis 21 Pixel
+   gross - und LOESCHEN sass direkt neben AENDERN. Auf einem Kinderdaumen ist
+   das ein Fehlklick mit Datenverlust. Das Icon bleibt klein, die Flaeche
+   darum herum waechst. */
+.crow-spk{ background:none; border:none; color:var(--ink-soft); cursor:pointer;
+  min-width:40px; min-height:40px; display:inline-flex; align-items:center;
+  justify-content:center; border-radius:11px; flex-shrink:0; }
+.crow-spk:active{ background:color-mix(in srgb, var(--ink) 8%, transparent); }
 .crow-spk:hover{ color:var(--accent); }
 .crow-box{ font-size:10px; font-weight:600; color:var(--accent); border:1px solid var(--line);
   border-radius:6px; padding:2px 7px; margin-left:auto; white-space:nowrap; }
-.crow-del{ background:none; border:none; color:var(--ink-soft); cursor:pointer; font-size:18px; padding:0 4px; line-height:1; }
+.crow-del{ background:none; border:none; color:var(--ink-soft); cursor:pointer;
+  font-size:19px; line-height:1; min-width:40px; min-height:40px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:11px; flex-shrink:0;
+  /* Abstand zum Nachbarn: Loeschen darf nicht am Aendern kleben. */
+  margin-left:4px; }
+.crow-del:active{ background:color-mix(in srgb, var(--danger) 14%, transparent); }
 .crow-del:hover{ color:var(--danger); }
 
 /* Die weggewischte Karte darf die Seite nicht seitlich scrollbar machen.
@@ -1022,7 +1043,11 @@ const STYLES = `
 .rate-sub{ font-size:12px; font-weight:400; opacity:.9; }
 .btn-again{ background:var(--card); border:1px solid var(--line); color:var(--ink); }
 .btn-again:hover{ border-color:var(--danger); color:var(--danger); }
-.btn-good{ background:var(--accent); color:var(--card); }
+/* --auf, nicht --card: Die Kartenfarbe ist im Dunkelmodus zu hell und ergab auf
+   dem Akzent nur 4.43 bis 4.49:1 - ausgerechnet beim wichtigsten Knopf der App.
+   --auf ist genau fuer Akzentflaechen gedacht und liegt in allen vier Paletten
+   und beiden Modi ueber 4.9:1. */
+.btn-good{ background:var(--accent); color:var(--auf); }
 .btn-good:hover{ background:var(--accent-press); }
 /* „scharf“ = diese Note liegt beim Wischen gerade an */
 .rate-row .btn.scharf{ transform:translateY(-2px); }
@@ -1119,7 +1144,10 @@ const STYLES = `
 .sprach-chip{ background:var(--card); border:none; box-shadow:0 2px 0 var(--line);
   border-radius:999px; padding:10px 16px; cursor:pointer; font-family:var(--ui);
   font-size:14px; font-weight:800; color:var(--ink-soft); }
-.sprach-chip.an{ color:var(--accent); box-shadow:0 2px 0 var(--accent); }
+/* --accent als Text erreichte auf der Karte nur 4.43:1. --accent-press ist
+   der dunklere Zwilling und liegt darueber. */
+.sprach-chip{ min-height:44px; }
+.sprach-chip.an{ color:var(--accent-press); box-shadow:0 2px 0 var(--accent); }
 .sprachwahl{ display:flex; flex-direction:column; gap:12px; }
 .sprach-knopf{ background:var(--card); border:none; box-shadow:0 3px 0 var(--line);
   border-radius:18px; padding:20px 22px; cursor:pointer; font-family:var(--disp);
@@ -1535,7 +1563,7 @@ const STYLES = `
 .kipp-label{ font-size:13px; color:var(--ink-soft); white-space:nowrap; }
 .recall-actions{ display:flex; justify-content:center; }
 .mic-round{ width:56px; height:56px; flex-shrink:0; border-radius:50%; border:none;
-  background:var(--accent); color:var(--card); cursor:pointer; display:flex; align-items:center; justify-content:center;
+  background:var(--accent); color:var(--auf); cursor:pointer; display:flex; align-items:center; justify-content:center;
   box-shadow:0 6px 16px -8px rgba(21,33,28,.6); }
 .mic-round:hover{ background:var(--accent-press); }
 .mic-round.live{ background:var(--accent-press); animation:puls 1.1s ease-in-out infinite; }
@@ -1557,7 +1585,7 @@ const STYLES = `
 .crow.waehlbar:hover{ background:var(--paper); }
 .crow.markiert{ background:var(--paper); }
 .haken{ flex-shrink:0; width:24px; height:24px; border-radius:7px; border:1.6px solid var(--line);
-  display:flex; align-items:center; justify-content:center; margin-right:10px; color:var(--card);
+  display:flex; align-items:center; justify-content:center; margin-right:10px; color:var(--auf);
   font-size:14px; line-height:1; }
 .crow.markiert .haken{ background:var(--accent); border-color:var(--accent); }
 .wahl-leiste{ position:sticky; bottom:10px; display:flex; align-items:center; justify-content:space-between;
@@ -1706,11 +1734,17 @@ const buddyName = (m) => {
 /* "Bloop" darf hier stehen, obwohl die App so heisst (Marcs Entscheidung, und
    sie traegt): Der Name kommt von **Buddy + Loop** - also ist der Begleiter
    ohnehin gemeint. Wer ihn so nennt, trifft den Ursprung, statt sich zu vertun. */
-const BUDDY_NAMEN = [
+const BUDDY_NAMEN_DE = [
   "Frida", "Finn", "Keks", "Nudel", "Krake", "Tinte", "Pepper", "Wusel", "Kraken-Kalle",
   "Okto", "Sushi", "Blubb", "Struppi", "Perle", "Anker", "Muschel", "Tako",
   "Neptun", "Käpt'n", "Pommes", "Zappel",
 ];
+const BUDDY_NAMEN_EN = [
+  "Frida", "Finn", "Cookie", "Noodle", "Squid", "Inky", "Pepper", "Wiggle", "Kraken",
+  "Okto", "Sushi", "Blub", "Scruffy", "Pearl", "Anchor", "Shelly", "Tako",
+  "Neptune", "Captain", "Fries", "Fidget",
+];
+const buddyNamen = () => (SPR === "en" ? BUDDY_NAMEN_EN : BUDDY_NAMEN_DE);
 const FARBEN = [
   { k: "violett", l: "Violett" }, { k: "mint", l: "Mint" },
   { k: "koralle", l: "Koralle" }, { k: "blau", l: "Blau" },
@@ -2032,12 +2066,25 @@ const GRUESSE = {
 };
 /* Fantasiename statt echtem Namen: Robin kann dich ansprechen und weiss trotzdem nichts
  * ueber dich. Ein Deckname ist per Definition keine personenbezogene Angabe. */
-const FANTASIENAMEN = [
+/* Wunschnamen zum Antippen. Pro Sprache eine eigene Liste: "Erdmaennchen" und
+   "Knoepfchen" sagen einem englischsprachigen Kind nichts, und ein Vorschlag,
+   den man nicht versteht, ist kein Vorschlag.
+   Uebersetzt wird NICHT - die Listen sind unabhaengig voneinander gewaehlt.
+   Gemeinsam ist ihnen der Ton: albern, geschlechtsneutral, niemals ein echter
+   Vorname, den ein Kind versehentlich fuer den eigenen halten koennte. */
+const FANTASIENAMEN_DE = [
   "Batman", "Klotilde", "Herta", "Gandalf", "Pippi", "Godzilla", "Einstein", "Kleopatra",
   "Yoda", "Waldemar", "Rosalinde", "Kaktus", "Donnerkeil", "Nachteule", "Zwiebel",
   "Professorin", "Sherlock", "Mathilda", "Obelix", "Merlin", "Käpt'n", "Wildsau",
   "Erdmännchen", "Baron", "Sputnik", "Knöpfchen", "Rakete", "Wasabi",
 ];
+const FANTASIENAMEN_EN = [
+  "Batman", "Gandalf", "Pippi", "Godzilla", "Einstein", "Cleopatra", "Yoda",
+  "Sherlock", "Merlin", "Captain", "Rocket", "Wasabi", "Cactus", "Pickle",
+  "Waffle", "Meerkat", "Nightowl", "Sputnik", "Bramble", "Noodle", "Peanut",
+  "Thunder", "Professor", "Wombat", "Biscuit", "Sprocket", "Pumpkin", "Domino",
+];
+const fantasienamen = () => (SPR === "en" ? FANTASIENAMEN_EN : FANTASIENAMEN_DE);
 function tageszeit(stunde) {
   if (stunde < 5) return "nacht";
   if (stunde < 11) return "morgen";
@@ -5203,7 +5250,7 @@ function Profil({ meta, onSetzen, onBack, sound }) {
         <NamensWahl
           titel={t("name.frage")}
           wert={meta.deckname || ""}
-          topf={FANTASIENAMEN}
+          topf={fantasienamen()}
           platzhalter={t("name.eigen")}
           onWaehlen={(n) => onSetzen({ deckname: n, namenSpaeter: true })}
           zuruecksetzen={meta.deckname ? {
@@ -5221,7 +5268,7 @@ function Profil({ meta, onSetzen, onBack, sound }) {
         <NamensWahl
           titel={t("profil.buddyname")}
           wert={meta.buddyName || ""}
-          topf={BUDDY_NAMEN}
+          topf={buddyNamen()}
           platzhalter={t("name.eigen")}
           onWaehlen={(n) => onSetzen({ buddyName: n })}
           zuruecksetzen={meta.buddyName ? {
@@ -5454,7 +5501,7 @@ function Home({ decks, sound, deckname, meta, onMeta, onAdd, onImport, onCatalog
       {impOpen && (
         <div className="panel" style={{ marginTop: 10 }}>
           <div className="panel-title">Kartei per Code
-            <button className="panel-close" onClick={() => setImpOpen(false)} aria-label="Schließen">×</button>
+            <button className="panel-close" onClick={() => setImpOpen(false)} aria-label={t("allg.schliessen")}>×</button>
           </div>
           <textarea className="share-ta" placeholder={t("imp.platz")} value={imp} onChange={(e) => setImp(e.target.value)} />
           {impErr && <div className="hint-err">{impErr}</div>}
@@ -5864,18 +5911,15 @@ function Feier({ feier, deckname, onZu }) {
   );
 }
 
-/* Namensdialog beim ersten Start. Kurz, ueberspringbar, mit Robins Teamwork-Zeile. */
+/* Namensdialog beim ersten Start. Kurz, ueberspringbar, mit der Teamwork-Zeile. */
 function Namenswahl({ onFertig, onSpaeter }) {
-  const [vorschlaege, setVorschlaege] = useState(() => shuffle(FANTASIENAMEN.slice()).slice(0, 6));
+  const [vorschlaege, setVorschlaege] = useState(() => shuffle(fantasienamen().slice()).slice(0, 6));
   const [eigen, setEigen] = useState("");
-  const wuerfeln = () => setVorschlaege(shuffle(FANTASIENAMEN.slice()).slice(0, 6));
+  const wuerfeln = () => setVorschlaege(shuffle(fantasienamen().slice()).slice(0, 6));
   return (
     <div className="namenswahl">
-      <div className="h1">Wie soll ich dich nennen?</div>
-      <div className="sub">
-        Bitte nicht deinen echten Namen — such dir was Lustiges aus. Ich merk mir nichts über
-        dich, und ein ausgedachter Name bleibt ausgedacht.
-      </div>
+      <div className="h1">{t("name.frage")}</div>
+      <div className="sub">{t("name.hinweis")}</div>
       <div className="nw-liste">
         {vorschlaege.map((n) => (
           <button key={n} className="chip" onClick={() => onFertig(n)}>{n}</button>
@@ -5887,7 +5931,7 @@ function Namenswahl({ onFertig, onSpaeter }) {
           onChange={(e) => setEigen(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && eigen.trim() && onFertig(eigen.trim())} />
         <button className="btn btn-ghost" disabled={!eigen.trim()} onClick={() => onFertig(eigen.trim())}>
-          Passt
+          {t("name.passt")}
         </button>
       </div>
       <div className="nw-team">{t("name.team")}</div>
@@ -7206,7 +7250,7 @@ function Study({ deck, tts, sound, onBack, onHome, onRate, onEditCard, alleDecks
               <div className="folge-text">{t("ende.naechstes")} <b>{folge.name}</b>.</div>
               <div className="folge-knoepfe">
                 <button className="btn btn-primary" onClick={() => onFolgeholen(folge.eintrag)}>
-                  Holen und loslegen
+                  {t("ende.holen")}
                 </button>
                 <button className="link-inline" onClick={onBack}>{t("ende.spaeter")}</button>
               </div>
@@ -7483,7 +7527,7 @@ function FotoImport({ sound, onBack, onImport, zielName }) {
         <button className="btn btn-ghost" style={{ width: "100%" }} onClick={() => fileRef.current && fileRef.current.click()}>
           {photo ? t("foto.anderes") : t("foto.knopf")}
         </button>
-        {photo && <img className="imp-photo" src={photo} alt="Fotografierte Buchseite" />}
+        {photo && <img className="imp-photo" src={photo} alt={t("foto.alt")} />}
         <div className="mic-hint" style={{ marginTop: 10 }}>
           So kommst du an den Text: <b>iPhone</b> — Foto öffnen, lange auf den Text tippen,
           „Alles auswählen“, kopieren. <b>Android</b> — in Google Fotos auf „Lens“ tippen, Text kopieren.
@@ -7492,7 +7536,7 @@ function FotoImport({ sound, onBack, onImport, zielName }) {
       </div>
 
       <div className="panel">
-        <div className="panel-title">2 · Text einfügen</div>
+        <div className="panel-title">{t("foto.schritt2")}</div>
         <textarea className="share-ta" style={{ height: 130 }} value={text} onChange={(e) => { setText(e.target.value); setDropped({}); }}
           placeholder={"hello — hallo\nplease — bitte\n\noder untereinander:\nWas ist der Median?\nDer mittlere Wert einer geordneten Reihe."} />
         <div className="target-toggle" style={{ marginTop: 12, marginBottom: 0, flexWrap: "wrap" }}>
@@ -7693,7 +7737,7 @@ function ZurueckKnopf({ onClick, onHeim, sound, rechts }) {
           {sound ? <SoundToggle sound={sound} /> : null}
         </div>
       </div>
-      <button className="zurueck-knopf" onClick={onClick} aria-label="Zurück">
+      <button className="zurueck-knopf" onClick={onClick} aria-label={t("allg.zurueck")}>
         <ChevronIcon /><span>{t("allg.zurueck")}</span>
       </button>
     </>
