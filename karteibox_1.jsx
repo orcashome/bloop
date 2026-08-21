@@ -63,6 +63,7 @@ const TEXTE = {
   /* Deutsch ist die Rueckfallsprache: was hier fehlt, faellt auf den Schluessel
      zurueck. Neue Texte gehoeren deshalb IMMER zuerst hierher. */
   de: {
+    "ende.fertig": "Fertig.",
     "foto.schritt2": "2 · Text einfügen",
     "foto.alt": "Fotografierte Buchseite",
     "name.hinweis": "Bitte nicht deinen echten Namen — such dir was Lustiges aus. Ich merk mir nichts über dich, und ein ausgedachter Name bleibt ausgedacht.",
@@ -146,8 +147,8 @@ const TEXTE = {
     "ub.vonkarten": "%F% von %G% Karten",
 
     "reife.frisch": "frisch",
-    "reife.kommt": "sitzt langsam",
-    "reife.fest": "sitzt fest",
+    "reife.kommt": "sitzen langsam",
+    "reife.fest": "sitzen fest",
     "ub.nie": "noch nicht gelernt",
     "ub.bildok": "Bild gespeichert — du findest es bei deinen Downloads.",
     "ub.bildfehler": "Hat nicht geklappt. Probier es nochmal.",
@@ -275,6 +276,7 @@ const TEXTE = {
     "profil.farbe": "Farbe & Helligkeit",
   },
   en: {
+    "ende.fertig": "Done.",
     "foto.schritt2": "2 · Paste the text",
     "foto.alt": "Photographed book page",
     "name.hinweis": "Please don't use your real name — pick something silly. I remember nothing about you, and a made-up name stays made up.",
@@ -7227,7 +7229,7 @@ function Study({ deck, tts, sound, onBack, onHome, onRate, onEditCard, alleDecks
       <div className="study">
         <ZurueckKnopf onClick={onHome} />
         <div className="center-msg">
-          <div className="big">Fertig.</div>
+          <div className="big">{t("ende.fertig")}</div>
           {schluss.zeigen && (
             <>
               <div className="schluss-ring ub-auf">

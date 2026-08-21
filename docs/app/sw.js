@@ -13,7 +13,7 @@
  *
  * Beim Neu-Deployen trotzdem CACHE hochzaehlen: das raeumt die alten Dateien weg.
  */
-const CACHE = "bloop-v26";
+const CACHE = "bloop-v27";
 // Wichtig: jede Datei hier MUSS existieren. addAll bricht sonst komplett ab,
 // der Service Worker installiert nicht, und die App laeuft nicht offline.
 const ASSETS = ["./", "./index.html", "./icon.svg", "./apple-touch-icon.png",
