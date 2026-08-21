@@ -1,19 +1,13 @@
-<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schnitzeljagd: eine Spur von Stationen zu einer Fahne">
-  <!-- Weg -->
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schnitzeljagd: eine Spur von Stationen fuehrt zu einer Fahne">
   <path d="M26,168 C70,168 66,120 108,120 C150,120 146,72 190,72 C232,72 236,44 276,44"
-        stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 13"
-        fill="none" opacity=".4"/>
-  <!-- Stationen -->
-  <g>
-    <circle cx="26" cy="168" r="12" fill="currentColor" opacity=".45"/>
-    <circle cx="108" cy="120" r="12" fill="currentColor" opacity=".45"/>
-    <circle cx="190" cy="72" r="12" fill="currentColor" opacity=".45"/>
+        stroke="var(--sz2)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 13" fill="none"/>
+  <g fill="var(--sz3)">
+    <circle cx="26" cy="168" r="12"/><circle cx="108" cy="120" r="12"/><circle cx="190" cy="72" r="12"/>
   </g>
-  <!-- Ziel -->
   <circle cx="276" cy="44" r="17" fill="var(--accent)"/>
   <path d="M276,27 V6" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
   <path d="M278,8 L306,16 L278,26 Z" fill="var(--accent)"/>
-  <!-- Suchende Figur am Anfang -->
-  <circle cx="60" cy="150" r="11" fill="var(--accent)" opacity=".8"/>
-  <path d="M44,182c0-12 7-22 16-22s16,10 16,22z" fill="var(--accent)" opacity=".8"/>
+  <!-- Suchende Figur am Anfang; Kopf und Schultern sitzen aneinander -->
+  <circle cx="60" cy="152" r="11" fill="var(--sz-akz2)"/>
+  <path d="M44,186c0-13 7-23 16-23s16,10 16,23z" fill="var(--sz-akz2)"/>
 </svg>

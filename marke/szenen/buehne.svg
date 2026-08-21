@@ -1,19 +1,21 @@
-<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ein Kind spricht vor einer Gruppe">
-  <ellipse cx="160" cy="180" rx="126" ry="13" fill="currentColor" opacity=".1"/>
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ein Kind spricht frei vor der Klasse und sagt: Frag mich was">
+  <ellipse cx="160" cy="184" rx="126" ry="13" fill="var(--sz1)"/>
   <!-- Zuhoerende, von hinten, unterschiedlich hoch -->
-  <g fill="currentColor" opacity=".3">
-    <circle cx="42" cy="140" r="13"/><path d="M23,182c0-13 8-24 19-24s19,11 19,24z"/>
-    <circle cx="92" cy="146" r="11"/><path d="M76,182c0-11 7-20 16-20s16,9 16,20z"/>
-    <circle cx="232" cy="144" r="12"/><path d="M215,182c0-12 7-21 17-21s17,9 17,21z"/>
-    <circle cx="280" cy="141" r="13"/><path d="M261,182c0-13 8-24 19-24s19,11 19,24z"/>
+  <g fill="var(--sz2)">
+    <circle cx="42" cy="144" r="13"/><path d="M23,186c0-13 8-24 19-24s19,11 19,24z"/>
+    <circle cx="92" cy="150" r="11"/><path d="M76,186c0-11 7-20 16-20s16,9 16,20z"/>
+    <circle cx="232" cy="148" r="12"/><path d="M215,186c0-12 7-21 17-21s17,9 17,21z"/>
+    <circle cx="280" cy="145" r="13"/><path d="M261,186c0-13 8-24 19-24s19,11 19,24z"/>
   </g>
-  <!-- Die sprechende Person, vorne, in Akzentfarbe -->
-  <circle cx="160" cy="104" r="18" fill="var(--accent)"/>
-  <path d="M132,182c0-20 12-35 28-35s28,15 28,35z" fill="var(--accent)"/>
-  <!-- Redefluss als drei Boegen -->
-  <g stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none" opacity=".55">
-    <path d="M196,74 C206,66 208,54 202,44"/>
-    <path d="M210,84 C226,72 230,50 218,34"/>
-    <path d="M224,94 C246,78 250,46 234,24"/>
+  <!-- Die sprechende Person, vorne. Kopf und Schultern sitzen jetzt aneinander -
+       vorher klaffte dazwischen eine Luecke und der Kopf schwebte. -->
+  <circle cx="160" cy="131" r="18" fill="var(--accent)"/>
+  <path d="M132,186c0-20 12-34 28-34s28,14 28,34z" fill="var(--accent)"/>
+  <!-- Sprechblase am Kopf statt drei abstrakter Boegen -->
+  <g>
+    <rect x="192" y="52" width="122" height="42" rx="15" fill="var(--accent)"/>
+    <path d="M204,92 L180,126 L226,94 Z" fill="var(--accent)"/>
+    <text x="253" y="79" text-anchor="middle" font-size="17" font-weight="800"
+          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Frag mich was.</text>
   </g>
 </svg>

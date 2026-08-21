@@ -4,175 +4,363 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Bloop — jedes Kind kann alles lernen</title>
-<meta name="description" content="Lernen ohne Konto, ohne Werbung, ohne Datensammeln. Offline, anonym, kostenlos im Browser. Für Kinder, Schule und alle, die etwas behalten wollen.">
-<meta name="theme-color" content="#F6F7F8" media="(prefers-color-scheme: light)">
+<meta name="description" content="Die Lern-App, die will, dass du sie schnell wieder zumachst. Ohne Konto, ohne Werbung, ohne Datensammeln. Offline und kostenlos im Browser.">
+<meta name="theme-color" content="#F7F8F9" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E0F11" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="app/icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="app/apple-touch-icon.png">
 <meta property="og:title" content="Bloop — jedes Kind kann alles lernen">
-<meta property="og:description" content="Egal wann, egal wo. Kein Netz? Kein Problem. Ohne Konto, ohne Werbung, ohne Datenkraken.">
+<meta property="og:description" content="Die einzige Lern-App, die will, dass du sie schnell wieder zumachst.">
 <meta property="og:type" content="website">
 <style>
 :root{
-  --paper:#F6F7F8; --card:#FFFFFF; --ink:#232830; --soft:#5B6270;
-  --line:#E2E5E9; --accent:#7A3FBF; --accent-satt:#65309F; --auf:#FFFFFF;
-  --figur:#7A3FBF; --still:#EDEFF2;
+  --paper:#F7F8F9; --card:#FFFFFF; --ink:#1F242B; --soft:#5B6270;
+  --line:#E4E7EB; --accent:#7A3FBF; --accent-satt:#65309F; --auf:#FFFFFF;
+  --still:#EFF1F4;
+  --sz1:#E2E3E3; --sz2:#BCBDBF; --sz3:#9A9CA0; --sz4:#74777C;
+  --sz-akz2:#A982D5; --sz-glanz:#B89CDC;
   --disp:ui-rounded,'SF Pro Rounded','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root{
-    --paper:#0E0F11; --card:#1A1C1F; --ink:#F0F1F3; --soft:#9AA2AE;
-    --line:#34383E; --accent:#A87BDB; --accent-satt:#BF9BE6; --auf:#0E0F11;
-    --figur:#A87BDB; --still:#22252A;
+    --paper:#0E0F11; --card:#191B1E; --ink:#F0F1F3; --soft:#98A0AC;
+    --line:#2E3238; --accent:#A87BDB; --accent-satt:#BF9BE6; --auf:#0E0F11;
+    --still:#212429;
+    --sz1:#35373A; --sz2:#5A5B5E; --sz3:#7A7B7E; --sz4:#9EA0A2;
+    --sz-akz2:#765999; --sz-glanz:#CBB0EE;
   }
 }
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
 body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--disp);
-  -webkit-font-smoothing:antialiased; line-height:1.5; }
-.bahn{ width:100%; max-width:720px; margin:0 auto; padding:0 20px; }
+  -webkit-font-smoothing:antialiased; line-height:1.55; }
+.bahn{ width:100%; max-width:680px; margin:0 auto; padding:0 22px; }
 h1,h2,h3{ letter-spacing:-.03em; text-wrap:balance; margin:0; }
 p{ margin:0; }
 a{ color:var(--accent); }
 
+/* Luft: die Abschnitte duerfen atmen. Enge wirkt gehetzt, und eine Seite,
+   die etwas von Ruhe erzaehlt, darf nicht selbst gedraengt aussehen. */
+section{ padding:clamp(52px,9vh,104px) 0; }
 .kopf{ position:sticky; top:0; z-index:40; background:color-mix(in srgb,var(--paper) 92%,transparent);
   backdrop-filter:saturate(1.4) blur(10px); border-bottom:1px solid var(--line); }
 .kopf-innen{ display:flex; align-items:center; justify-content:space-between; gap:12px; height:58px; }
 .marke{ display:flex; align-items:center; gap:9px; text-decoration:none; color:var(--ink); }
-.marke svg{ width:25px; height:27px; color:var(--figur); }
+.marke svg{ width:25px; height:27px; color:var(--accent); }
 .marke b{ font-size:18px; font-weight:800; letter-spacing:-.03em; }
 .mini{ background:var(--accent); color:var(--auf); text-decoration:none; font-size:14px;
   font-weight:800; padding:10px 17px; border-radius:13px; white-space:nowrap; }
 .mini:hover{ background:var(--accent-satt); }
 
-/* Kopfbereich: Claim, Dreiklang, Vorteile - alles ueber der Faltkante */
-header{ padding:clamp(34px,7vh,64px) 0 clamp(24px,4vh,40px); text-align:center; }
-.figur{ color:var(--figur); width:clamp(78px,11vw,120px); height:auto;
-  aspect-ratio:79.67/85.62; margin:0 auto 18px; display:block; }
-h1{ font-size:clamp(29px,6vw,46px); font-weight:800; line-height:1.1; margin-bottom:14px; }
-h1 em{ font-style:normal; color:var(--accent); }
-.unterclaim{ font-size:clamp(16px,2.4vw,19px); font-weight:600; color:var(--soft);
-  max-width:30ch; margin:0 auto 22px; text-wrap:balance; }
-.dreiklang{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px 22px; margin-bottom:24px; }
+header.oben{ padding:clamp(44px,9vh,90px) 0 clamp(34px,6vh,64px); text-align:center; }
+.figur{ color:var(--accent); width:clamp(84px,12vw,124px); height:auto;
+  aspect-ratio:79.67/85.62; margin:0 auto 22px; display:block; }
+h1{ font-size:clamp(30px,6.2vw,48px); font-weight:800; line-height:1.08; margin-bottom:18px; }
+.unterclaim{ font-size:clamp(16.5px,2.5vw,20px); font-weight:600; color:var(--soft);
+  max-width:28ch; margin:0 auto 26px; text-wrap:balance; }
+.dreiklang{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px 24px; margin-bottom:28px; }
 .dreiklang span{ font-size:clamp(17px,3vw,23px); font-weight:800; letter-spacing:-.03em; }
 .dreiklang span:nth-child(2){ color:var(--accent); }
 .knopf{ display:inline-block; background:var(--accent); color:var(--auf); text-decoration:none;
-  font-size:16px; font-weight:800; padding:15px 32px; border-radius:16px;
+  font-size:16.5px; font-weight:800; padding:16px 34px; border-radius:16px;
   box-shadow:0 3px 0 var(--accent-satt); }
 .knopf:hover{ background:var(--accent-satt); box-shadow:0 3px 0 var(--accent); }
-.unterknopf{ font-size:13px; font-weight:600; color:var(--soft); margin-top:11px; }
+.unterknopf{ font-size:13px; font-weight:600; color:var(--soft); margin-top:12px; }
 
-/* Vorteile auf einen Blick */
-.blick{ display:grid; grid-template-columns:repeat(2,1fr); gap:9px; margin:26px 0 0; text-align:left; }
-@media (min-width:620px){ .blick{ grid-template-columns:repeat(4,1fr); } }
-.blick div{ background:var(--card); border-radius:14px; padding:12px 13px; box-shadow:0 2px 0 var(--line); }
-.blick b{ display:block; font-size:14px; font-weight:800; margin-bottom:2px; }
-.blick span{ font-size:12px; font-weight:600; color:var(--soft); line-height:1.3; }
+/* Die vier Versprechen: Zeichen in Textfarbe, nicht in Lila. Farbe traegt hier
+   nichts bei - sie wuerde nur mit den Szenen konkurrieren. */
+.blick{ display:grid; grid-template-columns:repeat(2,1fr); gap:11px; margin:34px 0 0; text-align:left; }
+@media (min-width:640px){ .blick{ grid-template-columns:repeat(4,1fr); } }
+.blick div{ background:var(--card); border-radius:16px; padding:16px 15px;
+  box-shadow:0 2px 0 var(--line); }
+.blick svg{ width:22px; height:22px; color:var(--accent); margin-bottom:9px; display:block; }
+.blick b{ display:block; font-size:14.5px; font-weight:800; margin-bottom:3px; }
+.blick span{ font-size:12.5px; font-weight:600; color:var(--soft); line-height:1.35; }
 
-section{ padding:clamp(30px,5vh,52px) 0; }
 .balken{ font-size:11px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--accent); margin-bottom:9px; }
-h2{ font-size:clamp(22px,3.6vw,30px); font-weight:800; margin-bottom:11px; }
-.vor{ font-size:16px; font-weight:600; color:var(--soft); max-width:52ch; margin-bottom:20px; }
+  color:var(--soft); margin-bottom:11px; }
+h2{ font-size:clamp(24px,4vw,34px); font-weight:800; margin-bottom:14px; line-height:1.15; }
+.vor{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:52ch; margin-bottom:26px; }
 
-/* Der kurze Wortwechsel */
-.zug{ display:flex; gap:10px; align-items:flex-end; max-width:min(520px,100%); margin-bottom:11px; }
-.zug.du{ flex-direction:row-reverse; margin-left:auto; }
-/* Zwei Sprecher, zwei Farben. Beide blau hiesse: dieselbe Person redet mit
-   sich selbst. Die Toene sind so gewaehlt, dass weisse Schrift auf beiden
-   traegt und sie sich auch bei Rot-Gruen-Schwaeche unterscheiden. */
-.kuerzel{ width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex;
-  align-items:center; justify-content:center; font-size:13px; font-weight:800;
+/* Der Wortwechsel bekommt eine Einleitung - sonst faellt man mitten hinein
+   und weiss nicht, wer da spricht. */
+.chat-kopf{ background:var(--still); border-radius:20px 20px 0 0; padding:18px 20px;
+  display:flex; align-items:center; gap:12px; }
+.chat-kopf svg{ width:30px; height:32px; color:var(--accent); flex-shrink:0; }
+.chat-kopf b{ font-size:15.5px; font-weight:800; display:block; }
+.chat-kopf span{ font-size:12.5px; font-weight:600; color:var(--soft); }
+.chat{ background:var(--card); border-radius:0 0 20px 20px; padding:20px 18px 22px;
+  box-shadow:0 3px 0 var(--line); }
+/* Sabine steht links, Jochen rechts - zwei Menschen im Gespraech muessen
+   sich gegenueberstehen, sonst liest es sich wie zwei Aushaenge am selben
+   Brett. Bloop ist der Dritte: er sitzt links wie Sabine, ist aber durch
+   Oktopus, Akzentblase und Namen zweifelsfrei zu unterscheiden. */
+.zug{ display:flex; gap:10px; align-items:flex-end; max-width:min(430px,100%); margin-bottom:16px; }
+.zug.rechts{ flex-direction:row-reverse; margin-left:auto; }
+/* Wenn dieselbe Person zweimal hintereinander spricht, entfaellt die
+   Wiederholung von Bild und Namen - die Blasen ruecken zusammen. */
+.zug.folge{ margin-top:-10px; }
+.zug.folge .kuerzel{ visibility:hidden; }
+.zug.folge .name{ display:none; }
+.kuerzel{ width:32px; height:32px; border-radius:50%; flex-shrink:0; display:flex;
+  align-items:center; justify-content:center; font-size:12.5px; font-weight:800;
   color:#FFFFFF; background:#3A76AF; margin-bottom:2px; }
 .kuerzel.j{ background:#AA5F38; }
-.kuerzel.bloop{ background:none; color:var(--figur); width:34px; height:37px; border-radius:0; }
+.kuerzel.bloop{ background:none; color:var(--accent); width:32px; height:35px; border-radius:0; }
 .kuerzel.bloop svg{ width:100%; height:100%; }
-.blase{ background:var(--card); border-radius:18px; padding:13px 16px; box-shadow:0 2px 0 var(--line);
-  font-size:16px; font-weight:600; }
-.zug.du .blase{ background:var(--still); box-shadow:none; font-weight:700; }
-.zug.ist-bloop .blase{ background:color-mix(in srgb,var(--accent) 30%,var(--card));
-  box-shadow:0 2px 0 var(--accent); }
-.blase strong{ font-weight:800; color:var(--ink); }
+.sprech{ min-width:0; }
+.name{ display:block; font-size:11.5px; font-weight:800; letter-spacing:.05em;
+  text-transform:uppercase; color:var(--soft); margin:0 0 5px 5px; }
+.zug.rechts .name{ text-align:right; margin:0 5px 5px 0; }
+.blase{ background:var(--still); border-radius:17px; padding:12px 15px; font-size:15.5px;
+  font-weight:600; }
+.zug.ist-bloop .blase{ background:color-mix(in srgb,var(--accent) 12%,var(--card));
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--accent) 42%,transparent); }
+.zug.ist-bloop .name{ color:var(--accent); }
+.blase strong{ font-weight:800; }
 
-/* Anwendungsfaelle */
-.faelle{ display:grid; gap:14px; grid-template-columns:1fr; }
+/* Bloop bittet um Hilfe: der Besucher verbessert eine bewusst schwache Karte.
+   Drei Felder, weil eine Bloop-Karte drei Seiten hat - man begreift das Format,
+   indem man es benutzt. Nichts davon wird gespeichert oder verschickt. */
+.bitte{ display:flex; gap:11px; align-items:flex-start; margin-bottom:20px; }
+.bitte svg{ width:34px; height:37px; color:var(--accent); flex-shrink:0; }
+.bitte .blase{ max-width:44ch; }
+.werkbank{ background:var(--card); border-radius:20px; box-shadow:0 3px 0 var(--line);
+  padding:20px; display:grid; gap:15px; }
+.feld label{ display:block; font-size:10.5px; font-weight:800; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--soft); margin-bottom:7px; }
+.feld textarea{ width:100%; display:block; background:var(--still); color:var(--ink);
+  border:none; border-radius:13px; padding:13px 15px; font:inherit; font-size:16px;
+  font-weight:700; line-height:1.4; resize:none; overflow:hidden;
+  box-shadow:0 0 0 1.5px transparent; }
+.feld textarea::placeholder{ color:var(--soft); font-weight:600; }
+.feld textarea:focus{ outline:none; box-shadow:0 0 0 2px var(--accent); }
+.feld.dritte-feld textarea{ font-size:15px; font-weight:600; }
+.quittung{ font-size:14px; font-weight:700; color:var(--accent); margin-top:2px; }
+.quittung[hidden]{ display:none; }
+.werkbank-fuss{ font-size:12.5px; font-weight:600; color:var(--soft); margin-top:14px; }
+
+/* Die Probe: Frage lesen, tippen, Antwort. Das ist die App in klein. */
+.probe{ background:var(--card); border-radius:20px; box-shadow:0 3px 0 var(--line);
+  padding:24px; width:100%; text-align:left; border:none; font:inherit; color:inherit;
+  cursor:pointer; transition:box-shadow .16s ease; }
+.probe:hover{ box-shadow:0 3px 0 var(--accent); }
+.probe:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
+.probe .marke-zeile{ font-size:10.5px; font-weight:800; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--soft); margin-bottom:11px; }
+.probe .frage{ font-size:clamp(19px,3.2vw,24px); font-weight:800; line-height:1.25; }
+/* Drei Stufen, genau wie in der App: Frage, kurze Antwort, dann erst das
+   Warum. Antwort und Erklaerung duerfen NIE zusammen erscheinen - sonst liest
+   man beides und prueft nicht mehr ehrlich, ob man es wusste. */
+.probe .hinweis{ font-size:13px; font-weight:800; color:var(--accent); margin-top:18px; }
+.probe .hinweis span{ display:none; }
+.probe[data-stufe="0"] .hinweis span:nth-child(1),
+.probe[data-stufe="1"] .hinweis span:nth-child(2),
+.probe[data-stufe="2"] .hinweis span:nth-child(3){ display:inline; }
+.probe .loesung,.probe .dritte{ display:none; }
+.probe[data-stufe="1"] .loesung,
+.probe[data-stufe="2"] .loesung{ display:block; animation:auf .26s ease both; }
+.probe[data-stufe="2"] .dritte{ display:block; animation:auf .26s ease both; }
+.probe .dritte{ margin-top:16px; padding:15px 16px; border-radius:14px;
+  background:color-mix(in srgb,var(--accent) 9%,var(--card));
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--accent) 34%,transparent); }
+.probe .dritte-titel{ font-size:11px; font-weight:800; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+.probe .dritte p{ font-size:14.5px; font-weight:600; color:var(--soft); }
+.probe .antwort{ font-size:18px; font-weight:800; margin-top:16px; padding-top:16px;
+  border-top:2px solid var(--line); }
+@keyframes auf{ from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:none } }
+@media (prefers-reduced-motion:reduce){ .probe .loesung,.probe .dritte{ animation:none } }
+
+.faelle{ display:grid; gap:18px; grid-template-columns:1fr; }
 @media (min-width:640px){ .faelle{ grid-template-columns:1fr 1fr; } }
-.fall{ background:var(--card); border-radius:20px; overflow:hidden; box-shadow:0 3px 0 var(--line); }
-.fall .bild{ background:var(--still); color:var(--ink); padding:6px 10px 0; }
-.fall .bild svg{ width:100%; height:auto; display:block; }
-.fall .text{ padding:16px 18px 20px; }
-.fall h3{ font-size:17px; font-weight:800; margin-bottom:5px; }
+.fall svg{ width:100%; height:auto; display:block; border-radius:18px; }
+.fall h3{ font-size:17px; font-weight:800; margin:14px 0 4px; }
 .fall p{ font-size:14.5px; font-weight:600; color:var(--soft); }
 
-/* Zahlentabelle */
 .tab{ width:100%; border-collapse:collapse; font-size:15.5px; }
 .tab th{ text-align:left; font-size:11px; font-weight:800; letter-spacing:.09em;
-  text-transform:uppercase; color:var(--soft); padding:0 0 10px; }
-.tab td{ padding:13px 0; border-top:1px solid var(--line); font-weight:700; }
+  text-transform:uppercase; color:var(--soft); padding:0 0 12px; }
+.tab td{ padding:15px 0; border-top:1px solid var(--line); font-weight:700; }
 .tab td:first-child{ font-weight:800; }
 .tab td:not(:first-child){ text-align:right; font-variant-numeric:tabular-nums; }
 .tab .stark{ color:var(--accent); font-weight:800; }
-.fussnote{ font-size:12.5px; font-weight:600; color:var(--soft); margin-top:14px; line-height:1.45; }
+.fussnote{ font-size:12.5px; font-weight:600; color:var(--soft); margin-top:16px; line-height:1.5; }
 
 details{ background:var(--card); border-radius:15px; box-shadow:0 2px 0 var(--line);
-  margin-bottom:9px; overflow:hidden; }
-summary{ cursor:pointer; padding:15px 17px; font-size:15.5px; font-weight:800; list-style:none;
+  margin-bottom:10px; overflow:hidden; }
+summary{ cursor:pointer; padding:16px 18px; font-size:15.5px; font-weight:800; list-style:none;
   display:flex; justify-content:space-between; gap:12px; align-items:center; }
 summary::-webkit-details-marker{ display:none; }
 summary::after{ content:"+"; color:var(--accent); font-size:19px; font-weight:800; flex-shrink:0; }
 details[open] summary::after{ content:"\2013"; }
-details p{ padding:0 17px 16px; font-size:14.5px; font-weight:600; color:var(--soft); }
-details p + p{ padding-top:0; margin-top:-5px; }
+details p{ padding:0 18px 17px; font-size:14.5px; font-weight:600; color:var(--soft); }
+details p + p{ padding-top:0; margin-top:-6px; }
 
-.schluss{ background:var(--card); border-radius:22px; padding:clamp(24px,4vw,36px);
-  box-shadow:0 3px 0 var(--line); text-align:center; }
-.schluss p{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:44ch;
-  margin:0 auto 20px; text-wrap:balance; }
-footer{ padding:32px 0 44px; text-align:center; border-top:1px solid var(--line); margin-top:24px; }
+.warum-wir{ display:grid; gap:16px; grid-template-columns:1fr; }
+@media (min-width:640px){ .warum-wir{ grid-template-columns:1fr 1fr 1fr; } }
+.wk{ background:var(--card); border-radius:18px; padding:22px 20px; box-shadow:0 3px 0 var(--line); }
+.wk .nr{ font-size:12px; font-weight:800; color:var(--accent); letter-spacing:.06em; margin-bottom:8px; }
+.wk h3{ font-size:16.5px; font-weight:800; margin-bottom:6px; }
+.wk p{ font-size:14.5px; font-weight:600; color:var(--soft); }
+
+.schluss{ text-align:center; }
+.schluss p{ font-size:17px; font-weight:600; color:var(--soft); max-width:40ch;
+  margin:0 auto 26px; text-wrap:balance; }
+footer{ padding:34px 0 48px; text-align:center; border-top:1px solid var(--line); }
 footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 .mitte{ text-align:center; }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="octo" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="currentColor" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></symbol></svg>
 
-<header class="kopf-platz">
-  <div class="kopf">
-    <div class="bahn kopf-innen">
-      <a class="marke" href="#oben"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><b>Bloop</b></a>
-      <a class="mini" href="app/">Ausprobieren</a>
-    </div>
+<div class="kopf">
+  <div class="bahn kopf-innen">
+    <a class="marke" href="#oben"><span><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><b>Bloop</b></a>
+    <a class="mini" href="app/">Ausprobieren</a>
   </div>
-</header>
+</div>
 
 <main id="oben">
-  <header>
+  <header class="oben">
     <div class="bahn">
-      <div class="figur"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></div>
-      <h1>Jedes Kind kann <em>alles</em> lernen.</h1>
+      <div class="figur"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></div>
+      <h1>Jedes Kind kann alles lernen.</h1>
       <p class="unterclaim">Egal wann. Egal wo. Kein Netz? Kein Problem.</p>
       <div class="dreiklang" aria-label="Learn it. Loop it. Own it.">
         <span>Learn it.</span><span>Loop it.</span><span>Own it.</span>
       </div>
       <a class="knopf" href="app/">Jetzt ausprobieren</a>
       <p class="unterknopf">Kostenlos. Ohne Anmeldung. Sofort im Browser.</p>
-
       <div class="blick">
-        <div><b>Anonym</b><span>Kein Konto, kein Name.</span></div>
-        <div><b>Offline</b><span>Im Zug, im Funkloch.</span></div>
-        <div><b>Ohne Datenkraken</b><span>Kein Server, kein Tracker.</span></div>
-        <div><b>Ohne Suchtschleife</b><span>Keine Serie, keine Punkte.</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+   <path d="M4 12.5 9.5 18 20 6.5"/>
+ </svg><b>Anonym</b><span>Kein Konto, kein Name.</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+   <path d="M4 12.5 9.5 18 20 6.5"/>
+ </svg><b>Offline</b><span>Im Zug, im Funkloch.</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+   <path d="M4 12.5 9.5 18 20 6.5"/>
+ </svg><b>Keine Datenkraken</b><span>Kein Server, kein Tracker.</span></div>
+        <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"
+   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+   <path d="M4 12.5 9.5 18 20 6.5"/>
+ </svg><b>Keine Suchtschleife</b><span>Keine Serie, keine Punkte.</span></div>
       </div>
     </div>
   </header>
 
+  <section class="mitte">
+    <div class="bahn">
+      <div class="balken">Erst mal ausprobieren</div>
+      <h2>Kennst du die Antwort?</h2>
+      <p class="vor" style="margin-inline:auto">Jede Karte hat drei Seiten: Frage, kurze Antwort
+        — und dahinter das Warum. Tipp dich durch.</p>
+      <button class="probe" data-probe data-stufe="0" aria-expanded="false">
+        <div class="marke-zeile">Zum Staunen · Frage</div>
+        <div class="frage">Wie viele Zähne hat eine Schnecke?</div>
+        <div class="loesung">
+          <div class="antwort">Über 10 000.</div>
+        </div>
+        <div class="dritte">
+          <div class="dritte-titel">Warum?</div>
+          <p>Winzige Zähnchen sitzen in Reihen auf einer Raspelzunge — damit schabt die
+            Schnecke Blätter ab. Vorne nutzen sie sich ab, hinten wachsen ständig neue nach.</p>
+        </div>
+        <div class="hinweis"><span>Tippen zum Umdrehen →</span><span>Warum? ↑</span><span>Nochmal von vorn ↺</span></div>
+      </button>
+    </div>
+  </section>
+
   <section>
     <div class="bahn">
-      <div class="zug du"><span class="kuerzel">S</span><div class="blase">Meine schaut nur noch Shorts. Und die Lern-App, die ich ihr draufgemacht hab, macht dasselbe: Punkte, Serie, Drama. 😩</div></div>
-      <div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase">Bei mir kann nichts abreißen. <strong>Keine Serie, keine Punkte.</strong> Wer drei Tage nichts macht, verliert nichts.</div></div>
-      <div class="zug du"><span class="kuerzel j">J</span><div class="blase">Und die Daten?</div></div>
-      <div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase"><strong>Welche Daten?</strong> Flugmodus an — ich laufe weiter. Was offline funktioniert, verschickt nichts.</div></div>
-      <div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase">Was ich dafür kann: Ich lege jede Karte genau dann wieder vor, wenn dein Kind sie sonst vergessen würde. <strong>Fünf Minuten am Tag reichen.</strong></div></div>
+      <div class="balken">Karten bauen</div>
+      <h2>Diese Karte ist noch nicht gut.</h2>
+      <p class="vor">Und das ist kein Zufall — sie ist absichtlich schlecht. Die Frage ist zu
+        vage, die Antwort zu dünn, das Warum fehlt ganz. Mach sie besser.</p>
+      <div class="bitte">
+        <svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg>
+        <div class="blase">Hilfst du mir kurz? Ich krieg die Karte nicht hin. 🙈</div>
+      </div>
+      <div class="werkbank">
+        <div class="feld">
+          <label for="f-vorne">Vorderseite · die Frage</label>
+          <textarea id="f-vorne" data-wachs rows="1">Photosynthese?</textarea>
+        </div>
+        <div class="feld">
+          <label for="f-hinten">Rückseite · kurz und abrufbar</label>
+          <textarea id="f-hinten" data-wachs rows="1">Pflanzen machen Zucker.</textarea>
+        </div>
+        <div class="feld dritte-feld">
+          <label for="f-warum">Dritte Seite · das Warum</label>
+          <textarea id="f-warum" data-wachs data-quittung rows="1"
+            placeholder="Hier ist noch nichts. Genau hier wird aus Auswendiglernen Verstehen."></textarea>
+        </div>
+        <p class="quittung" id="q-warum" hidden>Jetzt hat sie drei Seiten. Genau so sehen Bloop Cards aus.</p>
+        <p class="werkbank-fuss">Nur zum Anfassen — nichts davon wird gespeichert oder verschickt.
+          In der App baust du so ganze Karteien und gibst sie per Code weiter.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="bahn">
+      <div class="balken">Warum noch eine Lern-App</div>
+      <h2>Es gibt tausend Karteikarten-Apps. Drei Dinge machen wir anders.</h2>
+      <div class="warum-wir">
+        <div class="wk">
+          <div class="nr">01</div>
+          <h3>Eine dritte Seite</h3>
+          <p>Frage, kurze Antwort — und dahinter das Warum. Auswendiglernen kann jede App.
+            Verstehen ist etwas anderes.</p>
+        </div>
+        <div class="wk">
+          <div class="nr">02</div>
+          <h3>Wir wollen dich loswerden</h3>
+          <p>Andere optimieren auf Verweildauer. Wir auf: fertig. Fünf Minuten,
+            dann ist gut — und niemand holt dich zurück.</p>
+        </div>
+        <div class="wk">
+          <div class="nr">03</div>
+          <h3>Kein Server, nirgends</h3>
+          <p>Nicht „wir sammeln wenig", sondern gar nichts. Flugmodus an, App läuft
+            weiter. Das kann man in zehn Sekunden prüfen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="bahn">
+      <div class="balken">Ein Gespräch</div>
+      <h2>Zwei Eltern, ein Oktopus.</h2>
+      <p class="vor">Sabine und Jochen kennen sich aus der Elterngruppe. Bloop kam später
+        dazu. Die Namen sind erfunden, die Sätze nicht.</p>
+      <div class="chat-kopf">
+        <span><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span>
+        <div><b>Elterngruppe 5b</b><span>Sabine, Jochen und Bloop</span></div>
+      </div>
+      <div class="chat">
+        <div class="zug links"><span class="kuerzel">S</span><div class="sprech"><span class="name">Sabine</span><div class="blase">Meine schaut nur noch Shorts. Drei Stunden. Jeden Tag. 😩</div></div></div>
+        <div class="zug rechts"><span class="kuerzel j">J</span><div class="sprech"><span class="name">Jochen</span><div class="blase">Kenn ich. Und wenn ich was sage, bin ich der Böse.</div></div></div>
+        <div class="zug links"><span class="kuerzel">S</span><div class="sprech"><span class="name">Sabine</span><div class="blase">Gestern stand sie um halb zehn heulend in der Tür. Wegen der Flammen bei Snap. Zwei Jahre hat die Serie gehalten. 🔥</div></div></div>
+        <div class="zug rechts"><span class="kuerzel j">J</span><div class="sprech"><span class="name">Jochen</span><div class="blase">Und die Lern-App, die ich draufgemacht hab, macht genau dasselbe. Punkte, Diamanten, Serie. Nur mit besserem Gewissen.</div></div></div>
+        <div class="zug links ist-bloop"><span class="kuerzel bloop"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><div class="sprech"><span class="name">Bloop</span><div class="blase">Darf ich? 👋</div></div></div>
+        <div class="zug links ist-bloop folge"><span class="kuerzel bloop"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><div class="sprech"><span class="name">Bloop</span><div class="blase"><strong>Bei mir kann nichts abreißen.</strong> Keine Serie, keine Punkte, keine Flammen, die erlöschen.</div></div></div>
+        <div class="zug rechts"><span class="kuerzel j">J</span><div class="sprech"><span class="name">Jochen</span><div class="blase">Und wo ist der Haken? 🤨</div></div></div>
+        <div class="zug links ist-bloop"><span class="kuerzel bloop"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><div class="sprech"><span class="name">Bloop</span><div class="blase">Dass niemand dein Kind zurückholt. Ich auch nicht — ich schicke keine Erinnerungen.</div></div></div>
+        <div class="zug links ist-bloop folge"><span class="kuerzel bloop"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><div class="sprech"><span class="name">Bloop</span><div class="blase">Klingt hart. Ist aber der Preis dafür, dass ich nichts an seiner Aufmerksamkeit verdiene.</div></div></div>
+        <div class="zug links"><span class="kuerzel">S</span><div class="sprech"><span class="name">Sabine</span><div class="blase">Und die Daten?</div></div></div>
+        <div class="zug links ist-bloop"><span class="kuerzel bloop"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><div class="sprech"><span class="name">Bloop</span><div class="blase"><strong>Welche Daten?</strong> Flugmodus an — ich laufe weiter. Was offline funktioniert, verschickt nichts.</div></div></div>
+        <div class="zug rechts"><span class="kuerzel j">J</span><div class="sprech"><span class="name">Jochen</span><div class="blase">Okay. Und was kann sie jetzt besser als die anderen?</div></div></div>
+        <div class="zug links ist-bloop"><span class="kuerzel bloop"><svg viewBox="0 0 64 64" aria-hidden="true"><use href="#octo"/></svg></span><div class="sprech"><span class="name">Bloop</span><div class="blase">Ich lege jede Karte genau dann wieder vor, wenn dein Kind sie sonst vergessen würde. Nicht öfter. <strong>Fünf Minuten am Tag reichen.</strong></div></div></div>
+        <div class="zug links"><span class="kuerzel">S</span><div class="sprech"><span class="name">Sabine</span><div class="blase">Fünf Minuten. Das schafft sogar meine. 😄</div></div></div>
+      </div>
     </div>
   </section>
 
@@ -180,8 +368,8 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
     <div class="bahn">
       <div class="balken">Was fünf Minuten bringen</div>
       <h2>Wenig, aber täglich. Das ist der ganze Trick.</h2>
-      <p class="vor">Ein Gedächtnismodell rechnet für jede Karte aus, wann sie zurückkommen
-        muss. So sieht ein Monat aus:</p>
+      <p class="vor">Ein Gedächtnismodell rechnet für jede Karte aus, wann sie zurück muss.
+        So sieht ein Monat aus:</p>
       <table class="tab">
         <thead><tr><th>Täglich</th><th>Neu gelernt</th><th>Sitzt nach 30 Tagen</th></tr></thead>
         <tbody>
@@ -192,9 +380,9 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
       </table>
       <p class="fussnote">Modellrechnung mit demselben Verfahren, das in der App läuft
         (FSRS-4.5) — keine Studie. Angenommen: 14 Sekunden für eine neue Karte, 6 für eine
-        Wiederholung, 85 % richtig beantwortet. <strong>„Sitzt"</strong> heißt: Das Modell
-        erwartet die Karte auch in einem Monat noch abrufbar.
-        Ein Schuljahr Englischvokabeln sind etwa 500 bis 800 Wörter.</p>
+        Wiederholung, 85 % richtig. <strong>„Sitzt"</strong> heißt: Das Modell erwartet die
+        Karte auch in einem Monat noch abrufbar. Zum Vergleich: Ein Schuljahr
+        Englischvokabeln sind etwa 500 bis 800 Wörter.</p>
     </div>
   </section>
 
@@ -202,124 +390,112 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
     <div class="bahn">
       <div class="balken">Nicht nur am Schreibtisch</div>
       <h2>Lernen passiert unterwegs.</h2>
-      <p class="vor">Karten kann man weitergeben — an die Freundin, an die Klasse,
-        an den Rest der Familie. Ein Code, fertig.</p>
+      <p class="vor">Karten gibt man weiter — an die Freundin, an die Klasse, an den Rest
+        der Familie. Ein Code, fertig.</p>
       <div class="faelle">
-        <div class="fall">
-          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Familie im Auto, ein Kind stellt von der Rueckbank eine Frage">
-  <path d="M0,178 H320" stroke="currentColor" stroke-width="3" opacity=".18" stroke-linecap="round"/>
-  <g stroke="currentColor" stroke-width="3.4" opacity=".13" stroke-linecap="round">
+        <div class="fall"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Familie im Auto, ein Kind fragt von der Ruecksitzbank nach den Zaehnen einer Schnecke">
+  <path d="M0,178 H320" stroke="var(--sz2)" stroke-width="3" stroke-linecap="round"/>
+  <g stroke="var(--sz1)" stroke-width="3.4" stroke-linecap="round">
     <path d="M16,190 H52"/><path d="M84,190 H120"/><path d="M152,190 H188"/><path d="M220,190 H256"/>
   </g>
   <path d="M40,150 C40,126 52,118 74,116 L104,84 C110,77 118,74 128,74 H206
            C218,74 228,79 234,88 L256,116 C274,120 286,130 286,150
-           C286,158 280,162 272,162 H54 C46,162 40,158 40,150 Z"
-        fill="currentColor" opacity=".42"/>
-  <path d="M116,112 L134,86 C137,82 141,80 146,80 H158 V112 Z" fill="var(--paper)" opacity=".85"/>
-  <path d="M170,80 H200 C207,80 212,82 216,87 L234,112 H170 Z" fill="var(--paper)" opacity=".85"/>
-  <circle cx="140" cy="100" r="11" fill="currentColor" opacity=".75"/>
-  <circle cx="200" cy="99" r="10" fill="currentColor" opacity=".62"/>
-  <circle cx="223" cy="103" r="8.5" fill="var(--accent)"/>
-  <circle cx="92" cy="162" r="21" fill="currentColor" opacity=".55"/>
-  <circle cx="92" cy="162" r="8" fill="var(--paper)" opacity=".7"/>
-  <circle cx="238" cy="162" r="21" fill="currentColor" opacity=".55"/>
-  <circle cx="238" cy="162" r="8" fill="var(--paper)" opacity=".7"/>
-  <!-- Sprechblase breit genug: vorher lief "Wie viele?" rechts aus dem Bild. -->
+           C286,158 280,162 272,162 H54 C46,162 40,158 40,150 Z" fill="var(--sz3)"/>
+  <path d="M116,112 L134,86 C137,82 141,80 146,80 H158 V112 Z" fill="var(--paper)"/>
+  <path d="M170,80 H200 C207,80 212,82 216,87 L234,112 H170 Z" fill="var(--paper)"/>
+  <circle cx="140" cy="100" r="11" fill="var(--sz4)"/>
+  <circle cx="193" cy="99" r="10" fill="var(--sz4)"/>
+  <circle cx="215" cy="101" r="8" fill="var(--accent)"/>
+  <circle cx="92" cy="162" r="21" fill="var(--sz4)"/>
+  <circle cx="92" cy="162" r="8" fill="var(--paper)"/>
+  <circle cx="238" cy="162" r="21" fill="var(--sz4)"/>
+  <circle cx="238" cy="162" r="8" fill="var(--paper)"/>
+  <!-- Der Zipfel zeigt auf das Kind in Akzentfarbe - das ist der, der fragt. -->
   <g>
-    <rect x="186" y="14" width="128" height="42" rx="15" fill="var(--accent)"/>
-    <path d="M206,54 L198,70 L222,56 Z" fill="var(--accent)"/>
-    <text x="250" y="41" text-anchor="middle" font-size="18" font-weight="800"
-          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Wie viele?</text>
+    <rect x="150" y="6" width="164" height="52" rx="16" fill="var(--accent)"/>
+    <path d="M192,56 L208,88 L218,58 Z" fill="var(--accent)"/>
+    <text x="232" y="28" text-anchor="middle" font-size="15.5" font-weight="800"
+          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Wie viele Zähne</text>
+    <text x="232" y="47" text-anchor="middle" font-size="15.5" font-weight="800"
+          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">hat eine Schnecke?</text>
   </g>
-</svg></div>
-          <div class="text"><h3>Quiz auf der Autofahrt</h3>
-            <p>Einer fragt, alle raten. Funktioniert ohne Netz — und hält länger als
-              jedes Hörspiel.</p></div>
-        </div>
-        <div class="fall">
-          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kinder sitzen am Lagerfeuer und raten">
-  <g fill="currentColor" opacity=".22">
+</svg>
+          <h3>Ahaaa!</h3>
+          <p>Einer fragt, alle raten, keiner kommt drauf. Ohne Netz — und es hält
+            länger als jedes Hörspiel.</p></div>
+        <div class="fall"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Zwei Kinder sitzen am Lagerfeuer und raten Gruselfragen">
+  <g fill="var(--sz2)">
     <circle cx="34" cy="26" r="2"/><circle cx="72" cy="14" r="1.5"/><circle cx="248" cy="22" r="2"/>
     <circle cx="288" cy="40" r="1.5"/><circle cx="188" cy="12" r="1.5"/><circle cx="130" cy="24" r="1.2"/>
   </g>
-  <ellipse cx="160" cy="176" rx="128" ry="15" fill="currentColor" opacity=".1"/>
-  <g fill="currentColor" opacity=".55">
+  <ellipse cx="160" cy="176" rx="128" ry="15" fill="var(--sz1)"/>
+  <g fill="var(--sz4)">
     <circle cx="66" cy="120" r="15"/>
     <path d="M44,176c0-16 10-28 22-28s22,12 22,28z"/>
     <circle cx="254" cy="124" r="13"/>
     <path d="M235,176c0-14 8-25 19-25s19,11 19,25z"/>
   </g>
-  <g stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity=".5">
+  <g stroke="var(--sz3)" stroke-width="7" stroke-linecap="round">
     <path d="M132,168 L188,156"/><path d="M134,157 L186,169"/>
   </g>
   <!-- Flamme mit Wendepunkten. Eine glatte Tropfenform sah aus wie ein Ballon -
        erst die eingezogene Taille und die Spitze machen daraus Feuer. -->
+  <path d="M136,100 C130,108 128,114 129,120 C131,128 137,132 142,130
+           C138,122 136,112 136,100 Z" fill="var(--sz-akz2)"/>
+  <path d="M184,100 C190,108 192,114 191,120 C189,128 183,132 178,130
+           C182,122 184,112 184,100 Z" fill="var(--sz-akz2)"/>
   <path d="M160,54 C168,74 182,82 182,102 C182,118 172,130 160,130
            C148,130 138,118 138,102 C138,92 143,86 148,80
            C150,88 154,92 158,94 C154,82 156,66 160,54 Z" fill="var(--accent)"/>
   <path d="M160,88 C165,98 168,103 168,110 C168,118 165,124 160,124
-           C155,124 152,118 152,110 C152,103 155,98 160,88 Z"
-        fill="var(--paper)" opacity=".5"/>
-  <path d="M136,100 C130,108 128,114 129,120 C131,128 137,132 142,130
-           C138,122 136,112 136,100 Z" fill="var(--accent)" opacity=".65"/>
-  <path d="M184,100 C190,108 192,114 191,120 C189,128 183,132 178,130
-           C182,122 184,112 184,100 Z" fill="var(--accent)" opacity=".65"/>
-  <g fill="var(--accent)" opacity=".6">
+           C155,124 152,118 152,110 C152,103 155,98 160,88 Z" fill="var(--sz-glanz)"/>
+  <g fill="var(--sz-akz2)">
     <circle cx="148" cy="42" r="2.6"/><circle cx="172" cy="34" r="2"/><circle cx="162" cy="22" r="1.6"/>
   </g>
-</svg></div>
-          <div class="text"><h3>Quiz am Lagerfeuer</h3>
-            <p>Schätzfragen, bei denen auch Erwachsene danebenliegen. Genau das macht
-              den Reiz aus.</p></div>
-        </div>
-        <div class="fall">
-          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ein Kind spricht vor einer Gruppe">
-  <ellipse cx="160" cy="180" rx="126" ry="13" fill="currentColor" opacity=".1"/>
+</svg>
+          <h3>Gemeinsam gruseln</h3>
+          <p>Ein Set aus Gruselfakten für die Übernachtungsparty. Alles wahr —
+            das ist ja das Schlimme.</p></div>
+        <div class="fall"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ein Kind spricht frei vor der Klasse und sagt: Frag mich was">
+  <ellipse cx="160" cy="184" rx="126" ry="13" fill="var(--sz1)"/>
   <!-- Zuhoerende, von hinten, unterschiedlich hoch -->
-  <g fill="currentColor" opacity=".3">
-    <circle cx="42" cy="140" r="13"/><path d="M23,182c0-13 8-24 19-24s19,11 19,24z"/>
-    <circle cx="92" cy="146" r="11"/><path d="M76,182c0-11 7-20 16-20s16,9 16,20z"/>
-    <circle cx="232" cy="144" r="12"/><path d="M215,182c0-12 7-21 17-21s17,9 17,21z"/>
-    <circle cx="280" cy="141" r="13"/><path d="M261,182c0-13 8-24 19-24s19,11 19,24z"/>
+  <g fill="var(--sz2)">
+    <circle cx="42" cy="144" r="13"/><path d="M23,186c0-13 8-24 19-24s19,11 19,24z"/>
+    <circle cx="92" cy="150" r="11"/><path d="M76,186c0-11 7-20 16-20s16,9 16,20z"/>
+    <circle cx="232" cy="148" r="12"/><path d="M215,186c0-12 7-21 17-21s17,9 17,21z"/>
+    <circle cx="280" cy="145" r="13"/><path d="M261,186c0-13 8-24 19-24s19,11 19,24z"/>
   </g>
-  <!-- Die sprechende Person, vorne, in Akzentfarbe -->
-  <circle cx="160" cy="104" r="18" fill="var(--accent)"/>
-  <path d="M132,182c0-20 12-35 28-35s28,15 28,35z" fill="var(--accent)"/>
-  <!-- Redefluss als drei Boegen -->
-  <g stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none" opacity=".55">
-    <path d="M196,74 C206,66 208,54 202,44"/>
-    <path d="M210,84 C226,72 230,50 218,34"/>
-    <path d="M224,94 C246,78 250,46 234,24"/>
-  </g>
-</svg></div>
-          <div class="text"><h3>Vor der Klasse sprechen</h3>
-            <p>Wer den Stoff wirklich kann, muss nicht ablesen. Das merkt man
-              beim Referat sofort.</p></div>
-        </div>
-        <div class="fall">
-          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schnitzeljagd: eine Spur von Stationen zu einer Fahne">
-  <!-- Weg -->
-  <path d="M26,168 C70,168 66,120 108,120 C150,120 146,72 190,72 C232,72 236,44 276,44"
-        stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 13"
-        fill="none" opacity=".4"/>
-  <!-- Stationen -->
+  <!-- Die sprechende Person, vorne. Kopf und Schultern sitzen jetzt aneinander -
+       vorher klaffte dazwischen eine Luecke und der Kopf schwebte. -->
+  <circle cx="160" cy="131" r="18" fill="var(--accent)"/>
+  <path d="M132,186c0-20 12-34 28-34s28,14 28,34z" fill="var(--accent)"/>
+  <!-- Sprechblase am Kopf statt drei abstrakter Boegen -->
   <g>
-    <circle cx="26" cy="168" r="12" fill="currentColor" opacity=".45"/>
-    <circle cx="108" cy="120" r="12" fill="currentColor" opacity=".45"/>
-    <circle cx="190" cy="72" r="12" fill="currentColor" opacity=".45"/>
+    <rect x="192" y="52" width="122" height="42" rx="15" fill="var(--accent)"/>
+    <path d="M204,92 L180,126 L226,94 Z" fill="var(--accent)"/>
+    <text x="253" y="79" text-anchor="middle" font-size="17" font-weight="800"
+          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Frag mich was.</text>
   </g>
-  <!-- Ziel -->
+</svg>
+          <h3>Selbstbewusst</h3>
+          <p>Wer den Stoff wirklich kann, muss nicht ablesen. Man sieht es beim
+            Referat sofort — an der Haltung.</p></div>
+        <div class="fall"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schnitzeljagd: eine Spur von Stationen fuehrt zu einer Fahne">
+  <path d="M26,168 C70,168 66,120 108,120 C150,120 146,72 190,72 C232,72 236,44 276,44"
+        stroke="var(--sz2)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 13" fill="none"/>
+  <g fill="var(--sz3)">
+    <circle cx="26" cy="168" r="12"/><circle cx="108" cy="120" r="12"/><circle cx="190" cy="72" r="12"/>
+  </g>
   <circle cx="276" cy="44" r="17" fill="var(--accent)"/>
   <path d="M276,27 V6" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
   <path d="M278,8 L306,16 L278,26 Z" fill="var(--accent)"/>
-  <!-- Suchende Figur am Anfang -->
-  <circle cx="60" cy="150" r="11" fill="var(--accent)" opacity=".8"/>
-  <path d="M44,182c0-12 7-22 16-22s16,10 16,22z" fill="var(--accent)" opacity=".8"/>
-</svg></div>
-          <div class="text"><h3>Schnitzeljagd</h3>
-            <p>Jede Station eine Frage, jede Antwort ein Hinweis. Karten dafür baut man
-              in zehn Minuten.</p></div>
-        </div>
+  <!-- Suchende Figur am Anfang; Kopf und Schultern sitzen aneinander -->
+  <circle cx="60" cy="152" r="11" fill="var(--sz-akz2)"/>
+  <path d="M44,186c0-13 7-23 16-23s16,10 16,23z" fill="var(--sz-akz2)"/>
+</svg>
+          <h3>Abenteuer</h3>
+          <p>Jede Station eine Frage, jede Antwort ein Hinweis. Eine Schnitzeljagd,
+            in zehn Minuten gebaut.</p></div>
       </div>
     </div>
   </section>
@@ -360,14 +536,11 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
     </div>
   </section>
 
-  <section>
+  <section class="schluss">
     <div class="bahn">
-      <div class="schluss">
-        <h2>Eine App für unsere Kinder.</h2>
-        <p>Und für alle anderen auch. Wir lernen alle gleich —
-          Kinder nur schneller.</p>
-        <a class="knopf" href="app/">Bloop öffnen</a>
-      </div>
+      <h2>Eine App für unsere Kinder.</h2>
+      <p>Und für alle anderen auch. Wir lernen alle gleich — Kinder nur schneller.</p>
+      <a class="knopf" href="app/">Bloop öffnen</a>
     </div>
   </section>
 </main>
@@ -376,5 +549,26 @@ footer p{ font-size:13px; font-weight:600; color:var(--soft); }
   <div class="bahn"><p>Bloop — Lernkarten ohne Konto, ohne Abo, ohne Werbung.</p></div>
 </footer>
 
+<script>
+  document.querySelectorAll("[data-probe]").forEach(function (k) {
+    k.addEventListener("click", function () {
+      var stufe = (Number(k.dataset.stufe) + 1) % 3;
+      k.dataset.stufe = String(stufe);
+      k.setAttribute("aria-expanded", stufe ? "true" : "false");
+    });
+  });
+  // Textfelder wachsen mit dem Inhalt - eine feste Hoehe waere beim
+  // Umformulieren staendig im Weg.
+  function wachse(f) { f.style.height = "auto"; f.style.height = f.scrollHeight + "px"; }
+  document.querySelectorAll("[data-wachs]").forEach(function (f) {
+    wachse(f);
+    f.addEventListener("input", function () {
+      wachse(f);
+      if (f.hasAttribute("data-quittung")) {
+        document.getElementById("q-warum").hidden = f.value.trim().length < 12;
+      }
+    });
+  });
+</script>
 </body>
 </html>
