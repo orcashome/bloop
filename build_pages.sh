@@ -22,6 +22,27 @@ if [ ! -d "$NM/react" ]; then
   exit 1
 fi
 
+
+# --- Sperre gegen einen Fehler, der hier fuenfmal passiert ist ---------------
+# Ein Backtick in einem Kommentar INNERHALB des STYLES-Literals beendet das
+# Template und bricht den Build mit einer voellig unverstaendlichen Meldung
+# ("Expected ; but found ..."). Lieber hier abfangen und klar sagen, was los ist.
+python3 - "$HERE/karteibox_1.jsx" <<'PYCHECK'
+import sys
+q = open(sys.argv[1], encoding="utf-8").read()
+i = q.index("const STYLES = `")
+j = q.index("`;", i)
+block = q[i + len("const STYLES = `"):j]
+if "`" in block:
+    zeile = q[:i].count("\n") + block[:block.index("`")].count("\n") + 1
+    print("")
+    print("  ABBRUCH: Backtick im STYLES-Block, etwa Zeile %d." % zeile)
+    print("  Ein Backtick beendet dort das Template-Literal. In CSS-Kommentaren")
+    print("  bitte keine Backticks verwenden - Anfuehrungszeichen oder gar nichts.")
+    print("")
+    sys.exit(1)
+PYCHECK
+
 npx esbuild "$HERE/web.jsx" --bundle --minify \
   --define:process.env.NODE_ENV='"production"' \
   --outfile="$HERE/app.min.js"

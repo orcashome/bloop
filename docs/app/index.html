@@ -529,9 +529,19 @@ Error generating stack: `+i.message+`
   font-variant-numeric:tabular-nums;
   font-feature-settings:"ss01";
 }
+/* Silbentrennung mit Bremse. hyphens:auto allein trennte "Nahrungsbausteine"
+   zu "Nah-rungsbausteine" - drei Buchstaben vor dem Strich lesen sich wie ein
+   Fehler. hyphenate-limit-chars sagt: erst ab 10 Zeichen trennen, und dann
+   mindestens vier Buchstaben auf jede Seite. Ohne Trennung gar nicht geht auch
+   nicht - deutsche Komposita sprengen sonst die Karte.
+   text-wrap:pretty verhindert zusaetzlich einzelne Woerter auf der letzten
+   Zeile; Browser ohne Unterstuetzung ignorieren beides stillschweigend. */
 .face .term, .face .answer{ width:100%; min-height:0; max-height:100%; overflow-y:auto;
   overscroll-behavior:contain; -webkit-overflow-scrolling:touch;
-  padding:2px 2px 4px; hyphens:auto; overflow-wrap:break-word; }
+  padding:2px 2px 4px; overflow-wrap:break-word;
+  hyphens:auto; -webkit-hyphens:auto;
+  hyphenate-limit-chars:10 4 4; -webkit-hyphenate-limit-chars:10 4 4;
+  text-wrap:pretty; }
 .face .kicker{ position:absolute; top:16px; left:20px; font-size:10px; letter-spacing:.1em;
   font-weight:800; text-transform:uppercase; color:var(--ink-soft); }
 .face-spk{ position:absolute; top:6px; right:8px; background:none; border:none; color:var(--ink-soft);
