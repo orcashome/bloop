@@ -3,626 +3,378 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Bloop — weil jedes Kind alles lernen kann</title>
-<meta name="description" content="Eine Lern-App ohne Konto, ohne Werbung, ohne Datensammeln. Von Eltern gebaut, für Kinder, Lehrkräfte und Schulen. Im Browser kostenlos.">
+<title>Bloop — jedes Kind kann alles lernen</title>
+<meta name="description" content="Lernen ohne Konto, ohne Werbung, ohne Datensammeln. Offline, anonym, kostenlos im Browser. Für Kinder, Schule und alle, die etwas behalten wollen.">
 <meta name="theme-color" content="#F6F7F8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0E0F11" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/svg+xml" href="app/icon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="app/apple-touch-icon.png">
-<meta property="og:title" content="Bloop — weil jedes Kind alles lernen kann">
-<meta property="og:description" content="Eine Lern-App, die zufrieden ist, wenn man sie zumacht.">
+<meta property="og:title" content="Bloop — jedes Kind kann alles lernen">
+<meta property="og:description" content="Egal wann, egal wo. Kein Netz? Kein Problem. Ohne Konto, ohne Werbung, ohne Datenkraken.">
 <meta property="og:type" content="website">
 <style>
 :root{
   --paper:#F6F7F8; --card:#FFFFFF; --ink:#232830; --soft:#5B6270;
   --line:#E2E5E9; --accent:#7A3FBF; --accent-satt:#65309F; --auf:#FFFFFF;
-  --figur:#7A3FBF; --blase-du:#EDEFF2;
+  --figur:#7A3FBF; --still:#EDEFF2;
   --disp:ui-rounded,'SF Pro Rounded','Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root{
     --paper:#0E0F11; --card:#1A1C1F; --ink:#F0F1F3; --soft:#9AA2AE;
     --line:#34383E; --accent:#A87BDB; --accent-satt:#BF9BE6; --auf:#0E0F11;
-    --figur:#A87BDB; --blase-du:#22252A;
+    --figur:#A87BDB; --still:#22252A;
   }
 }
 *{ box-sizing:border-box; }
 html{ scroll-behavior:smooth; }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
-body{ margin:0; background:var(--paper); color:var(--ink);
-  font-family:var(--disp); -webkit-font-smoothing:antialiased; line-height:1.5; }
-.bahn{ width:100%; max-width:680px; margin:0 auto; padding:0 20px; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:var(--disp);
+  -webkit-font-smoothing:antialiased; line-height:1.5; }
+.bahn{ width:100%; max-width:720px; margin:0 auto; padding:0 20px; }
 h1,h2,h3{ letter-spacing:-.03em; text-wrap:balance; margin:0; }
 p{ margin:0; }
 a{ color:var(--accent); }
 
-/* Kopfleiste mit Burger */
-.kopf{ position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--paper) 92%, transparent);
+.kopf{ position:sticky; top:0; z-index:40; background:color-mix(in srgb,var(--paper) 92%,transparent);
   backdrop-filter:saturate(1.4) blur(10px); border-bottom:1px solid var(--line); }
-.kopf-innen{ display:flex; align-items:center; justify-content:space-between;
-  gap:14px; height:60px; }
+.kopf-innen{ display:flex; align-items:center; justify-content:space-between; gap:12px; height:58px; }
 .marke{ display:flex; align-items:center; gap:9px; text-decoration:none; color:var(--ink); }
-.marke svg{ width:26px; height:28px; color:var(--figur); }
-.marke b{ font-size:19px; font-weight:800; letter-spacing:-.03em; }
-.kopf-rechts{ display:flex; align-items:center; gap:10px; }
+.marke svg{ width:25px; height:27px; color:var(--figur); }
+.marke b{ font-size:18px; font-weight:800; letter-spacing:-.03em; }
 .mini{ background:var(--accent); color:var(--auf); text-decoration:none; font-size:14px;
   font-weight:800; padding:10px 17px; border-radius:13px; white-space:nowrap; }
 .mini:hover{ background:var(--accent-satt); }
-.burger{ background:none; border:none; cursor:pointer; padding:9px; color:var(--ink);
-  display:flex; flex-direction:column; gap:4.5px; border-radius:10px; }
-.burger span{ display:block; width:21px; height:2.4px; background:currentColor; border-radius:2px; }
-@media (min-width:700px){ .burger{ display:none; } }
-.nav{ display:none; }
-@media (min-width:700px){
-  .nav{ display:flex; gap:20px; align-items:center; }
-  .nav a{ text-decoration:none; color:var(--soft); font-size:14.5px; font-weight:700; }
-  .nav a:hover{ color:var(--ink); }
-}
-.klapp{ display:none; border-top:1px solid var(--line); }
-.klapp.auf{ display:block; }
-@media (min-width:700px){ .klapp{ display:none !important; } }
-.klapp a{ display:block; padding:15px 20px; text-decoration:none; color:var(--ink);
-  font-size:16px; font-weight:700; border-bottom:1px solid var(--line); }
 
-/* Der Verlauf: Bloop links, du rechts */
-.verlauf{ padding:clamp(30px,6vh,58px) 0 10px; display:flex; flex-direction:column; gap:15px; }
-.zug{ display:flex; gap:11px; align-items:flex-end; max-width:min(560px,100%); }
-.zug.du{ flex-direction:row-reverse; margin-left:auto; }
-.kopfbild{ width:38px; height:41px; flex-shrink:0; color:var(--figur); margin-bottom:2px; }
-.zug.du .kopfbild{ visibility:hidden; width:0; }
-.blase{ background:var(--card); border-radius:20px 20px 20px 6px; padding:15px 18px;
-  box-shadow:0 2px 0 var(--line); font-size:16.5px; font-weight:600; }
-.zug.du .blase{ background:var(--blase-du); border-radius:20px 20px 6px 20px;
-  font-weight:700; color:var(--soft); box-shadow:none; }
-.blase strong{ font-weight:800; color:var(--ink); }
-.blase.gross{ font-size:clamp(20px,3.4vw,27px); font-weight:800; letter-spacing:-.025em;
-  line-height:1.25; }
-.blase.gross em{ font-style:normal; color:var(--accent); }
-.blase p + p{ margin-top:9px; }
-/* Mehrere Blasen hintereinander vom selben Sprecher: nur die erste bekommt das Bild */
-.zug.folge .kopfbild{ visibility:hidden; }
-.zug.folge .blase{ border-radius:20px; }
-
-/* Die Karte, in HTML nachgebaut statt als Bildschirmfoto: sie bleibt scharf,
-   waegt nichts und folgt dem hellen wie dem dunklen Modus. */
-.probe{ background:var(--card); border-radius:20px; box-shadow:0 3px 0 var(--line);
-  padding:18px; margin:4px 0 0; }
-.probe-kicker{ font-size:10px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--soft); }
-.probe-frage{ font-size:19px; font-weight:800; margin:9px 0 14px; line-height:1.25; }
-.probe-warum{ display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:800;
-  color:var(--accent); border-bottom:2px solid var(--line); padding-bottom:5px; }
-.probe-antwort{ font-size:15px; font-weight:600; color:var(--soft); margin-top:12px;
-  padding-top:12px; border-top:2px solid var(--line); }
-.probe-knoepfe{ display:flex; gap:9px; margin-top:15px; }
-.probe-knoepfe span{ flex:1; text-align:center; font-size:14px; font-weight:800;
-  padding:11px; border-radius:13px; }
-.probe-knoepfe .n{ background:var(--blase-du); color:var(--ink); }
-.probe-knoepfe .g{ background:var(--accent); color:var(--auf); }
-
-section{ padding:clamp(38px,6vh,66px) 0; }
-.balken{ font-size:11px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
-  color:var(--accent); margin-bottom:10px; }
-h2{ font-size:clamp(23px,3.6vw,31px); font-weight:800; margin-bottom:12px; }
-.vor{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:54ch; margin-bottom:22px; }
-
-.karten{ display:grid; gap:13px; grid-template-columns:1fr; }
-@media (min-width:620px){ .karten{ grid-template-columns:1fr 1fr; } }
-.karte{ background:var(--card); border-radius:18px; padding:20px; box-shadow:0 3px 0 var(--line); }
-.karte h3{ font-size:17px; font-weight:800; margin-bottom:7px; }
-.karte p{ font-size:15px; font-weight:600; color:var(--soft); }
-
-details{ background:var(--card); border-radius:15px; box-shadow:0 2px 0 var(--line);
-  margin-bottom:10px; overflow:hidden; }
-summary{ cursor:pointer; padding:16px 18px; font-size:15.5px; font-weight:800;
-  list-style:none; display:flex; justify-content:space-between; gap:13px; align-items:center; }
-summary::-webkit-details-marker{ display:none; }
-summary::after{ content:"+"; color:var(--accent); font-size:20px; font-weight:800; flex-shrink:0; }
-details[open] summary::after{ content:"\2013"; }
-details p{ padding:0 18px 17px; font-size:15px; font-weight:600; color:var(--soft); }
-details p + p{ padding-top:0; margin-top:-6px; }
-details ol{ padding:0 18px 17px 36px; font-size:15px; font-weight:600; color:var(--soft); margin:0; }
-details li{ margin-bottom:7px; }
-details code{ display:block; background:var(--paper); border-radius:10px; padding:13px 15px;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12.5px; line-height:1.55;
-  color:var(--ink); white-space:pre-wrap; margin:9px 0 3px; }
-
+/* Kopfbereich: Claim, Dreiklang, Vorteile - alles ueber der Faltkante */
+header{ padding:clamp(34px,7vh,64px) 0 clamp(24px,4vh,40px); text-align:center; }
+.figur{ color:var(--figur); width:clamp(78px,11vw,120px); height:auto;
+  aspect-ratio:79.67/85.62; margin:0 auto 18px; display:block; }
+h1{ font-size:clamp(29px,6vw,46px); font-weight:800; line-height:1.1; margin-bottom:14px; }
+h1 em{ font-style:normal; color:var(--accent); }
+.unterclaim{ font-size:clamp(16px,2.4vw,19px); font-weight:600; color:var(--soft);
+  max-width:30ch; margin:0 auto 22px; text-wrap:balance; }
+.dreiklang{ display:flex; flex-wrap:wrap; justify-content:center; gap:6px 22px; margin-bottom:24px; }
+.dreiklang span{ font-size:clamp(17px,3vw,23px); font-weight:800; letter-spacing:-.03em; }
+.dreiklang span:nth-child(2){ color:var(--accent); }
 .knopf{ display:inline-block; background:var(--accent); color:var(--auf); text-decoration:none;
-  font-size:16px; font-weight:800; padding:15px 30px; border-radius:16px;
+  font-size:16px; font-weight:800; padding:15px 32px; border-radius:16px;
   box-shadow:0 3px 0 var(--accent-satt); }
 .knopf:hover{ background:var(--accent-satt); box-shadow:0 3px 0 var(--accent); }
-.laeden{ display:flex; flex-wrap:wrap; gap:11px; margin-top:18px; }
-.laden{ display:flex; flex-direction:column; gap:1px; background:var(--paper);
-  border:2px dashed var(--line); border-radius:14px; padding:12px 18px; min-width:158px; }
-.laden .oben{ font-size:10.5px; font-weight:700; color:var(--soft); }
-.laden .unten{ font-size:15px; font-weight:800; color:var(--ink); }
-.laden .bald{ font-size:10.5px; font-weight:800; color:var(--accent);
-  letter-spacing:.07em; text-transform:uppercase; margin-top:2px; }
+.unterknopf{ font-size:13px; font-weight:600; color:var(--soft); margin-top:11px; }
 
-footer{ padding:36px 0 46px; text-align:center; border-top:1px solid var(--line); margin-top:26px; }
-footer p{ font-size:13px; font-weight:600; color:var(--soft); }
+/* Vorteile auf einen Blick */
+.blick{ display:grid; grid-template-columns:repeat(2,1fr); gap:9px; margin:26px 0 0; text-align:left; }
+@media (min-width:620px){ .blick{ grid-template-columns:repeat(4,1fr); } }
+.blick div{ background:var(--card); border-radius:14px; padding:12px 13px; box-shadow:0 2px 0 var(--line); }
+.blick b{ display:block; font-size:14px; font-weight:800; margin-bottom:2px; }
+.blick span{ font-size:12px; font-weight:600; color:var(--soft); line-height:1.3; }
 
-/* Der Verlauf baut sich beim Scrollen auf, nicht nach der Uhr. Ein Chat mit
-   Kunstpause ist beim ersten Besuch charmant und ab dem zweiten laestig - man
-   kann nicht ueberfliegen, nicht nachlesen, nicht zurueck. So bleibt das Tempo
-   beim Leser, und es wirkt trotzdem lebendig.
-   Ohne JavaScript oder mit reduzierter Bewegung steht einfach alles da. */
-.zug{ opacity:1; }
-.js .zug{ opacity:0; transform:translateY(14px); }
-.js .zug.da{ opacity:1; transform:none;
-  transition:opacity .42s ease, transform .42s cubic-bezier(.2,.7,.3,1); }
-@media (prefers-reduced-motion:reduce){
-  .js .zug{ opacity:1; transform:none; }
-  .js .zug.da{ transition:none; }
-}
-/* Die Sorgen am Anfang: dieselbe Seite wie die Fragen des Lesers, aber
-   ernster gesetzt - sie sind keine Zwischenfrage, sondern der Grund. */
-.zug.sorge .blase{ font-size:17.5px; font-weight:700; color:var(--ink);
-  background:var(--blase-du); }
-.dazwischen{ text-align:center; font-size:12.5px; font-weight:700; color:var(--soft);
-  letter-spacing:.03em; padding:14px 0 4px; }
+section{ padding:clamp(30px,5vh,52px) 0; }
+.balken{ font-size:11px; font-weight:800; letter-spacing:.11em; text-transform:uppercase;
+  color:var(--accent); margin-bottom:9px; }
+h2{ font-size:clamp(22px,3.6vw,30px); font-weight:800; margin-bottom:11px; }
+.vor{ font-size:16px; font-weight:600; color:var(--soft); max-width:52ch; margin-bottom:20px; }
 
-/* Die Probekarte auf dieser Seite ist ANFASSBAR. Frage und Antwort gleichzeitig
-   zu zeigen nimmt genau den Moment weg, um den es geht: kurz nachdenken, dann
-   nachsehen. Wer einmal selbst getippt hat, hat die App verstanden. */
-.probe.tipp{ cursor:pointer; user-select:none; width:100%; text-align:left;
-  border:none; font:inherit; color:inherit; transition:box-shadow .16s ease; }
-.probe.tipp:hover{ box-shadow:0 3px 0 var(--accent); }
-.probe.tipp:focus-visible{ outline:3px solid var(--accent); outline-offset:3px; }
-.probe-hinweis{ font-size:12.5px; font-weight:800; color:var(--accent);
-  letter-spacing:.04em; margin-top:14px; }
-.probe-loesung{ display:none; }
-.probe.auf .probe-loesung{ display:block; animation:probeAuf .26s ease both; }
-.probe.auf .probe-hinweis{ display:none; }
-@keyframes probeAuf{ from{ opacity:0; transform:translateY(6px) } to{ opacity:1; transform:none } }
-@media (prefers-reduced-motion:reduce){ .probe.auf .probe-loesung{ animation:none } }
-
-/* Ablauf in Schritten. Nummern sind hier keine Deko: die Reihenfolge ist
-   der Inhalt - wer Schritt zwei vor Schritt eins macht, kommt nicht ans Ziel. */
-.ablauf{ counter-reset:schritt; display:flex; flex-direction:column; gap:2px; }
-.schritt{ display:flex; gap:15px; padding:15px 0; }
-.schritt::before{ counter-increment:schritt; content:counter(schritt);
-  flex-shrink:0; width:29px; height:29px; border-radius:50%; background:var(--accent);
-  color:var(--auf); font-size:14px; font-weight:800;
-  display:flex; align-items:center; justify-content:center; margin-top:1px; }
-.schritt h4{ margin:0 0 4px; font-size:16px; font-weight:800; letter-spacing:-.02em; }
-.schritt p{ font-size:15px; font-weight:600; color:var(--soft); }
-.schritt + .schritt{ border-top:1px solid var(--line); }
-.weg{ background:var(--card); border-radius:18px; padding:20px 22px;
-  box-shadow:0 3px 0 var(--line); margin-bottom:13px; }
-.weg > .kopf-zeile{ font-size:17px; font-weight:800; margin-bottom:4px; }
-.weg > .wer{ font-size:13px; font-weight:700; color:var(--accent);
-  letter-spacing:.03em; margin-bottom:12px; }
-
-/* Chat-Beiwerk: Tippanzeige und eine abgebrochene Sprachnachricht.
-   Beides laeuft NUR, wenn die Zeile im Bild ist - eine Animation, die im
-   Hintergrund vor sich hin tickt, kostet Akku und sieht niemand. */
-.tippt .blase{ display:inline-flex; gap:5px; padding:17px 20px; }
-.tippt i{ width:8px; height:8px; border-radius:50%; background:var(--soft);
-  display:block; opacity:.35; }
-.tippt.da i{ animation:tippAn 1.25s infinite; }
-.tippt.da i:nth-child(2){ animation-delay:.18s; }
-.tippt.da i:nth-child(3){ animation-delay:.36s; }
-@keyframes tippAn{ 0%,60%,100%{ opacity:.3; transform:none }
-                   30%{ opacity:1; transform:translateY(-3px) } }
-@keyframes welle{ 50%{ height:100%; opacity:.9 } }
-@media (prefers-reduced-motion:reduce){
-  .tippt.da i, }
-
-/* Gruppenchat: Menschen wechseln die Seite, damit man sieht, dass mehrere
-   reden. Nur wenn dieselbe Person zweimal hintereinander schreibt, bleibt sie
-   auf ihrer Seite - und bekommt dann weder Namen noch Bild noch einmal.
-   Die Namen sind erfunden; darauf weist die Zeile ueber dem Verlauf hin.
-   Erfundene Zitate mit echten Namen waeren auf einer Seite, die mit
-   Ehrlichkeit wirbt, genau der falsche Anfang. */
-/* SEITENREGEL bei drei Sprechern:
-   Sabine steht IMMER links, Jochen IMMER rechts - so wechselt der Verlauf
-   wirklich die Seite und man sieht auf einen Blick, dass zwei Menschen reden.
-   Bloop steht ebenfalls links, ist aber farblich abgesetzt: seine Blase traegt
-   den Akzent. Ohne diese Trennung saessen Sabine und Bloop untereinander auf
-   derselben Seite und laesen sich wie eine Person.
-   Wer hier Blasen einfuegt: Person bestimmt die Seite, nicht die Reihenfolge. */
-.wer-name{ font-size:12px; font-weight:800; color:var(--soft); letter-spacing:.02em;
-  margin:0 0 4px 2px; }
-.zug.du .wer-name{ text-align:right; margin:0 2px 4px 0; }
-.zug.folge .wer-name{ display:none; }
-.kuerzel{ width:38px; height:38px; border-radius:50%; flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-size:14px; font-weight:800; color:var(--auf); margin-bottom:2px; }
-.kuerzel.a{ background:#3F7DB8; } .kuerzel.b{ background:#B8683F; }
-/* Bloop bekommt kein Kuerzel, sondern sich selbst. */
-.kuerzel.bloop{ background:none; color:var(--figur); width:38px; height:41px;
-  border-radius:0; }
+/* Der kurze Wortwechsel */
+.zug{ display:flex; gap:10px; align-items:flex-end; max-width:min(520px,100%); margin-bottom:11px; }
+.zug.du{ flex-direction:row-reverse; margin-left:auto; }
+/* Zwei Sprecher, zwei Farben. Beide blau hiesse: dieselbe Person redet mit
+   sich selbst. Die Toene sind so gewaehlt, dass weisse Schrift auf beiden
+   traegt und sie sich auch bei Rot-Gruen-Schwaeche unterscheiden. */
+.kuerzel{ width:34px; height:34px; border-radius:50%; flex-shrink:0; display:flex;
+  align-items:center; justify-content:center; font-size:13px; font-weight:800;
+  color:#FFFFFF; background:#3A76AF; margin-bottom:2px; }
+.kuerzel.j{ background:#AA5F38; }
+.kuerzel.bloop{ background:none; color:var(--figur); width:34px; height:37px; border-radius:0; }
 .kuerzel.bloop svg{ width:100%; height:100%; }
-.zug.folge .kuerzel{ visibility:hidden; }
-.blase-spalte{ display:flex; flex-direction:column; min-width:0; }
-
-/* Systemzeile wie in jedem Gruppenchat: zentriert, klein, ohne Sprecher.
-   Sie traegt den Moment, in dem Bloop dazukommt - dafuer braucht es keinen
-   Satz, der ihn ankuendigt. */
-.system{ text-align:center; padding:10px 0 2px; }
-.system span{ display:inline-block; background:var(--blase-du); color:var(--soft);
-  font-size:12.5px; font-weight:700; padding:7px 15px; border-radius:999px; }
-
-/* Die Tippanzeige verschwindet, sobald die Antwort da ist. Sonst steht sie
-   dauerhaft ueber einer Blase, die schon geschrieben wurde - Bloop tippt und
-   hat gleichzeitig geantwortet. */
-.tippt{ transition:opacity .2s ease, max-height .3s ease, margin .3s ease; }
-/* Spezifitaet muss die Scroll-Regel `.js .zug.da` schlagen, sonst bleibt die
-   Deckkraft auf 1 und nur die Hoehe faellt zusammen. */
-.js .zug.tippt.fertig, .tippt.fertig{ opacity:0; max-height:0; margin:0;
-  overflow:hidden; pointer-events:none; }
-@media (prefers-reduced-motion:reduce){ .tippt{ transition:none } }
-
-/* Bloop spricht mit Akzent - im Wortsinn. Das trennt ihn von Sabine, die auf
-   derselben Seite steht. Der Kontrast ist geprueft: heller Text auf Akzent
-   liegt in beiden Modi ueber 4.5:1. */
-/* 14% Akzent ergaben nur 1.2:1 gegen Sabines Blase - unsichtbar. Mit 32% und
-   einer durchgezogenen Kante ist Bloop auf einen Blick von den Eltern zu
-   unterscheiden, auch wenn beide links stehen. Voller Akzent waere zu laut:
-   Bloop redet viel, und eine Wand aus Violett erschlaegt den Verlauf. */
-.zug.ist-bloop .blase{ background:color-mix(in srgb, var(--accent) 32%, var(--card));
+.blase{ background:var(--card); border-radius:18px; padding:13px 16px; box-shadow:0 2px 0 var(--line);
+  font-size:16px; font-weight:600; }
+.zug.du .blase{ background:var(--still); box-shadow:none; font-weight:700; }
+.zug.ist-bloop .blase{ background:color-mix(in srgb,var(--accent) 30%,var(--card));
   box-shadow:0 2px 0 var(--accent); }
-.zug.ist-bloop .wer-name{ color:var(--accent); }
+.blase strong{ font-weight:800; color:var(--ink); }
+
+/* Anwendungsfaelle */
+.faelle{ display:grid; gap:14px; grid-template-columns:1fr; }
+@media (min-width:640px){ .faelle{ grid-template-columns:1fr 1fr; } }
+.fall{ background:var(--card); border-radius:20px; overflow:hidden; box-shadow:0 3px 0 var(--line); }
+.fall .bild{ background:var(--still); color:var(--ink); padding:6px 10px 0; }
+.fall .bild svg{ width:100%; height:auto; display:block; }
+.fall .text{ padding:16px 18px 20px; }
+.fall h3{ font-size:17px; font-weight:800; margin-bottom:5px; }
+.fall p{ font-size:14.5px; font-weight:600; color:var(--soft); }
+
+/* Zahlentabelle */
+.tab{ width:100%; border-collapse:collapse; font-size:15.5px; }
+.tab th{ text-align:left; font-size:11px; font-weight:800; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--soft); padding:0 0 10px; }
+.tab td{ padding:13px 0; border-top:1px solid var(--line); font-weight:700; }
+.tab td:first-child{ font-weight:800; }
+.tab td:not(:first-child){ text-align:right; font-variant-numeric:tabular-nums; }
+.tab .stark{ color:var(--accent); font-weight:800; }
+.fussnote{ font-size:12.5px; font-weight:600; color:var(--soft); margin-top:14px; line-height:1.45; }
+
+details{ background:var(--card); border-radius:15px; box-shadow:0 2px 0 var(--line);
+  margin-bottom:9px; overflow:hidden; }
+summary{ cursor:pointer; padding:15px 17px; font-size:15.5px; font-weight:800; list-style:none;
+  display:flex; justify-content:space-between; gap:12px; align-items:center; }
+summary::-webkit-details-marker{ display:none; }
+summary::after{ content:"+"; color:var(--accent); font-size:19px; font-weight:800; flex-shrink:0; }
+details[open] summary::after{ content:"\2013"; }
+details p{ padding:0 17px 16px; font-size:14.5px; font-weight:600; color:var(--soft); }
+details p + p{ padding-top:0; margin-top:-5px; }
+
+.schluss{ background:var(--card); border-radius:22px; padding:clamp(24px,4vw,36px);
+  box-shadow:0 3px 0 var(--line); text-align:center; }
+.schluss p{ font-size:16.5px; font-weight:600; color:var(--soft); max-width:44ch;
+  margin:0 auto 20px; text-wrap:balance; }
+footer{ padding:32px 0 44px; text-align:center; border-top:1px solid var(--line); margin-top:24px; }
+footer p{ font-size:13px; font-weight:600; color:var(--soft); }
 .mitte{ text-align:center; }
 </style>
 </head>
 <body>
 
-<header class="kopf">
-  <div class="bahn kopf-innen">
-    <a class="marke" href="#oben"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><b>Bloop</b></a>
-    <div class="kopf-rechts">
-      <nav class="nav">
-        <a href="#eltern">Für Eltern</a>
-        <a href="#schule">Für Schulen</a>
-        <a href="#creator">Karten bauen</a>
-      </nav>
+<header class="kopf-platz">
+  <div class="kopf">
+    <div class="bahn kopf-innen">
+      <a class="marke" href="#oben"><span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><b>Bloop</b></a>
       <a class="mini" href="app/">Ausprobieren</a>
-      <button class="burger" id="burger" aria-label="Menü" aria-expanded="false">
-        <span></span><span></span><span></span>
-      </button>
     </div>
-  </div>
-  <div class="klapp" id="klapp">
-    <a href="#eltern">Für Eltern</a>
-    <a href="#schule">Für Schulen und Lehrkräfte</a>
-    <a href="#creator">Eigene Karten bauen</a>
-    <a href="#app">Die App</a>
   </div>
 </header>
 
 <main id="oben">
-  <div class="bahn verlauf">
-<p class="dazwischen">So klingt es in jeder Elterngruppe. Die Namen sind erfunden, die Sätze nicht.</p>
-<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Meine schaut nur noch Shorts. Insta, TikTok, Snap. Drei Stunden. Jeden Tag. 😩</div></div></div>
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Bei uns dasselbe 🙈 Und wenn ich was sage, bin ich der Böse.</div></div></div>
-<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Gestern stand sie um halb zehn heulend in der Tür. <strong>Wegen der Flammen bei Snap.</strong> 🔥</div></div></div>
-<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">„Mama bitte, nur zwei Minuten, sonst ist die Serie weg.“ Zwei Jahre hat die gehalten.</div></div></div>
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Kenn ich. Wir lassen es inzwischen einfach laufen, damit Ruhe ist 🤷</div></div></div>
-<div class="zug du folge"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Blöd nur: Genau das machen die Lern-Apps auch. Punkte, Diamanten, Serie. Nur mit besserem Gewissen.</div></div></div>
-<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Und keiner sagt einem, was die mit den Daten machen 😤</div></div></div>
-<div class="zug folge"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Ich will doch nur, dass sie was lernt. <strong>Ohne dass ich Polizei spielen muss.</strong></div></div></div>
-<div class="system"><span>Bloop wurde zur Gruppe hinzugefügt</span></div>
-<div class="zug tippt ist-bloop" data-tippt><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase" aria-label="schreibt"><i></i><i></i><i></i></div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Hi. Ich bin Bloop 👋 Darf ich kurz was zu den Flammen sagen?</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase"><strong>Bei mir kann nichts abreißen.</strong> Es gibt keine Serie, keine Punkte, keine Flammen, die erlöschen.</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Wer drei Tage nichts macht, verliert nichts. Ich warte einfach. Niemand muss abends um halb zehn nochmal ran.</div></div></div>
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Und wo ist der Haken? 🤨</div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Dass niemand dein Kind zurückholt. Ich auch nicht — ich schicke keine Erinnerungen.</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Klingt hart. Ist aber der Preis dafür, dass ich nichts an seiner Aufmerksamkeit verdiene.</div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Und mal ehrlich: Ich bin nicht das Gegenteil von TikTok. <strong>Ich bin einfach ein Lernbuddy.</strong> 🧠</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Was ich kann: Ich rechne für jede Karte aus, wann sie wiederkommen muss — genau in dem Moment, in dem dein Kind sie sonst vergessen würde.</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Nicht damit es länger bleibt. <strong>Damit es schneller fertig ist.</strong> Zwanzig Minuten, dann ist gut.</div></div></div>
-<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">Schneller fertig? Das ist mal ein Verkaufsargument 😄</div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Learn it. Loop it. <strong>Own it.</strong></div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Am Ende gehört das Wissen wirklich deinem Kind. Und seine Daten sowieso — die waren nie irgendwo anders als auf seinem Handy.</div></div></div>
-<p class="dazwischen">Und was ich mache</p>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Kurz gesagt: Ich merke mir, was dein Kind sich merken will.</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Nicht zwanzigmal hintereinander. <strong>Einmal richtig.</strong></div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase"><div class="probe"><div class="probe-kicker">Mathematik · Frage</div><div class="probe-frage">Warum ist minus mal minus plus?</div><div class="probe-antwort" style="border-top:none;padding-top:0;margin-top:0;font-weight:800;color:var(--ink);font-size:16px">Weil das Gegenteil vom Gegenteil das Original ist.</div><div style="margin-top:12px"><span class="probe-warum">↑ Warum?</span></div><div class="probe-antwort">Minus dreht die Richtung um — zweimal umdrehen führt zurück. Wenn dir jemand dreimal Schulden von 4 Euro erlässt, hast du 12 Euro mehr.</div><div class="probe-knoepfe"><span class="n">Nochmal</span><span class="g">Gewusst</span></div></div></div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Zwei Seiten wie immer — und eine dritte dahinter, für das Warum. <strong>Die gibt es nur bei mir.</strong></div></div></div>
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Bitte kein Mathe-Beispiel 😅 Dann macht meiner die App gar nicht erst auf.</div></div></div>
-<div class="zug"><span class="kuerzel a">S</span><div class="blase-spalte"><p class="wer-name">Sabine</p><div class="blase">😂😂</div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Fair. Da hast du recht 😄</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Fangen wir anders an — <strong>mit einer Frage, die fast niemand beantworten kann.</strong></div></div></div>
-
-
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">
-  <button class="probe tipp" data-probe aria-expanded="false">
-    <div class="probe-kicker">Zum Staunen · Frage</div>
-    <div class="probe-frage">Wie viele Zähne hat eine Schnecke?</div>
-    <div class="probe-hinweis">Tippen zum Umdrehen →</div>
-    <div class="probe-loesung">
-      <div class="probe-antwort" style="border-top:none;padding-top:0;margin-top:0;
-        font-weight:800;color:var(--ink);font-size:16.5px">Über 10 000.</div>
-      <div class="probe-antwort">Winzige Zähnchen auf einer Raspelzunge — damit
-        schabt sie Blätter ab. Nachwachsen tun sie auch, ein Leben lang.</div>
-    </div>
-  </button></div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">
-  Das ist die Frage, die es bei uns zu Hause geschafft hat. Seitdem wird sie jedem
-  erzählt, der nicht schnell genug weggeht.</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">
-  Und wer erst einmal rät, merkt nicht, dass er dabei schon lernt —
-  wie eine Karte funktioniert, wie das Umdrehen geht, wie sich das anfühlt.
-  <strong>Der Lernstoff kommt danach von selbst.</strong></div></div></div>
-
-<div class="zug du"><span class="kuerzel b">J</span><div class="blase-spalte"><p class="wer-name">Jochen</p><div class="blase">Was kostet das?</div></div></div>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Im Browser gar nichts. Für immer.</div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">Die Apps für Handy und Tablet kosten einmalig. Kein Abo.</div></div></div>
-<p class="dazwischen">Zum Schluss</p>
-<div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">
-  Der Mensch, der mich gebaut hat, saß genau da, wo du gerade sitzt. Zwei Kinder,
-  neun und zwölf, und eine Frage, die ihn nicht losließ:
-  <strong>Warum ist eigentlich keine dieser Apps auf der Seite der Kinder?</strong></div></div></div>
-<div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase-spalte"><p class="wer-name">Bloop</p><div class="blase">
-  Also hat er eine gebaut. Am Küchentisch, nach Feierabend, viel zu oft zu spät.
-  <a href="#eltern">Die ganze Geschichte steht weiter unten.</a></div></div></div>
-
-  </div>
-
-  <div class="bahn mitte" style="padding:34px 20px 6px">
-    <a class="knopf" href="app/">Einfach ausprobieren</a>
-    <p style="font-size:13px;font-weight:600;color:var(--soft);margin-top:11px">
-      Ohne Anmeldung. Läuft sofort.</p>
-  </div>
-
-  <section id="eltern">
+  <header>
     <div class="bahn">
-      <div class="balken">Wer das baut</div>
-      <h2>Ein Vater, ein Küchentisch, zu viele Abende.</h2>
-      <p class="vor">Ich baue Bloop im Wesentlichen allein. Aber ich baue es nicht
-        allein <em>aus</em>: Ich rede jeden Tag mit meiner Frau darüber, mit meinen
-        Kindern — neun und zwölf — und mit anderen Eltern.
-        <strong>Die drei Sätze ganz oben sind nicht erfunden.</strong> Sie fallen bei
-        uns am Tisch, und sie fallen überall sonst auch.</p>
-      <p class="vor">Meine Kinder sind gnadenlose Tester. Was sie langweilig finden,
-        fliegt raus. Was sie nicht auf Anhieb verstehen, war schlecht erklärt —
-        nicht sie haben es nicht kapiert.</p>
+      <div class="figur"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></div>
+      <h1>Jedes Kind kann <em>alles</em> lernen.</h1>
+      <p class="unterclaim">Egal wann. Egal wo. Kein Netz? Kein Problem.</p>
+      <div class="dreiklang" aria-label="Learn it. Loop it. Own it.">
+        <span>Learn it.</span><span>Loop it.</span><span>Own it.</span>
+      </div>
+      <a class="knopf" href="app/">Jetzt ausprobieren</a>
+      <p class="unterknopf">Kostenlos. Ohne Anmeldung. Sofort im Browser.</p>
+
+      <div class="blick">
+        <div><b>Anonym</b><span>Kein Konto, kein Name.</span></div>
+        <div><b>Offline</b><span>Im Zug, im Funkloch.</span></div>
+        <div><b>Ohne Datenkraken</b><span>Kein Server, kein Tracker.</span></div>
+        <div><b>Ohne Suchtschleife</b><span>Keine Serie, keine Punkte.</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="bahn">
+      <div class="zug du"><span class="kuerzel">S</span><div class="blase">Meine schaut nur noch Shorts. Und die Lern-App, die ich ihr draufgemacht hab, macht dasselbe: Punkte, Serie, Drama. 😩</div></div>
+      <div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase">Bei mir kann nichts abreißen. <strong>Keine Serie, keine Punkte.</strong> Wer drei Tage nichts macht, verliert nichts.</div></div>
+      <div class="zug du"><span class="kuerzel j">J</span><div class="blase">Und die Daten?</div></div>
+      <div class="zug ist-bloop"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase"><strong>Welche Daten?</strong> Flugmodus an — ich laufe weiter. Was offline funktioniert, verschickt nichts.</div></div>
+      <div class="zug ist-bloop folge"><span class="kuerzel bloop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g transform="translate(2.224 0.000) scale(0.74749)"><path fill="#9B6CD0" d="M45.86,64.96c-4.09-.64-7.87-.11-12-.26.52,6.07-2.57,23.47-10.2,20.54-2.25-.86-3.75-3.7-2.49-6.27,1.87-3.84,6.49-20.79-.57-19.32-.99,6.13-2.03,13.95-8.15,17.59-2.85,1.7-8.72-.66-10.61-3.11-3.73-4.84-1.27-10.99,2.53-14.81,7.45-7.49.31-10.98.09-25.18C4.18,15.23,18.21,1.28,36.87.09c13.87-.88,27.18,4.52,34.08,16.81,5.43,9.67,5.19,20.83,1.79,31.25-1.45,4.45-.8,7.99,2.59,11.16,3.78,3.52,5.98,9.59,2.88,14.51-1.68,2.67-8.05,5.21-10.96,3.42-10.19-6.26-5.25-21.2-10.73-17.05-2.66,2.01-.44,13.36,2.18,18.79,1.23,2.55-.57,5.4-2.78,6.27-7.48,2.96-10.35-13.22-10.04-20.29ZM38.16,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM59.67,33.95c0-5-4.06-9.06-9.07-9.06s-9.07,4.06-9.07,9.06,4.06,9.06,9.07,9.06,9.07-4.06,9.07-9.06ZM34.51,48.61c-.95-.62-2.37.1-2.8.7-.28.4-.66,1.38-.02,2.07,4.2,4.49,11.43,4.78,15.82.45.89-.87.67-1.94.41-2.51-1.7-3.7-5.21,4.61-13.41-.71Z"/><circle cx="29.09" cy="33.95" r="9.07" fill="#fff"/><circle cx="50.60" cy="33.95" r="9.07" fill="#fff"/><path fill="var(--paper)" d="M34.51,48.61c8.2,5.32,11.71-2.99,13.41.71.26.57.48,1.64-.41,2.51-4.39,4.33-11.62,4.04-15.82-.45-.64-.69-.27-1.67.02-2.07.42-.6,1.85-1.31,2.8-.7Z"/><circle cx="31.01" cy="35.29" r="4.77" fill="var(--paper)"/><circle cx="52.45" cy="35.30" r="4.77" fill="var(--paper)"/></g></svg></span><div class="blase">Was ich dafür kann: Ich lege jede Karte genau dann wieder vor, wenn dein Kind sie sonst vergessen würde. <strong>Fünf Minuten am Tag reichen.</strong></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="bahn">
+      <div class="balken">Was fünf Minuten bringen</div>
+      <h2>Wenig, aber täglich. Das ist der ganze Trick.</h2>
+      <p class="vor">Ein Gedächtnismodell rechnet für jede Karte aus, wann sie zurückkommen
+        muss. So sieht ein Monat aus:</p>
+      <table class="tab">
+        <thead><tr><th>Täglich</th><th>Neu gelernt</th><th>Sitzt nach 30 Tagen</th></tr></thead>
+        <tbody>
+          <tr><td>5 Minuten</td><td>rund 330</td><td class="stark">rund 125 Karten</td></tr>
+          <tr><td>10 Minuten</td><td>rund 670</td><td class="stark">rund 260 Karten</td></tr>
+          <tr><td>20 Minuten</td><td>rund 1340</td><td class="stark">rund 540 Karten</td></tr>
+        </tbody>
+      </table>
+      <p class="fussnote">Modellrechnung mit demselben Verfahren, das in der App läuft
+        (FSRS-4.5) — keine Studie. Angenommen: 14 Sekunden für eine neue Karte, 6 für eine
+        Wiederholung, 85 % richtig beantwortet. <strong>„Sitzt"</strong> heißt: Das Modell
+        erwartet die Karte auch in einem Monat noch abrufbar.
+        Ein Schuljahr Englischvokabeln sind etwa 500 bis 800 Wörter.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="bahn">
+      <div class="balken">Nicht nur am Schreibtisch</div>
+      <h2>Lernen passiert unterwegs.</h2>
+      <p class="vor">Karten kann man weitergeben — an die Freundin, an die Klasse,
+        an den Rest der Familie. Ein Code, fertig.</p>
+      <div class="faelle">
+        <div class="fall">
+          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Familie im Auto, ein Kind stellt von der Rueckbank eine Frage">
+  <path d="M0,178 H320" stroke="currentColor" stroke-width="3" opacity=".18" stroke-linecap="round"/>
+  <g stroke="currentColor" stroke-width="3.4" opacity=".13" stroke-linecap="round">
+    <path d="M16,190 H52"/><path d="M84,190 H120"/><path d="M152,190 H188"/><path d="M220,190 H256"/>
+  </g>
+  <path d="M40,150 C40,126 52,118 74,116 L104,84 C110,77 118,74 128,74 H206
+           C218,74 228,79 234,88 L256,116 C274,120 286,130 286,150
+           C286,158 280,162 272,162 H54 C46,162 40,158 40,150 Z"
+        fill="currentColor" opacity=".42"/>
+  <path d="M116,112 L134,86 C137,82 141,80 146,80 H158 V112 Z" fill="var(--paper)" opacity=".85"/>
+  <path d="M170,80 H200 C207,80 212,82 216,87 L234,112 H170 Z" fill="var(--paper)" opacity=".85"/>
+  <circle cx="140" cy="100" r="11" fill="currentColor" opacity=".75"/>
+  <circle cx="200" cy="99" r="10" fill="currentColor" opacity=".62"/>
+  <circle cx="223" cy="103" r="8.5" fill="var(--accent)"/>
+  <circle cx="92" cy="162" r="21" fill="currentColor" opacity=".55"/>
+  <circle cx="92" cy="162" r="8" fill="var(--paper)" opacity=".7"/>
+  <circle cx="238" cy="162" r="21" fill="currentColor" opacity=".55"/>
+  <circle cx="238" cy="162" r="8" fill="var(--paper)" opacity=".7"/>
+  <!-- Sprechblase breit genug: vorher lief "Wie viele?" rechts aus dem Bild. -->
+  <g>
+    <rect x="186" y="14" width="128" height="42" rx="15" fill="var(--accent)"/>
+    <path d="M206,54 L198,70 L222,56 Z" fill="var(--accent)"/>
+    <text x="250" y="41" text-anchor="middle" font-size="18" font-weight="800"
+          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Wie viele?</text>
+  </g>
+</svg></div>
+          <div class="text"><h3>Quiz auf der Autofahrt</h3>
+            <p>Einer fragt, alle raten. Funktioniert ohne Netz — und hält länger als
+              jedes Hörspiel.</p></div>
+        </div>
+        <div class="fall">
+          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kinder sitzen am Lagerfeuer und raten">
+  <g fill="currentColor" opacity=".22">
+    <circle cx="34" cy="26" r="2"/><circle cx="72" cy="14" r="1.5"/><circle cx="248" cy="22" r="2"/>
+    <circle cx="288" cy="40" r="1.5"/><circle cx="188" cy="12" r="1.5"/><circle cx="130" cy="24" r="1.2"/>
+  </g>
+  <ellipse cx="160" cy="176" rx="128" ry="15" fill="currentColor" opacity=".1"/>
+  <g fill="currentColor" opacity=".55">
+    <circle cx="66" cy="120" r="15"/>
+    <path d="M44,176c0-16 10-28 22-28s22,12 22,28z"/>
+    <circle cx="254" cy="124" r="13"/>
+    <path d="M235,176c0-14 8-25 19-25s19,11 19,25z"/>
+  </g>
+  <g stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity=".5">
+    <path d="M132,168 L188,156"/><path d="M134,157 L186,169"/>
+  </g>
+  <!-- Flamme mit Wendepunkten. Eine glatte Tropfenform sah aus wie ein Ballon -
+       erst die eingezogene Taille und die Spitze machen daraus Feuer. -->
+  <path d="M160,54 C168,74 182,82 182,102 C182,118 172,130 160,130
+           C148,130 138,118 138,102 C138,92 143,86 148,80
+           C150,88 154,92 158,94 C154,82 156,66 160,54 Z" fill="var(--accent)"/>
+  <path d="M160,88 C165,98 168,103 168,110 C168,118 165,124 160,124
+           C155,124 152,118 152,110 C152,103 155,98 160,88 Z"
+        fill="var(--paper)" opacity=".5"/>
+  <path d="M136,100 C130,108 128,114 129,120 C131,128 137,132 142,130
+           C138,122 136,112 136,100 Z" fill="var(--accent)" opacity=".65"/>
+  <path d="M184,100 C190,108 192,114 191,120 C189,128 183,132 178,130
+           C182,122 184,112 184,100 Z" fill="var(--accent)" opacity=".65"/>
+  <g fill="var(--accent)" opacity=".6">
+    <circle cx="148" cy="42" r="2.6"/><circle cx="172" cy="34" r="2"/><circle cx="162" cy="22" r="1.6"/>
+  </g>
+</svg></div>
+          <div class="text"><h3>Quiz am Lagerfeuer</h3>
+            <p>Schätzfragen, bei denen auch Erwachsene danebenliegen. Genau das macht
+              den Reiz aus.</p></div>
+        </div>
+        <div class="fall">
+          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Ein Kind spricht vor einer Gruppe">
+  <ellipse cx="160" cy="180" rx="126" ry="13" fill="currentColor" opacity=".1"/>
+  <!-- Zuhoerende, von hinten, unterschiedlich hoch -->
+  <g fill="currentColor" opacity=".3">
+    <circle cx="42" cy="140" r="13"/><path d="M23,182c0-13 8-24 19-24s19,11 19,24z"/>
+    <circle cx="92" cy="146" r="11"/><path d="M76,182c0-11 7-20 16-20s16,9 16,20z"/>
+    <circle cx="232" cy="144" r="12"/><path d="M215,182c0-12 7-21 17-21s17,9 17,21z"/>
+    <circle cx="280" cy="141" r="13"/><path d="M261,182c0-13 8-24 19-24s19,11 19,24z"/>
+  </g>
+  <!-- Die sprechende Person, vorne, in Akzentfarbe -->
+  <circle cx="160" cy="104" r="18" fill="var(--accent)"/>
+  <path d="M132,182c0-20 12-35 28-35s28,15 28,35z" fill="var(--accent)"/>
+  <!-- Redefluss als drei Boegen -->
+  <g stroke="var(--accent)" stroke-width="4" stroke-linecap="round" fill="none" opacity=".55">
+    <path d="M196,74 C206,66 208,54 202,44"/>
+    <path d="M210,84 C226,72 230,50 218,34"/>
+    <path d="M224,94 C246,78 250,46 234,24"/>
+  </g>
+</svg></div>
+          <div class="text"><h3>Vor der Klasse sprechen</h3>
+            <p>Wer den Stoff wirklich kann, muss nicht ablesen. Das merkt man
+              beim Referat sofort.</p></div>
+        </div>
+        <div class="fall">
+          <div class="bild"><svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Schnitzeljagd: eine Spur von Stationen zu einer Fahne">
+  <!-- Weg -->
+  <path d="M26,168 C70,168 66,120 108,120 C150,120 146,72 190,72 C232,72 236,44 276,44"
+        stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 13"
+        fill="none" opacity=".4"/>
+  <!-- Stationen -->
+  <g>
+    <circle cx="26" cy="168" r="12" fill="currentColor" opacity=".45"/>
+    <circle cx="108" cy="120" r="12" fill="currentColor" opacity=".45"/>
+    <circle cx="190" cy="72" r="12" fill="currentColor" opacity=".45"/>
+  </g>
+  <!-- Ziel -->
+  <circle cx="276" cy="44" r="17" fill="var(--accent)"/>
+  <path d="M276,27 V6" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M278,8 L306,16 L278,26 Z" fill="var(--accent)"/>
+  <!-- Suchende Figur am Anfang -->
+  <circle cx="60" cy="150" r="11" fill="var(--accent)" opacity=".8"/>
+  <path d="M44,182c0-12 7-22 16-22s16,10 16,22z" fill="var(--accent)" opacity=".8"/>
+</svg></div>
+          <div class="text"><h3>Schnitzeljagd</h3>
+            <p>Jede Station eine Frage, jede Antwort ein Hinweis. Karten dafür baut man
+              in zehn Minuten.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="bahn">
+      <div class="balken">Für Eltern und Lehrkräfte</div>
+      <h2>Die Fragen, die Sie stellen sollten.</h2>
       <details>
-        <summary>Welche Daten sammelt die App über mein Kind?</summary>
-        <p>Keine. Kein Konto, keine Anmeldung, keine Analyse-Werkzeuge.
-          Karten und Lernstand liegen im Speicher des Geräts.</p>
-        <p><strong>So prüfen Sie es:</strong> Flugmodus einschalten, App öffnen.
-          Sie läuft weiter. Was offline funktioniert, verschickt nichts.</p>
+        <summary>Welche Daten werden gesammelt?</summary>
+        <p>Keine. Kein Konto, keine Anmeldung, keine Analyse-Werkzeuge, kein Server.
+          Alles liegt im Speicher des Geräts.</p>
+        <p><strong>Nachprüfbar:</strong> Flugmodus einschalten, App öffnen. Sie läuft weiter.</p>
       </details>
       <details>
-        <summary>Wie finanziert sich das dann?</summary>
-        <p>Der Browser bleibt kostenlos. Geld verdienen wir über die Apps in den
-          Stores — einmalig, kein Abo — und über freiwillige Unterstützung.</p>
+        <summary>Wie finanziert sich das?</summary>
+        <p>Der Browser bleibt kostenlos. Geld verdienen wir über die Apps in den Stores —
+          einmalig, kein Abo — und über freiwillige Unterstützung.</p>
         <p>Was wir <strong>nicht</strong> tun: Aufmerksamkeit verkaufen.</p>
       </details>
       <details>
-        <summary>Kann ich sehen, was mein Kind gelernt hat?</summary>
-        <p>Wenn Ihr Kind es Ihnen zeigt. Es gibt eine Übersicht und einen Knopf,
-          der daraus ein Bild macht.</p>
-        <p>Einen <strong>Elternzugang gibt es nicht</strong>. Der Unterschied zwischen
-          Stolz und Kontrolle ist, wer die Seite aufschlägt.</p>
+        <summary>Ohne Punkte — ist das nicht naiv?</summary>
+        <p>Punkte und Serien erzeugen Druck und nutzen sich ab. Sichtbarer Fortschritt
+          wirkt länger: Bloop zeigt, was schon sitzt — und nie, was fehlt.</p>
       </details>
       <details>
-        <summary>Wo sind die Schwächen? Bitte ehrlich.</summary>
-        <p>Weil nichts das Gerät verlässt, gibt es <strong>keine Cloud-Sicherung</strong>.
-          Wer die Browserdaten löscht, verliert den Stand.</p>
-        <p>Und es gibt <strong>keine Erinnerungen</strong>. Wer nicht von selbst öffnet,
-          wird nicht geholt — der Preis dafür, keine Dark Patterns zu bauen.</p>
-      </details>
-    </div>
-  </section>
-
-  <section id="schule">
-    <div class="bahn">
-      <div class="balken">Für Schulen und Lehrkräfte</div>
-      <h2>Kein Vertrag. Keine Verwaltung. Keine Folgenabschätzung.</h2>
-      <p class="vor">Weil nichts erhoben wird, gibt es auch nichts zu verwalten.</p>
-      <div class="karten">
-        <div class="karte">
-          <h3>Sofort einsetzbar</h3>
-          <p>Eine Adresse im Browser. Keine Lizenzen, keine Zugänge, keine Schulung.
-            Auch auf alten Geräten und im Schul-WLAN.</p>
-        </div>
-        <div class="karte">
-          <h3>Karten weitergeben</h3>
-          <p>Sie bauen einen Satz und geben ihn als Code weiter. Die Klasse fügt ihn
-            ein — ohne Konto, ohne dass wir erfahren, wer da lernt.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section id="creator">
-    <div class="bahn">
-      <div class="balken">Bloop Creator</div>
-      <h2>Dein erstes Deck. In zwei Minuten.</h2>
-      <p class="vor">Karten selbst bauen, weitergeben, gemeinsam lernen — ohne Konto,
-        ohne Upload. Zwei Wege, die bei uns täglich laufen.</p>
-
-      <div class="weg">
-        <div class="kopf-zeile">Die Vokabelseite aus dem Schulbuch</div>
-        <div class="wer">Kind, 12 · dauert etwa zwei Minuten</div>
-        <div class="ablauf">
-          <div class="schritt"><div>
-            <h4>Seite abfotografieren</h4>
-            <p>Mit der Kamera des Handys. Danach im Foto auf den Text tippen und
-              „Alles auswählen“ — das macht das Handy selbst, iPhone wie Android.</p></div></div>
-          <div class="schritt"><div>
-            <h4>In Bloop einfügen</h4>
-            <p>Neue Kartei → Text einfügen. Aus jeder Zeile wird eine Karte.
-              Was nicht passt, fliegt mit einem Tipp raus.</p></div></div>
-          <div class="schritt"><div>
-            <h4>Weitergeben</h4>
-            <p>Kartei teilen erzeugt einen Code. Der geht per Nachricht an die
-              Freundin, die ihn einfügt — fertig. <strong>Kein Konto, kein Server,
-              keine Anmeldung.</strong></p></div></div>
-        </div>
-      </div>
-
-      <div class="weg">
-        <div class="kopf-zeile">Das Referat über Schnecken</div>
-        <div class="wer">Elternteil mit KI · dauert etwa fünf Minuten</div>
-        <div class="ablauf">
-          <div class="schritt"><div>
-            <h4>Stoff sammeln</h4>
-            <p>Aus dem Schulbuch, einem Sachbuch oder aus dem, was die KI ohnehin weiß.</p></div></div>
-          <div class="schritt"><div>
-            <h4>Karten schreiben lassen</h4>
-            <p>Den Auftrag unten in ein beliebiges KI-Werkzeug geben.
-              <strong>Wir bauen bewusst keine ein</strong> — jede App, die Inhalte
-              erzeugt, schickt Ihre Eingabe an einen fremden Server.</p></div></div>
-          <div class="schritt"><div>
-            <h4>Gegenlesen</h4>
-            <p>Das ist der Schritt, den niemand überspringen sollte. KIs erfinden
-              gelegentlich Zahlen. Bei zwanzig Karten dauert das eine Minute.</p></div></div>
-          <div class="schritt"><div>
-            <h4>Einfügen und loslegen</h4>
-            <p>Kopieren, in Bloop unter „Neue Kartei“ einfügen. Fertig.</p></div></div>
-        </div>
-      </div>
-
-      <details>
-        <summary>Der Auftrag zum Kopieren — getestet</summary>
-        <p>Wir haben ihn mit den Antwortstilen der gängigen Werkzeuge geprüft:
-          nummerierte Listen, Fettdruck, Markdown-Tabellen. <strong>Alle vier
-          Varianten werden korrekt eingelesen.</strong> Wenn Ihr Werkzeug etwas
-          anderes ausgibt, funktioniert es trotzdem — die App räumt Formatierung
-          selbst weg.</p>
-        <code>Erstelle 20 Lernkarten zum Thema [THEMA] für ein Kind
-in der [KLASSE].
-
-Format: eine Karte pro Zeile, Vorderseite und Rückseite
-getrennt durch einen Gedankenstrich.
-
-Regeln:
-- Die Antwort ist kurz. Ein Wort oder ein Satz.
-- Steht in der Antwort eine Zahl, muss die Einheit in
-  der Frage stehen ("Wie viele Kammern hat ein Herz?").
-- Frage nach dem Warum, nicht nach Auswendiggelerntem.
-- Keine Einleitung, keine Nummerierung, kein Markdown.
-- Prüfe zum Schluss jede Karte: Passt die Antwort
-  wirklich zur Frage?</code>
-        <p>Die letzte Regel ist die wichtigste. Ohne sie kommen gelegentlich
-          Karten heraus, deren Antwort eine andere Frage beantwortet.</p>
+        <summary>Wo sind die Schwächen?</summary>
+        <p>Keine Cloud-Sicherung: Wer die Browserdaten löscht, verliert den Stand.
+          Karteien lassen sich aber als Code sichern und weitergeben.</p>
+        <p>Keine Erinnerungen: Wer nicht von selbst öffnet, wird nicht geholt.
+          Das ist der Preis dafür, keine Dark Patterns zu bauen.</p>
       </details>
       <details>
-        <summary>Karten weitergeben und sichern</summary>
-        <p>Jede Kartei lässt sich als Code ausgeben und woanders einfügen —
-          per Nachricht, Mail oder Zettel. Das ist zugleich Ihre Sicherung:
-          ein Text, der Ihnen gehört und den niemand sonst sieht.</p>
+        <summary>Für Schulen: brauchen wir einen Vertrag?</summary>
+        <p>Nein. Weil nichts erhoben wird, gibt es nichts zu verwalten — keine Lizenzen,
+          keine Zugänge, keine Folgenabschätzung. Eine Adresse im Browser, fertig.</p>
       </details>
     </div>
   </section>
 
-  <section id="app">
+  <section>
     <div class="bahn">
-      <div class="balken">Browser oder App</div>
-      <h2>Der Browser reicht. Die App kann etwas mehr.</h2>
-      <div class="karten">
-        <div class="karte">
-          <h3>Spürbare Rückmeldung</h3>
-          <p>Ein kurzer Impuls, wenn eine Karte weg ist. Auf dem iPhone gibt es das
-            im Browser überhaupt nicht.</p>
-        </div>
-        <div class="karte">
-          <h3>Sicherung und Gerätewechsel</h3>
-          <p>Über iCloud oder Google sichern, ohne dass wir je einen Server sehen.</p>
-        </div>
+      <div class="schluss">
+        <h2>Eine App für unsere Kinder.</h2>
+        <p>Und für alle anderen auch. Wir lernen alle gleich —
+          Kinder nur schneller.</p>
+        <a class="knopf" href="app/">Bloop öffnen</a>
       </div>
-      <div class="laeden">
-        <div class="laden"><span class="oben">Laden im</span>
-          <span class="unten">App Store</span><span class="bald">In Vorbereitung</span></div>
-        <div class="laden"><span class="oben">Jetzt bei</span>
-          <span class="unten">Google Play</span><span class="bald">In Vorbereitung</span></div>
-        <div class="laden"><span class="oben">Unterstützen über</span>
-          <span class="unten">Patreon</span><span class="bald">In Vorbereitung</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="mitte">
-    <div class="bahn">
-      <h2>Probieren Sie es aus.</h2>
-      <p class="vor" style="margin:0 auto 22px">Eine Minute, keine Anmeldung, kein Risiko.</p>
-      <a class="knopf" href="app/">Bloop öffnen</a>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="bahn">
-    <p>Bloop — Lernkarten ohne Konto, ohne Abo, ohne Werbung.</p>
-  </div>
+  <div class="bahn"><p>Bloop — Lernkarten ohne Konto, ohne Abo, ohne Werbung.</p></div>
 </footer>
 
-<script>
-  // Die Probekarten drehen sich wirklich um. Kein Zeitgeber, kein Automatismus -
-  // der Besucher entscheidet, wann er nachsieht. Genau das ist die Geste, die
-  // er in der App wiederfindet.
-  document.querySelectorAll("[data-probe]").forEach(function (k) {
-    k.addEventListener("click", function () {
-      var auf = k.classList.toggle("auf");
-      k.setAttribute("aria-expanded", auf ? "true" : "false");
-    });
-  });
-</script>
-<script>
-  // Bloop tippt - und hoert auf, sobald seine erste Antwort erscheint.
-  (function () {
-    var tippt = document.querySelector("[data-tippt]");
-    if (!tippt) return;
-    // Die naechste Blase nach der Tippanzeige ist die Antwort.
-    var antwort = tippt.nextElementSibling;
-    while (antwort && !antwort.classList.contains("zug")) antwort = antwort.nextElementSibling;
-    if (!antwort) return;
-    var beenden = function () {
-      // Kurz stehen lassen, damit man das Tippen ueberhaupt sieht.
-      setTimeout(function () { tippt.classList.add("fertig"); }, 900);
-    };
-    if (!("IntersectionObserver" in window)) { beenden(); return; }
-    new IntersectionObserver(function (e, o) {
-      if (e[0].isIntersecting) { beenden(); o.disconnect(); }
-    }, { threshold: 0.4 }).observe(antwort);
-  })();
-</script>
-<script>
-  document.documentElement.classList.add("js");
-  // Die Blasen erscheinen beim Erreichen, nicht nach der Uhr - so bleibt das
-  // Tempo beim Leser. Wer die Seite ein zweites Mal liest, wird nicht gebremst.
-  var zuege = document.querySelectorAll(".zug");
-  if (!("IntersectionObserver" in window)) {
-    // Alter Browser: alles sofort zeigen statt gar nichts.
-    zuege.forEach(function (z) { z.classList.add("da"); });
-  } else {
-    var beobachter = new IntersectionObserver(function (eintraege) {
-      eintraege.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        // Kleiner Versatz, damit aufeinanderfolgende Blasen nacheinander
-        // eintrudeln statt gleichzeitig aufzupoppen.
-        var i = +e.target.dataset.i || 0;
-        setTimeout(function () { e.target.classList.add("da"); }, Math.min(i, 3) * 90);
-        beobachter.unobserve(e.target);
-      });
-    }, { rootMargin: "0px 0px -12% 0px", threshold: 0.15 });
-    var lauf = 0, letzterOben = -999;
-    zuege.forEach(function (z) {
-      var oben = z.offsetTop;
-      lauf = (oben - letzterOben < 140) ? lauf + 1 : 0;
-      letzterOben = oben;
-      z.dataset.i = lauf;
-      beobachter.observe(z);
-    });
-  }
-</script>
-<script>
-  // Burger: nur auf schmalen Schirmen sichtbar, deshalb genuegt ein Umschalter.
-  var b = document.getElementById("burger"), k = document.getElementById("klapp");
-  b.addEventListener("click", function () {
-    var auf = k.classList.toggle("auf");
-    b.setAttribute("aria-expanded", auf ? "true" : "false");
-  });
-  // Nach der Wahl wieder zu - sonst verdeckt das Menue das Ziel.
-  k.addEventListener("click", function (e) {
-    if (e.target.tagName === "A") { k.classList.remove("auf"); b.setAttribute("aria-expanded", "false"); }
-  });
-</script>
 </body>
 </html>

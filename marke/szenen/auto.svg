@@ -1,0 +1,26 @@
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Familie im Auto, ein Kind stellt von der Rueckbank eine Frage">
+  <path d="M0,178 H320" stroke="currentColor" stroke-width="3" opacity=".18" stroke-linecap="round"/>
+  <g stroke="currentColor" stroke-width="3.4" opacity=".13" stroke-linecap="round">
+    <path d="M16,190 H52"/><path d="M84,190 H120"/><path d="M152,190 H188"/><path d="M220,190 H256"/>
+  </g>
+  <path d="M40,150 C40,126 52,118 74,116 L104,84 C110,77 118,74 128,74 H206
+           C218,74 228,79 234,88 L256,116 C274,120 286,130 286,150
+           C286,158 280,162 272,162 H54 C46,162 40,158 40,150 Z"
+        fill="currentColor" opacity=".42"/>
+  <path d="M116,112 L134,86 C137,82 141,80 146,80 H158 V112 Z" fill="var(--paper)" opacity=".85"/>
+  <path d="M170,80 H200 C207,80 212,82 216,87 L234,112 H170 Z" fill="var(--paper)" opacity=".85"/>
+  <circle cx="140" cy="100" r="11" fill="currentColor" opacity=".75"/>
+  <circle cx="200" cy="99" r="10" fill="currentColor" opacity=".62"/>
+  <circle cx="223" cy="103" r="8.5" fill="var(--accent)"/>
+  <circle cx="92" cy="162" r="21" fill="currentColor" opacity=".55"/>
+  <circle cx="92" cy="162" r="8" fill="var(--paper)" opacity=".7"/>
+  <circle cx="238" cy="162" r="21" fill="currentColor" opacity=".55"/>
+  <circle cx="238" cy="162" r="8" fill="var(--paper)" opacity=".7"/>
+  <!-- Sprechblase breit genug: vorher lief "Wie viele?" rechts aus dem Bild. -->
+  <g>
+    <rect x="186" y="14" width="128" height="42" rx="15" fill="var(--accent)"/>
+    <path d="M206,54 L198,70 L222,56 Z" fill="var(--accent)"/>
+    <text x="250" y="41" text-anchor="middle" font-size="18" font-weight="800"
+          fill="var(--auf)" font-family="ui-rounded,system-ui,sans-serif">Wie viele?</text>
+  </g>
+</svg>

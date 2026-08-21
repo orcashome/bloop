@@ -1,0 +1,31 @@
+<svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kinder sitzen am Lagerfeuer und raten">
+  <g fill="currentColor" opacity=".22">
+    <circle cx="34" cy="26" r="2"/><circle cx="72" cy="14" r="1.5"/><circle cx="248" cy="22" r="2"/>
+    <circle cx="288" cy="40" r="1.5"/><circle cx="188" cy="12" r="1.5"/><circle cx="130" cy="24" r="1.2"/>
+  </g>
+  <ellipse cx="160" cy="176" rx="128" ry="15" fill="currentColor" opacity=".1"/>
+  <g fill="currentColor" opacity=".55">
+    <circle cx="66" cy="120" r="15"/>
+    <path d="M44,176c0-16 10-28 22-28s22,12 22,28z"/>
+    <circle cx="254" cy="124" r="13"/>
+    <path d="M235,176c0-14 8-25 19-25s19,11 19,25z"/>
+  </g>
+  <g stroke="currentColor" stroke-width="7" stroke-linecap="round" opacity=".5">
+    <path d="M132,168 L188,156"/><path d="M134,157 L186,169"/>
+  </g>
+  <!-- Flamme mit Wendepunkten. Eine glatte Tropfenform sah aus wie ein Ballon -
+       erst die eingezogene Taille und die Spitze machen daraus Feuer. -->
+  <path d="M160,54 C168,74 182,82 182,102 C182,118 172,130 160,130
+           C148,130 138,118 138,102 C138,92 143,86 148,80
+           C150,88 154,92 158,94 C154,82 156,66 160,54 Z" fill="var(--accent)"/>
+  <path d="M160,88 C165,98 168,103 168,110 C168,118 165,124 160,124
+           C155,124 152,118 152,110 C152,103 155,98 160,88 Z"
+        fill="var(--paper)" opacity=".5"/>
+  <path d="M136,100 C130,108 128,114 129,120 C131,128 137,132 142,130
+           C138,122 136,112 136,100 Z" fill="var(--accent)" opacity=".65"/>
+  <path d="M184,100 C190,108 192,114 191,120 C189,128 183,132 178,130
+           C182,122 184,112 184,100 Z" fill="var(--accent)" opacity=".65"/>
+  <g fill="var(--accent)" opacity=".6">
+    <circle cx="148" cy="42" r="2.6"/><circle cx="172" cy="34" r="2"/><circle cx="162" cy="22" r="1.6"/>
+  </g>
+</svg>
